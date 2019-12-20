@@ -1,14 +1,13 @@
 from flask import render_template, redirect, url_for, flash, request, Blueprint
-from flaskblog import db, bcrypt
+from flaskblog import db, bcrypt, paranoid, login_manager
 from flaskblog.models import User, Post
 from flask_login import login_user, logout_user, login_required
 from flaskblog.users.forms import *
 from flaskblog.users.util import save_picture, send_reset_email
 
-users= Blueprint('users', __name__)
+users = Blueprint('users', __name__)
 
-
-
+login_manager.session_protection = None
 
 
 @users.route("/register", methods=['GET', 'POST'])
@@ -36,18 +35,21 @@ def login():
         return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email= form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember= form.remember.data)
+            login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login failed. please check email and password', 'danger')
     return render_template('login.html', title="Login", form=form)
+
+
 @users.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
+
 
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -70,18 +72,15 @@ def account():
                            image_file=image_file, form=form)
 
 
-
 @users.route('/users/<string:username>')
 def user_post(username):
-    page = request.args.get('page', 1, type= int)
+    page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user)\
-        .order_by(Post.date_posted.desc())\
+    posts = Post.query.filter_by(author=user) \
+        .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=5)
 
     return render_template('user_posts.html', posts=posts, user=user)
-
-
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
@@ -115,11 +114,6 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-
-
-
-
-
-
-
-
+@paranoid.on_invalid_session
+def invalid_session():
+    return 'please login', 401
