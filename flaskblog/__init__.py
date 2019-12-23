@@ -6,8 +6,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flaskblog.config import Config
 from flask_socketio import SocketIO
-from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
 from flask_paranoid import Paranoid
 
 app = Flask(__name__)
@@ -23,10 +21,6 @@ paranoid = Paranoid()
 paranoid.redirect_view = 'users.login'
 
 mail = Mail()
-migrate = Migrate()
-manager = Manager()
-manager.add_command('db', MigrateCommand)
-
 
 
 def create_app(config_class=Config):
@@ -38,8 +32,6 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
     socketio.init_app(app)
-    migrate.init_app(app, db)
-    manager.__init__(app)
     paranoid.init_app(app)
 
     from flaskblog.users.routes import users
