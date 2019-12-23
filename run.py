@@ -2,7 +2,7 @@ from flaskblog import create_app
 
 app = create_app()
 
-ENV= 'prod'
+ENV= 'dev'
 
 if ENV == 'dev':
     app.debug = True
