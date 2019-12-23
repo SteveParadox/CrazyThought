@@ -13,7 +13,7 @@ class Config:
         SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     else:
 
-        SQLALCHEMY_DATABASE_URI = 'postgres://bzzbbjdumbntco:4ee5a8c0e94e274c2c1979b20ac2e93c4395204909169803627e12d7577fbdae@ec2-174-129-255-37.compute-1.amazonaws.com:5432/dcjhrsk5ihpbfr'
+        SQLALCHEMY_DATABASE_URI = 'postgres://xtxivwdedrdqiq:dca0e349351bad9191732318455e178bd99eec6326c351c09a4d70b475833b32@ec2-174-129-32-240.compute-1.amazonaws.com:5432/dagkfphn1hgj9d'
 
     SECRET_KEY=os.environ.get('SECRET_KEY')
 
