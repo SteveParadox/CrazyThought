@@ -39,21 +39,20 @@ def new_post():
 @posts.route("/post/<int:post_id>", methods=['POST','GET'])
 @login_required
 def post(post_id):
+    page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
     posts = Post.query.order_by(Post.id.desc()).all()
-    comments= Comment.query.filter_by(post_id=post.id).all()
-    com= Comment.query.order_by(Comment.pub_date.desc()).all()
-
+    comments= Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page, per_page=5)
     if request.method== 'POST':
         message= request.form.get('message')
-        comment= Comment(message=message, post_id=post.id, name=current_user.username)
+        comment= Comment(message=message, post_id=post.id, reply=current_user)
 
         db.session.add(comment)
         post.comments= post.comments+1
         flash('your comment has been submitted', 'success')
         db.session.commit()
         return redirect(request.url)
-    return render_template('post.html', title=post.title, post=post, posts=posts, comments=comments, com=com)
+    return render_template('post.html', title=post.title, post=post, posts=posts, comments=comments)
 
 
 
@@ -99,71 +98,13 @@ def update_post(post_id):
 def delete_post(post_id):
 
     post = Post.query.get_or_404(post_id)
-    comment = Comment.query.get_or_404(id)
+    comment = Comment.query.get_or_404(post_id)
     if post.author != current_user:
         abort(403)
-    comment= Comment(comment_post_id=comment.post_id, comment_id=comment.id)
-    db.session.delete(post)
+
     db.session.delete(comment)
+    db.session.delete(post)
 
     db.session.commit()
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))
-
-
-
-
-
-@posts.route("/post/fashion", methods=['GET', 'POST'])
-@login_required
-def fashion():
-    posts = Post.query.all()
-    return render_template('fashion.html', posts=posts)
-
-
-@posts.route("/post/fineart", methods=['GET', 'POST'])
-@login_required
-def fineart():
-    return render_template('fineart.html')
-
-
-@posts.route("/post/landscape", methods=['GET', 'POST'])
-@login_required
-def landscape():
-    return render_template('landscape.html')
-
-
-@posts.route("/post/macro", methods=['GET', 'POST'])
-@login_required
-def macro():
-    return render_template('macro.html')
-
-
-@posts.route("/post/photoshop", methods=['GET', 'POST'])
-@login_required
-def photoshop():
-    return render_template('photoshop.html')
-
-
-@posts.route("/post/photojournalism", methods=['GET', 'POST'])
-@login_required
-def photojournalism():
-    return render_template('photojournalism.html')
-
-
-@posts.route("/post/portraiture", methods=['GET', 'POST'])
-@login_required
-def portraiture():
-    return render_template('portraiture.html')
-
-
-@posts.route("/post/wedding", methods=['GET', 'POST'])
-@login_required
-def wedding():
-    return render_template('wedding.html')
-
-
-@posts.route("/post/wildlife", methods=['GET', 'POST'])
-@login_required
-def wildlife():
-    return render_template('wildlife.html')
