@@ -1,5 +1,5 @@
 aiohttp==3.6.2
-apturl==0.5.2
+alembic==0.9.3.dev0
 argcomplete==1.9.3
 asn1crypto==0.24.0
 async-timeout==3.0.1
@@ -51,6 +51,7 @@ Flask-WhooshAlchemy==0.56
 Flask-WTF==0.14.2
 future==0.16.0
 gevent==1.4.0
+gunicorn==20.0.4
 greenlet==0.4.15
 guess-language==0.2
 guess-language-spirit==0.5a4
