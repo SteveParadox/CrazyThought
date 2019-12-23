@@ -40,24 +40,30 @@
           <div class="bg-info">
               <h5>{{ post.comments }} Comments</h5>
           </div>
-              {% for comment in comments %}
+              {% for comment in comments.items %}
+
 
               <div class="comment-list">
                   <div class="desc">
                        <br>
 
-                       <h4  class="comment">
-                         <b>Anonymous </b>
-                     </h4>
+
 
 <small  class="date">
                           {{ comment.pub_date.strftime('%a/%b/%y   :   %r') }}
                    </small>
 
+                      <h3  class="comment">
+                          <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
+                           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
+                          </a>
+                           <b> {{ comment.reply.username }} </b>
+                     </h3>
 
-                     <h4  class="comment">
+
+                     <h5  class="comment">
                          {{ comment.message }}
-                     </h4>
+                     </h5>
 
 
                   </div>
@@ -65,6 +71,19 @@
 
 
               {% endfor %}
+        <br>
+        <br>
+         {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if posts.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('posts.post', post_id=post.id, page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.post', post_id=post.id, page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
 
 
 
