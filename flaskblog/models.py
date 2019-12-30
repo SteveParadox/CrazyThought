@@ -45,6 +45,7 @@ class Post(db.Model):
     img_filename = db.Column(db.String())
     img_data = db.Column(db.LargeBinary)
     comment = db.relationship('Comment', backref='parser', lazy=True)
+    #translate = db.relationship('Translate', backref='translation', lazy=True)
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}'), '{self.content}' "
@@ -64,3 +65,7 @@ class Comment(db.Model):
         return '<Comment %r>' % self.username
 
 
+'''class Translate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+'''

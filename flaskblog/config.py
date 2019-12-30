@@ -7,7 +7,7 @@ MAX_SEARCH_RESULTS = 50
 
 
 class Config:
-    ENV = 'prod'
+    ENV = 'dev'
 
     if ENV == 'dev':
         SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
@@ -23,6 +23,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('EMAIL_USER')
     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
     SQLALCHEMY_TRACK_MODIFICATIONS= True
+    BABEL_DEFAULT_LOCALE = 'en'
 
 
 

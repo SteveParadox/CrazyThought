@@ -1,18 +1,12 @@
 from flask import render_template, redirect, url_for, flash, request, abort, Blueprint
-from flaskblog import db
+from flaskblog import db, babel
 from flaskblog.posts.forms import PostForm
 from flaskblog.models import Post, Comment
 from flask_login import current_user, login_required
 from flaskblog.posts.utils import save_img
-
-
+from google.cloud import translate_v2 as translate
 
 posts = Blueprint('posts', __name__)
-
-
-
-
-
 
 
 @posts.route("/post/new", methods=['GET', 'POST'])
@@ -24,6 +18,18 @@ def new_post():
         pic_file = save_img(form.photo.data)
         post = Post(title=form.title.data, content=form.content.data, author=current_user, img_data=file.read(),
                     img_filename=pic_file)
+        '''translate_client = translate.Client()
+
+        text = form.content.data
+        target = 'en'
+
+        translation = translate_client.translate(
+            text,
+            target_language=target)
+
+        print('Text:  ', text)
+
+        print(u'Translation: {}'.format(translation['translatedText']))'''
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
@@ -32,28 +38,38 @@ def new_post():
                            form=form, legend='New Post')
 
 
-
-
-
-
-@posts.route("/post/<int:post_id>", methods=['POST','GET'])
+@posts.route("/post/<int:post_id>", methods=['POST', 'GET'])
 @login_required
 def post(post_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
     posts = Post.query.order_by(Post.id.desc()).all()
-    comments= Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page, per_page=5)
-    if request.method== 'POST':
-        message= request.form.get('message')
-        comment= Comment(message=message, post_id=post.id, reply=current_user)
+    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
+                                                                                                   per_page=5)
+
+    '''translate_client = translate.Client()
+
+    text = Post.query.filter_by(id=post.content)
+    target = 'fr'
+
+    translation = translate_client.translate(
+        text,
+        target_language=target)
+
+    print('Text:  ', text)
+
+    print(u'Translation: {}'.format(translation['translatedText']))'''
+
+    if request.method == 'POST':
+        message = request.form.get('message')
+        comment = Comment(message=message, post_id=post.id, reply=current_user)
 
         db.session.add(comment)
-        post.comments= post.comments+1
+        post.comments = post.comments + 1
         flash('your comment has been submitted', 'success')
         db.session.commit()
         return redirect(request.url)
     return render_template('post.html', title=post.title, post=post, posts=posts, comments=comments)
-
 
 
 """
@@ -75,8 +91,12 @@ def create_entry():
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
+    comment = Comment.query.filter_by(post_id=post_id).all()
     if post.author != current_user:
         abort(403)
+    for o in comment:
+        db.session.delete(o)
+    post.comments = 0
     form = PostForm()
     if form.validate_on_submit():
         pic_file = save_img(form.photo.data)
@@ -96,13 +116,13 @@ def update_post(post_id):
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
-
     post = Post.query.get_or_404(post_id)
-    comment = Comment.query.get_or_404(post_id)
+    comment = Comment.query.filter_by(post_id=post_id).all()
     if post.author != current_user:
         abort(403)
 
-    db.session.delete(comment)
+    for o in comment:
+        db.session.delete(o)
     db.session.delete(post)
 
     db.session.commit()
