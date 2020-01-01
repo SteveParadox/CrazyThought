@@ -7,7 +7,7 @@ from flask_mail import Mail
 from flaskblog.config import Config
 from flask_socketio import SocketIO
 from flask_paranoid import Paranoid
-from flask_babel import Babel
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -20,7 +20,6 @@ login_manager.login_message_category = 'info'
 socketio = SocketIO()
 paranoid = Paranoid()
 paranoid.redirect_view = 'users.login'
-babel= Babel()
 
 mail = Mail()
 
@@ -35,7 +34,6 @@ def create_app(config_class=Config):
     mail.init_app(app)
     socketio.init_app(app)
     paranoid.init_app(app)
-    babel.init_app(app)
 
     from flaskblog.users.routes import users
     from flaskblog.posts.routes import posts
