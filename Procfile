@@ -1,1 +1,1 @@
-web: gunicorn 'flaskblog:create_app()'
+web: gunicorn --workers=2 'flaskblog:create_app()'
