@@ -8,14 +8,14 @@
               <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
             </div>
-            <h4><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h4>
+            <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
             <p class="article-content">{{ post.content }}</p>
 
                <div>
                    {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
 
-{% endif %}
+{% endif %}]
 
             </div>
 
