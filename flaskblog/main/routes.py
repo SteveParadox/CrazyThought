@@ -2,7 +2,7 @@
 from flask import render_template ,request,  Blueprint
 
 from flaskblog.models import Post
-from google.cloud import translate_v2 as translate
+#from google.cloud import translate_v2 as translate
 
 
 
