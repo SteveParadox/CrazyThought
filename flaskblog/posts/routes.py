@@ -1,10 +1,10 @@
 from flask import render_template, redirect, url_for, flash, request, abort, Blueprint
-from flaskblog import db, babel
+from flaskblog import db
 from flaskblog.posts.forms import PostForm
 from flaskblog.models import Post, Comment
 from flask_login import current_user, login_required
 from flaskblog.posts.utils import save_img
-from google.cloud import translate_v2 as translate
+#from google.cloud import translate_v2 as translate
 
 posts = Blueprint('posts', __name__)
 
@@ -21,7 +21,7 @@ def new_post():
         '''translate_client = translate.Client()
 
         text = form.content.data
-        target = 'en'
+        target = 'es'
 
         translation = translate_client.translate(
             text,
@@ -96,7 +96,7 @@ def update_post(post_id):
         abort(403)
     for o in comment:
         db.session.delete(o)
-    post.comments = 0
+    post.comments = post.comments - post.comments
     form = PostForm()
     if form.validate_on_submit():
         pic_file = save_img(form.photo.data)
