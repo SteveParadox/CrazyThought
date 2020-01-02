@@ -9,7 +9,12 @@ from flaskblog.models import Post
 main= Blueprint('main', __name__)
 
 
+
 @main.route('/')
+def loader():
+    return render_template('loader.html')
+
+
 @main.route('/home')
 
 def home():
