@@ -6,7 +6,7 @@
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
-       <small class="text-muted">{{ post.date_posted.strftime('%a/%b/%y   :   %r') }}</small>
+       <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
         {% if post.author == current_user %}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
@@ -50,7 +50,7 @@
 
 
 <small  class="date">
-                          {{ comment.pub_date.strftime('%a/%b/%y   :   %r') }}
+                          {{ comment.pub_date.strftime('%d/%b/%y   :   %r') }}
                    </small>
 
                       <h3  class="comment">
