@@ -5,17 +5,19 @@
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit="No">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }} " crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
 
     {% if title %}
-        <title>Anonymous Crazy thoughts - {{ title }}</title>
+        <title>Anonymous Crazy Thoughts - {{ title }}</title>
     {% else %}
-        <title>Anonymous Crazy thoughts</title>
+        <title>Anonymous Crazy Thoughts</title>
     {% endif %}
     <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
@@ -40,11 +42,13 @@
 
 </head>
 <br>
+<br>
 <body>
+
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/home">Anonymous Crazy thoughts</a>
+          <a class="navbar-brand mr-4" href="/home">Anonymous Crazy Thoughts</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -90,7 +94,6 @@
 
 
 
-<br>
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
@@ -107,6 +110,57 @@
         </div>
 
 
+{% if current_user.is_authenticated %}
+          <div class="col-md-4">
+           <div class="squa">
+               <div class="colx">
+              <h4 align="center" > Trending </h4>
+                   <hr>
+              <ul class="list-group">
+
+              </ul>
+
+
+          </div>
+
+           </div>
+<br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+                <br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+
+
+              <div class="squa">
+               <div class="colx">
+              <h4 align="center" > Following </h4>
+
+                   <hr>
+              <ol class="list-group">
+
+
+              </ol>
+
+
+          </div>
+
+           </div>
+          </div>
+
+
+
+
+
+
+             {% endif %}
       </div>
     </main>
     {% block script %}
