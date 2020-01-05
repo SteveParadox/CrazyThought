@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
     {% for post in posts.items %}
-        <article class="media content-section">
+<br>
+        <article class="squad">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
@@ -9,8 +10,7 @@
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
-            <p class="article-content">{{ post.content }}</p>
-
+            <p class="article-content" >{{ post.content }}</p>
                <div>
                    {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">

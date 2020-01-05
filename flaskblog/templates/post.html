@@ -22,6 +22,7 @@
 {% endif %}
         <br>
         <br>
+
           {% if current_user.is_authenticated %}
 
          <form method="POST">
@@ -37,6 +38,10 @@
 
 
             </form>
+     </div>
+    </article>
+<article>
+<div>
           <div class="bg-info">
               <h5>{{ post.comments }} Comments</h5>
           </div>
@@ -49,9 +54,7 @@
 
 
 
-<small  class="date">
-                          {{ comment.pub_date.strftime('%d/%b/%y   :   %r') }}
-                   </small>
+
 
                       <h3  class="comment">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
@@ -59,6 +62,9 @@
                           </a>
                            <b> {{ comment.reply.username }} </b>
                      </h3>
+                      <small  class="date">
+                          {{ comment.pub_date.strftime('%d/%b/%y   :   %r') }}
+                   </small>
 
 
                      <h5  class="comment">
