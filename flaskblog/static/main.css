@@ -268,7 +268,7 @@ to {opacity: 0;}
 
 .squa{
 background-color: #fafafa;
-heightL 25px;
+height 25px;
 width: 270px;
 border: 1px solid silver;
 border-radius: 30px;
@@ -277,9 +277,34 @@ position: fixed;
 
 }
 
+.squad{
+background-color: #ffffff;
+
+width: 650px;
+border-top: 1px solid silver;
+border-bottom: 1px solid silver;
+border-radius: 10px;
+
+}
+
 
 .nav-xx{
-font-size: 22px;
+font-size: 25px;
 font-family: 'Satisfy', cursive;
 
 }
+
+
+@viewport{
+zoom: 1.0;
+width: extend-to-zoom;
+}
+
+
+@viewport{
+
+width: extend-to-zoom;
+zoom: 1.0;
+}
+
+
