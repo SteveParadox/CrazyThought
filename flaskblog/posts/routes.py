@@ -47,9 +47,7 @@ def post(post_id):
     posts = Post.query.order_by(Post.id.desc()).all()
     comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
                                                                                                    per_page=5)
-    side = (Post.query.order_by(Post.comments.desc()).all())
-    dox = len(side)
-
+    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
     '''translate_client = translate.Client()
 
     text = Post.query.filter_by(id=post.content)
