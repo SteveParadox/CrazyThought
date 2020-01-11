@@ -9,6 +9,7 @@ from flaskblog.posts.utils import save_img
 posts = Blueprint('posts', __name__)
 
 
+
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -46,6 +47,8 @@ def post(post_id):
     posts = Post.query.order_by(Post.id.desc()).all()
     comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
                                                                                                    per_page=5)
+    side = (Post.query.order_by(Post.comments.desc()).all())
+    dox = len(side)
 
     '''translate_client = translate.Client()
 
@@ -69,7 +72,7 @@ def post(post_id):
         flash('your comment has been submitted', 'success')
         db.session.commit()
         return redirect(request.url)
-    return render_template('post.html', title=post.title, post=post, posts=posts, comments=comments)
+    return render_template('post.html', title=post.title, post=post, posts=posts, comments=comments, side=side)
 
 
 """
