@@ -81,6 +81,7 @@
 
 
                 <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
+
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout.png') }}">
                 </a>
 
@@ -115,18 +116,27 @@
 {% if current_user.is_authenticated %}
           <div class="col-md-4">
            <div class="squa">
-               <div class="colx">
+
               <h4 align="center" > Trending </h4>
+               <div class="colx">
                    <hr>
               <ul class="list-group">
 
-              </ul>
+                  {% for sides in side %}
+
+                  <div class="nox"><a class="article-title" href="{{ url_for('posts.post', post_id = sides.id) }}"><li>{{ sides.title }}</li></a></div>
+                   
+
+                  {% endfor %}
+                             </ul>
 
 
           </div>
 
            </div>
 <br>
+
+              <br>
               <br>
               <br>
               <br>
@@ -142,14 +152,20 @@
 
 
               <div class="squa">
-               <div class="colx">
+
               <h4 align="center" > Following </h4>
+                  <div class="colx">
 
                    <hr>
-              <ol class="list-group">
+              <ul class="list-group">
+                  {% for post in posts.items %}
+                  {% for pos in post.title %}
+                  <li><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></li>
+                  {% endfor %}
+                  {% endfor %}
 
 
-              </ol>
+              </ul>
 
 
           </div>
