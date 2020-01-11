@@ -34,8 +34,8 @@ def loader():
 def home():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=8)
-    side= (Post.query.order_by(Post.comments.desc()).all())
-    dox= len(side)
+    side= (Post.query.order_by(Post.comments.desc()).all()[0:10])
+
 
 
     '''def convert_to_dict(obj):
@@ -76,7 +76,7 @@ def home():
 
 
 
-    return render_template('home.html', posts=posts, side=side, dox=dox)
+    return render_template('home.html', posts=posts, side=side)
 
 '''
 @main.route('/feed')
