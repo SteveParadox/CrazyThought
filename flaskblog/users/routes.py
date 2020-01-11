@@ -80,8 +80,7 @@ def user_post(username):
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=5)
 
-
-    side = (Post.query.order_by(Post.comments.desc()).all())
+    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
     dox = len(side)
 
 
