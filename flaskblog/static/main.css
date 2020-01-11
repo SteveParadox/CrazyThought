@@ -308,4 +308,10 @@ width: extend-to-zoom;
 zoom: 1.0;
 }
 
+.nox{
+position: relative;
+padding-left: 30px;
+padding-top: 5px;
+}
+
 
