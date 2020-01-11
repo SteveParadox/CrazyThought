@@ -4,16 +4,16 @@ from flask import render_template, request, Blueprint, json
 from flaskblog.models import Post
 #from google.cloud import translate_v2 as translate
 from flask import Flask, render_template, request, jsonify
-from pusher import Pusher, pusher
+'''from pusher import Pusher, pusher
 import uuid
-
+'''
 
 
 
 main= Blueprint('main', __name__)
 
 
-
+'''
 pusher_client = pusher.Pusher(
   app_id='926605',
   key='1a1e24764be2a75fa3eb',
@@ -21,7 +21,7 @@ pusher_client = pusher.Pusher(
   cluster='eu',
   ssl=True
 )
-
+'''
 
 
 @main.route('/')
@@ -78,9 +78,9 @@ def home():
 
     return render_template('home.html', posts=posts, side=side, dox=dox)
 
-
+'''
 @main.route('/feed')
 def feed():
     return render_template('feed.html')
-
+'''
 
