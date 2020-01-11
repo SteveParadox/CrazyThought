@@ -80,7 +80,13 @@ def user_post(username):
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=5)
 
-    return render_template('user_posts.html', posts=posts, user=user)
+
+    side = (Post.query.order_by(Post.comments.desc()).all())
+    dox = len(side)
+
+
+
+    return render_template('user_posts.html', posts=posts, user=user,  side=side, dox=dox)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
