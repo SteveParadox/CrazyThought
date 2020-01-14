@@ -51,6 +51,20 @@ def logout():
     return redirect(url_for('main.home'))
 
 
+@users.route('/posts')
+@login_required
+def posts():
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.filter_by(author=current_user) \
+        .order_by(Post.date_posted.desc()) \
+        .paginate(page=page, per_page=5)
+
+    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
+    dox = len(side)
+
+    return render_template('posts.html', posts=posts, side=side, dox=dox)
+
+
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -72,6 +86,8 @@ def account():
                            image_file=image_file, form=form)
 
 
+
+
 @users.route('/users/<string:username>')
 def user_post(username):
     page = request.args.get('page', 1, type=int)
@@ -83,9 +99,7 @@ def user_post(username):
     side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
     dox = len(side)
 
-
-
-    return render_template('user_posts.html', posts=posts, user=user,  side=side, dox=dox)
+    return render_template('user_posts.html', posts=posts, user=user, side=side, dox=dox)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
