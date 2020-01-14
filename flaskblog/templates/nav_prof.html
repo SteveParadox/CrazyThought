@@ -6,17 +6,20 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
 
+
+    <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
 
     {% if title %}
-        <title>Anonymous Crazy thoughts - {{ title }}</title>
+        <title>Anonymous Crazy Thoughts - {{ title }}</title>
     {% else %}
-        <title>Anonymous Crazy thoughts</title>
+        <title>Anonymous Crazy Thoughts</title>
     {% endif %}
     <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
@@ -43,10 +46,11 @@
 <br>
 <br>
 <body>
+
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/"><div class="nav-xx"> Anonymous Crazy thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx">Anonymous Crazy Thoughts</div></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -67,19 +71,18 @@
                 &nbsp;
                 <div class="vl"></div>&nbsp;
 
-                  <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
-                  </a>
             <!--    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  -->
+                 <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
 
-
-                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
-
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout.png') }}">
                 </a>
+
+
+
+
 
 
                 {% else %}
@@ -94,7 +97,6 @@
 
 
 
-<br>
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
@@ -111,8 +113,72 @@
         </div>
 
 
+{% if current_user.is_authenticated %}
+          <div class="col-md-4">
+           <div class="squa">
+
+              <h4 align="center" > Trending </h4>
+               <div class="colx">
+                   <hr>
+              <ul class="list-group">
+
+                  {% for sides in side %}
+
+                  <div class="nox"><a class="article-title" href="{{ url_for('posts.post', post_id = sides.id) }}"><li>{{ sides.title }}</li></a></div>
 
 
+                  {% endfor %}
+                             </ul>
+
+
+          </div>
+
+           </div>
+<br>
+
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+                <br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+
+
+              <div class="squa">
+
+              <h4 align="center" > Following </h4>
+                  <div class="colx">
+
+                   <hr>
+              <ul class="list-group">
+                  {% for post in posts.items %}
+                  {% for pos in post.title %}
+                  <li><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></li>
+                  {% endfor %}
+                  {% endfor %}
+
+
+              </ul>
+
+
+          </div>
+
+           </div>
+          </div>
+
+
+
+
+
+
+             {% endif %}
       </div>
     </main>
     {% block script %}

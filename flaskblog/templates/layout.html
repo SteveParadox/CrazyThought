@@ -80,10 +80,13 @@
                  -->
 
 
-                <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
+                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
                 </a>
+
+
+
 
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
@@ -158,7 +161,11 @@
 
                    <hr>
               <ul class="list-group">
-                 
+                  {% for post in posts.items %}
+                  {% for pos in post.title %}
+                  <li><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></li>
+                  {% endfor %}
+                  {% endfor %}
 
 
               </ul>
