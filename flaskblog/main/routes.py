@@ -1,7 +1,9 @@
 
-from flask import render_template, request, Blueprint, json
+from flask import render_template, request, Blueprint, json, url_for, redirect
+from flask_login import login_required
 
-from flaskblog.models import Post
+from flaskblog.main.form import Searchform
+from flaskblog.models import Post, User
 #from google.cloud import translate_v2 as translate
 from flask import Flask, render_template, request, jsonify
 '''from pusher import Pusher, pusher
@@ -30,11 +32,14 @@ def loader():
 
 
 @main.route('/home')
+@login_required
 
 def home():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=8)
     side= (Post.query.order_by(Post.comments.desc()).all()[0:10])
+    form= Searchform()
+
 
 
 
@@ -76,11 +81,38 @@ def home():
 
 
 
-    return render_template('home.html', posts=posts, side=side)
+    return render_template('home.html', posts=posts, side=side, form=form)
 
 '''
 @main.route('/feed')
 def feed():
     return render_template('feed.html')
+    
 '''
 
+
+
+
+
+
+'''
+@main.route('/search', methods=['GET', 'POST'])
+def search():
+    form = Searchform()
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('search_results', query=form.search.data))
+    return render_template('home.html', form=form)
+
+
+@main.route('/search_results/<query>')
+@login_required
+def search_results(query):
+    results = User.query.whoosh_search(query).all()
+    return render_template('search_results.html', query=query, results=results)
+
+'''
+
+@main.route('/search')
+
+def search():
+    return render_template('search.html')
