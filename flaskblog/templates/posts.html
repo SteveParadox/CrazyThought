@@ -10,7 +10,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
+                <p>{{ post.author.username }}</p>
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
