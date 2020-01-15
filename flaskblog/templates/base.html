@@ -46,7 +46,7 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/"><div class="nav-xx"> Anonymous Crazy thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"> Anonymous Crazy thoughts</div></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -68,7 +68,7 @@
                 <div class="vl"></div>&nbsp;
 
                   <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
                   </a>
             <!--    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -78,7 +78,7 @@
 
                  <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
                 </a>
 
 
