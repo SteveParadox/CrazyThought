@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request, Blueprint
-from flaskblog import db, bcrypt, paranoid, login_manager
+from flaskblog import db, bcrypt, login_manager
 from flaskblog.models import User, Post
 from flask_login import login_user, logout_user, login_required
 from flaskblog.users.forms import *
@@ -141,7 +141,3 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
 
-
-@paranoid.on_invalid_session
-def invalid_session():
-    return 'please login', 401
