@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request, Blueprint
-from flaskblog import db, bcrypt, login_manager
+from flaskblog import db, bcrypt, paranoid, login_manager
 from flaskblog.models import User, Post
 from flask_login import login_user, logout_user, login_required
 from flaskblog.users.forms import *
@@ -69,6 +69,13 @@ def posts():
 @login_required
 def account():
     form = UpdateAccountForm()
+    user = User.query.filter_by(email=request.form.get('email')).first()
+    if user:
+        flash('This email is already used by another user', 'danger')
+        return redirect(url_for('users.account'))
+    elif user == current_user.email:
+        flash('This email is already used by you', 'danger')
+        return redirect(url_for('users.account'))
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
@@ -140,4 +147,3 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
-
