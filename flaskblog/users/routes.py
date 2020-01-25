@@ -73,9 +73,7 @@ def account():
     if user:
         flash('This email is already used by another user', 'danger')
         return redirect(url_for('users.account'))
-    elif user == current_user.email:
-        flash('This email is already used by you', 'danger')
-        return redirect(url_for('users.account'))
+   
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
