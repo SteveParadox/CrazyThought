@@ -6,6 +6,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
+
+       <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
 
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
 
@@ -64,6 +67,8 @@
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
 
+
+                .
                   <a class="nav-item nav-link" href="{{ url_for('users.account') }}">
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
@@ -81,7 +86,7 @@
                  -->
 
 
-                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
+                 <a class="nav-item nav-link" href="{{ url_for('posts.feed') }}">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
                 </a>
@@ -121,7 +126,7 @@
           <div class="col-md-4">
            <div class="squa">
 
-              <h4 align="center" > Trending </h4>
+              <h4 align="center" class="nav-xy" ><b> Trending </b></h4>
                <div class="colx">
                    <hr>
               <ul class="list-group">
@@ -157,15 +162,24 @@
 
               <div class="squa">
 
-              <h4 align="center" > Following </h4>
+              <h4 align="center" class="nav-xy" > <b>Following </b></h4>
                   <div class="colx">
 
                    <hr>
               <ul class="list-group">
                   {% for post in posts.items %}
-                  {% for pos in post.title %}
-                  <li><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></li>
-                  {% endfor %}
+                  {{post.title}}
+
+                  <script>
+                  $(function(){
+                     $('#post').on('click', function(){
+                     console.log('{{ post.content }}');
+                        $('#{{post.title}}').toggle();
+
+                  });
+                  });
+
+</script>
                   {% endfor %}
 
 
@@ -192,8 +206,7 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
