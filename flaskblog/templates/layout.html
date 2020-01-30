@@ -86,10 +86,7 @@
                  -->
 
 
-                 <a class="nav-item nav-link" href="{{ url_for('posts.feed') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
-                </a>
 
 
 
@@ -167,20 +164,6 @@
 
                    <hr>
               <ul class="list-group">
-                  {% for post in posts.items %}
-                  {{post.title}}
-
-                  <script>
-                  $(function(){
-                     $('#post').on('click', function(){
-                     console.log('{{ post.content }}');
-                        $('#{{post.title}}').toggle();
-
-                  });
-                  });
-
-</script>
-                  {% endfor %}
 
 
               </ul>
