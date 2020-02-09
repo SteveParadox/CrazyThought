@@ -30,16 +30,40 @@
                 {% else %}
                     {{ form.content(class="form-control form-control-lg", rows="6") }}
                 {% endif %}
+                <br>
 
-                 <div class="form-group">
-                {{ form.photo.label(class="form-control-label") }}
-                 {{ form.photo(class="form-control-file") }}
-                 {% if form.photo.errors %}
-                    {% for error in form.photo.errors %}
-                        <span class="text-danger">{{ error }}</span><br>
-                    {% endfor %}
-                 {% endif %}
-             </div>
+
+                 <div class="input-file-container">
+
+                    {{ form.photo(class="input-file") }}
+                      {{ form.photo.label(tabindex="0", class="input-file-trigger") }}
+                    {% if form.photo.errors %}
+                        {% for error in form.photo.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+  <p class="file-return"></p>
+
+      <script>document.querySelector("html").classList.add('js');
+
+var fileInput  = document.querySelector( ".input-file" ),
+    button     = document.querySelector( ".input-file-trigger" ),
+    the_return = document.querySelector(".file-return");
+
+button.addEventListener( "keydown", function( event ) {
+    if ( event.keyCode == 13 || event.keyCode == 32 ) {
+        fileInput.focus();
+    }
+});
+button.addEventListener( "click", function( event ) {
+   fileInput.focus();
+   return false;
+});
+fileInput.addEventListener( "change", function( event ) {
+    the_return.innerHTML = this.value;
+});  </script>
 
             </div>
         </fieldset>
