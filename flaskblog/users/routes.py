@@ -70,10 +70,9 @@ def posts():
 def account():
     form = UpdateAccountForm()
     user = User.query.filter_by(email=request.form.get('email')).first()
-    if user:
+    if user and user != current_user:
         flash('This email is already used by another user', 'danger')
         return redirect(url_for('users.account'))
-   
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
