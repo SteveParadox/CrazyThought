@@ -44,6 +44,7 @@ a.article-title:hover {
 
 .article-content {
   white-space: pre-line;
+  font-size: 11px; 
 }
 
 .article-img {
