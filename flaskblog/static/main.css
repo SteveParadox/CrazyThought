@@ -49,6 +49,9 @@ a.article-title:hover {
   font-size: 13px; 
 }
 
+.article-contents {
+  font-size: 13px; 
+}
 .article-img {
   height: 35px;
   width: 35px;
