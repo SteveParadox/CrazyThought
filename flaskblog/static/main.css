@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-title {
   color: #444444;
-  font-size: 17px;
+  font-size: 18px;
 
 }
 
@@ -46,7 +46,7 @@ a.article-title:hover {
 
 .article-content {
   white-space: pre-line;
-  font-size: 14px; 
+  font-size: 16px; 
 }
 
 .article-contents {
