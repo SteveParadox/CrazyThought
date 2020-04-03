@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <h3 class="mb-3">Posts by {{ user.username }} ({{ posts.total }})</h3>
+    <h3 class="nav-xx">Posts by {{ user.username }} ({{ posts.total }})</h3>
     {% for post in posts.items %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
@@ -11,7 +11,7 @@
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
-            <p class="article-content">{{ post.content }}</p>
+            <p><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.content }}</a></p>
              {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
 

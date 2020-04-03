@@ -1,7 +1,7 @@
 {% extends "bast.html" %}
 {% block content %}
 
-    <article class="media content-section">
+   <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
     <div class="media-body">
       <div class="article-metadata">
@@ -9,8 +9,8 @@
        <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
         {% if post.author == current_user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
-            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'refresh.png') }}"></a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"><img class="rou" src="{{ url_for('static', filename= 'delete.png') }}"></button>
 
           </div>
           {% endif %}
@@ -56,18 +56,18 @@
 
 
 
-                      <h3  class="comment">
+                      <h5  class="comment">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
                           </a>
                            <b> {{ comment.reply.username }} </b>
-                     </h3>
+                     </h5>
                       <small  class="date">
                           {{ comment.pub_date.strftime('%d/%b/%y   :   %r') }}
                    </small>
 
 
-                     <h6  class="article-contents">
+                     <h6  class="comment">
                          {{ comment.message }}
                      </h6>
 
@@ -116,5 +116,4 @@
       </div>
     </div>
   </div>
-
 {% endblock content %}

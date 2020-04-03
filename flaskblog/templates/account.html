@@ -39,6 +39,7 @@
                         {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+
                 <br>
                  <div class="input-file-container">
 
@@ -81,35 +82,6 @@ fileInput.addEventListener( "change", function( event ) {
 
 
 
-{% if  posts.total  > 1 %}
-<h3 class="mb-3">{{ posts.total }} posts</h3>
-{% else %}
-<h3 class="mb-3"> {{ posts.total }} post</h3>
-{% endif %}
-    {% for post in posts.items %}
-        <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
-          <div class="media-body">
-            <div class="article-metadata">
-                <p class="mr-2" >{{ post.author.username }}</p>
-                <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
-            </div>
-            <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
 
-          </div>
-        </article>
-    {% endfor %}
-    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current= 1, right_current=2) %}
-        {% if page_num %}
-            {% if posts.page == page_num %}
-                <a class="btn btn-info mb-4" href="{{ url_for('users.account', page=page_num) }}"></a>
-            {% else %}
-                <a class="btn btn-outline-info mb-4" href="{{ url_for('users.account', page=page_num) }}"></a>
-
-            {% endif %}
-        {% else %}
-        ...
-        {% endif %}
-     {% endfor %}
 
 {% endblock content %}

@@ -67,7 +67,7 @@
                 &nbsp;
                 <div class="vl"></div>&nbsp;
 
-                  <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">
+                  <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
                   </a>
             <!--    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -78,7 +78,7 @@
 
                  <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
                 </a>
 
 
@@ -104,6 +104,7 @@
                 <div class="alert alert-{{ category }}">
                   {{ message }}
                 </div>
+
               {% endfor %}
             {% endif %}
           {% endwith %}

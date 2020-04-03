@@ -1,75 +1,32 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 {% block content %}
+
 <div class="content-section">
    <form method=POST enctype=multipart/form-data action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">{{ legend }}</legend>
+
+
             <div class="form-group">
-                {{ form.title.label(class="form-control-label") }}
-                {% if form.title.errors %}
-                    {{ form.title(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.title.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.title(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.content.label(class="form-control-label") }}
+
                 {% if form.content.errors %}
-                    {{ form.content(class="form-control form-control-lg is-invalid", rows="5") }}
+                    {{ form.content(class="daxx", placeholder="What's Up?", rows="5") }}
                     <div class="invalid-feedback">
                         {% for error in form.content.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.content(class="form-control form-control-lg", rows="6") }}
+                    {{ form.content(class="daxx", rows="5", placeholder="What's On Your Mind?") }}
                 {% endif %}
-                <br>
 
 
-                 <div class="input-file-container">
-
-                    {{ form.photo(class="input-file") }}
-                      {{ form.photo.label(tabindex="0", class="input-file-trigger") }}
-                    {% if form.photo.errors %}
-                        {% for error in form.photo.errors %}
-                            <span class="text-danger">{{ error }}</span></br>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-
-  <p class="file-return"></p>
-
-      <script>document.querySelector("html").classList.add('js');
-
-var fileInput  = document.querySelector( ".input-file" ),
-    button     = document.querySelector( ".input-file-trigger" ),
-    the_return = document.querySelector(".file-return");
-
-button.addEventListener( "keydown", function( event ) {
-    if ( event.keyCode == 13 || event.keyCode == 32 ) {
-        fileInput.focus();
-    }
-});
-button.addEventListener( "click", function( event ) {
-   fileInput.focus();
-   return false;
-});
-fileInput.addEventListener( "change", function( event ) {
-    the_return.innerHTML = this.value;
-});  </script>
-
-            </div>
+</div>
         </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
     </form>
 </div>
+
 {% endblock content %}

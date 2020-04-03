@@ -1,23 +1,41 @@
 {% extends "layout.html" %}
 {% block content %}
-<form>
-   <div  align="center"> {{ form.q.label(class="btn btn-outline") }}
-       {% if form.q.errors %}
-                    {{ form.q(class="btn btn-outline-info") }}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<div class="content-section">
+   <form method=POST enctype=multipart/form-data action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+
+
+            <div class="form-group">
+
+                {% if form.content.errors %}
+                    {{ form.content(class="daxx", placeholder="What's Up?", rows="5") }}
                     <div class="invalid-feedback">
-                        {% for error in form.q.errors %}
+                        {% for error in form.content.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.q(class="btn btn-outline-info") }}
+                    {{ form.content(class="daxx", rows="5", placeholder="What's On Your Mind?") }}
                 {% endif %}
-    {{ form.submit(class="btn btn-outline-info") }}
-   </div>
-</form>
+
+
+</div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
 
     {% for post in posts.items %}
 <br>
+
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
@@ -36,7 +54,15 @@
             </div>
 
               <br>
-           <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
+           {% if post.comments > 999 %}
+              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }}k <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
+
+              {% else %}
+              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
+
+              {% endif %}
+
+               <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}">  <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'share.png') }}"></a>
 
           </div>
 
@@ -60,3 +86,5 @@
       {% endif %}
     {% endfor %}
 {% endblock content %}
+
+

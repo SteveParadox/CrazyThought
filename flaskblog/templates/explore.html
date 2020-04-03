@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="nav-xx">
+    <p align="center" ><b>Popular Posts</b></p>
+</div>
+ {% for sidex in side %}
+
+
+
+ <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + sidex.author.image_file) }}">
+<div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('users.user_post', username=sidex.author.username) }}">{{ sidex.author.username }}</a>
+                <small class="text-muted"><i>{{ sidex.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
+            </div>
+
+    <p><a class="article-title" href="{{ url_for('posts.post', post_id = sidex.id) }}"> {{ sidex.content }}</a></p>
+</div>
+ </article>
+     {% endfor %}
+{% endblock content %}

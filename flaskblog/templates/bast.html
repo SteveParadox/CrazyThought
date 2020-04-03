@@ -72,7 +72,7 @@
                 &nbsp;
                 <div class="vl"></div>&nbsp;
 
-                  <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">
+                  <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
                   </a>
             <!--    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -81,9 +81,9 @@
                  -->
 
 
-                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
+                <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'upload.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
                 </a>
 
 
@@ -114,83 +114,6 @@
           {% endwith %}
           {% block content %}{% endblock %}
         </div>
-{% if current_user.is_authenticated %}
-          <div class="col-md-4">
-           <div class="squa">
-
-              <h4 align="center" class="nav-xy" ><b> Trending </b></h4>
-               <div class="colx">
-                   <hr>
-              <ul class="list-group">
-
-                  {% for sides in side %}
-
-                  <div class="nox"><a class="article-title" href="{{ url_for('posts.post', post_id = sides.id) }}"><li>{{ sides.title }}</li></a></div>
-
-
-                  {% endfor %}
-                             </ul>
-
-
-          </div>
-
-           </div>
-<br>
-
-              <br>
-              <br>
-              <br>
-              <br>
-              <br>
-              <br>
-              <br>
-                <br>
-              <br>
-              <br>
-              <br>
-              <br>
-              <br>
-
-
-              <div class="squa">
-
-              <h4 align="center" class="nav-xy" > <b>Following </b></h4>
-                  <div class="colx">
-
-                   <hr>
-              <ul class="list-group">
-                  {% for post in posts.items %}
-
-
-                  {{post.title}}
-
-                  <script>
-                  $(function(){
-                     $('#post').on('click', function(){
-                     console.log('{{ post.content }}');
-                        $('#{{post.title}}').toggle();
-
-                  });
-                  });
-
-</script>
-                  {% endfor %}
-
-
-              </ul>
-
-
-          </div>
-
-           </div>
-          </div>
-
-
-
-
-
-
-             {% endif %}
 
 
 

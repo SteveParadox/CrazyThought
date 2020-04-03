@@ -1,7 +1,13 @@
-{% extends "layout.html" %}
-{% block content %}
-  <h1>Search results for "{{ query }}":</h1>
-  {% for post in results %}
-      {% include 'post.html' %}
-  {% endfor %}
-{% endblock %}
+<!-- {{ form.q.label(class="btn btn-outline") }}
+       {% if form.q.errors %}
+                    {{ form.q(class="btn btn-outline-info") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.q.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.q(class="btn btn-outline-info") }}
+                {% endif %}>
+ {{ form.submit(class="btn btn-outline-info") }}
+       -->
