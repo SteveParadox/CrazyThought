@@ -1,19 +1,23 @@
+import time
 
-from flask import render_template, request, Blueprint, json, url_for, redirect
-from flask_login import login_required
+from flask import Blueprint, jsonify, url_for, redirect, json, flash
+from flask_login import login_required, current_user
 
-from flaskblog.main.form import Searchform
-from flaskblog.models import Post, User
-#from google.cloud import translate_v2 as translate
-from flask import Flask, render_template, request, jsonify
-'''from pusher import Pusher, pusher
+from flaskblog import db, abort
+from flaskblog.main.form import Searchform, SharePostForm
+from flaskblog.models import Post, User, Comment
+# from google.cloud import translate_v2 as translate
+from flask import render_template, request
+from pynput.mouse import Listener
+
+from flaskblog.posts.forms import PostForm
+
+'''from pusher import Pusher, pusher.
 import uuid
 '''
 
 
-
-main= Blueprint('main', __name__)
-
+main = Blueprint('main', __name__)
 
 '''
 pusher_client = pusher.Pusher(
@@ -31,57 +35,39 @@ def loader():
     return render_template('loader.html')
 
 
-@main.route('/home')
+@main.route('/home', methods= ['GET','POST'])
 @login_required
-
 def home():
+
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=8)
-    side= (Post.query.order_by(Post.comments.desc()).all()[0:10])
-    form= Searchform()
+    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
+    gra= Comment.query.order_by(Comment.pub_date.desc()).all
+    gray = Post.query.filter_by(author=current_user) \
+        .order_by(Post.date_posted.desc())
+    form = PostForm()
+    if form.validate_on_submit():
 
+        post = Post(content=form.content.data, author=current_user)
+        '''translate_client = translate.Client()
 
+        text = form.content.data
+        target = 'es'
 
+        translation = translate_client.translate(
+            text,
+            target_language=target)
 
-    '''def convert_to_dict(obj):
-        """
-        A function takes in a custom object and returns a dictionary representation of the object.
-        This dict representation includes meta data such as the object's module and class names.
-        """
+        print('Text:  ', text)
 
-        #  Populate the dictionary with object meta data
-        obj_dict = {
-            "__class__": obj.__class__.__name__,
-            "__module__": obj.__module__
-        }
+        print(u'Translation: {}'.format(translation['translatedText']))'''
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('main.home'))
 
-        #  Populate the dictionary with object properties
-        obj_dict.update(obj.__dict__)
+    return render_template('home.html', posts=posts, side=side,  reload = time.time(), gray=gray, form=form)
 
-        return obj_dict
-
-
-    translate_client = translate.Client()
-
-    text = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=8)
-
-    target = 'fr'
-
-    translation = translate_client.translate(
-        text,
-        target_language=target)
-
-    data = json.dumps(text, default=convert_to_dict)
-
-    print(data)
-
-    #print(u'Translation: {}'.format(translation['translatedText']))
-    
-'''
-
-
-
-    return render_template('home.html', posts=posts, side=side, form=form)
 
 '''
 @main.route('/feed')
@@ -90,16 +76,11 @@ def feed():
     
 '''
 
-
-
-
-
-
 '''
 @main.route('/search', methods=['GET', 'POST'])
 def search():
     form = Searchform()
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit(): 
         return redirect(url_for('search_results', query=form.search.data))
     return render_template('home.html', form=form)
 
@@ -111,8 +92,29 @@ def search_results(query):
     return render_template('search_results.html', query=query, results=results)
 
 '''
+@main.route("/post/<int:post_id>/share", methods=['GET', 'POST'])
+@login_required
+def share_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    form=SharePostForm()
+    if form.is_submitted():
+        poss= Post( content=form.content.data, author=current_user)
+        posf = Post.query.get_or_404(post_id)
+        db.session.add(poss)
+        db.session.add(posf)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('main.home', post_id=post.id))
+    return render_template('share.html', title='Share Post',form=form,
+                            legend='Share Post', post_id=post.id, post=post)
 
-@main.route('/search')
 
+
+
+@main.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('search.html')
+    searchbox= request.form.get("text")
+   # query = "select word_eng from words where word_eng LIKE '{}%' order by word_eng".format(searchbox)
+    result= User.query.filter_by(username=searchbox).all()
+
+    return jsonify(result)
