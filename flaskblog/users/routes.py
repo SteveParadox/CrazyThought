@@ -16,7 +16,7 @@ def register():
     if request.method == 'POST':
         user = User.query.filter_by(email=request.form.get('email')).first()
         if user:
-            flash('This email is already used by another user', 'danger')
+            flash('This email is already taken by another user, Please try another one.', 'danger')
             return redirect(url_for('users.register'))
 
     if form.validate_on_submit():
@@ -59,10 +59,9 @@ def posts():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
-    dox = len(side)
 
-    return render_template('posts.html', posts=posts, side=side, dox=dox)
+
+    return render_template('posts.html', posts=posts)
 
 
 @users.route("/account", methods=['GET', 'POST'])
