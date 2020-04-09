@@ -8,7 +8,7 @@ from flaskblog.main.form import Searchform, SharePostForm
 from flaskblog.models import Post, User, Comment
 # from google.cloud import translate_v2 as translate
 from flask import render_template, request
-from pynput.mouse import Listener
+
 
 from flaskblog.posts.forms import PostForm
 
