@@ -1,22 +1,61 @@
+import re
+
 from flask import render_template, redirect, url_for, flash, request, Blueprint
-from flaskblog import db, bcrypt, paranoid, login_manager
+from wtforms.validators import email
+
+from flaskblog import db, bcrypt, login_manager
 from flaskblog.models import User, Post
 from flask_login import login_user, logout_user, login_required
 from flaskblog.users.forms import *
 from flaskblog.users.util import save_picture, send_reset_email
+email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+name_regex = re.compile(r'^[a-zA-Z]+$')
+password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")
+
 
 users = Blueprint('users', __name__)
 
 login_manager.session_protection = None
 
-
+                                        #^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])
 @users.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if request.method == 'POST':
+        if len(request.form['email']) < 1:
+            flash("E-mail cannot be empty!", 'danger')
+            return redirect(url_for('users.register'))
+        if len(request.form['username']) < 1 :
+            flash("Username cannot be empty!", 'danger')
+            return redirect(url_for('users.register'))
+        if request.form['password'] != request.form['confirm_password']:
+            flash("Passwords does not match!. Try again", 'danger')
+            return redirect(url_for('users.register'))
+        if len(request.form['password']) < 1 and len(request.form['confirm_password']):
+            flash("Passwords cannot be empty!", 'danger')
+            return redirect(url_for('users.register'))
+        if not email_regex.match(request.form['email']):
+            flash("Invalid Email Address!", 'danger')
+            return redirect(url_for('users.register'))
+        if not password_regex.match(request.form['password']):
+            flash("password must contain at least one smallcase letter!", 'danger')
+            flash("password must contain at least one Capital case letter !", 'danger')
+            flash("password must contain at least one digit!", 'danger')
+            flash("password must not be less than 8 characters!", 'warning')
+            return redirect(url_for('users.register'))
+        if len(request.form['password']) < 8 and len(request.form['confirm_password']) < 8:
+            flash("Passwords must be over 8 characters long!", 'danger')
+            return redirect(url_for('users.register'))
+
+
         user = User.query.filter_by(email=request.form.get('email')).first()
         if user:
             flash('This email is already taken by another user, Please try another one.', 'danger')
+            return redirect(url_for('users.register'))
+    if request.method == 'POST':
+        user = User.query.filter_by(username=request.form.get('username')).first()
+        if user:
+            flash('This Username is already in use. Select a different username.', 'warning')
             return redirect(url_for('users.register'))
 
     if form.validate_on_submit():
