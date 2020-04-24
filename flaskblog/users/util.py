@@ -1,7 +1,7 @@
 
 import os
 import secrets
-from PilLite import Image
+from Pil import Image
 from flask import url_for, current_app
 from flaskblog import mail
 
