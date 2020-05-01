@@ -72,7 +72,7 @@ def home():
     gra = Comment.query.order_by(Comment.pub_date.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
-    gray = random.choice(gry)
+   
 
     if form.validate_on_submit():
         post = Post(content=form.content.data, author=current_user)
@@ -93,7 +93,7 @@ def home():
         flash('Your post has been created!', 'success')
         return redirect(url_for('main.home'))
 
-    return render_template('home.html', posts=posts, side=side, reload=time.time(), gray=gray, form=form)
+    return render_template('home.html', posts=posts, side=side, reload=time.time(), form=form)
 
 
 @main.route('/search', methods=['GET', 'POST'])
