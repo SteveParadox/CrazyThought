@@ -13,22 +13,12 @@
                 <p class="mr-2" >{{ post.author.username }}</p>
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
             </div>
-            <p><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.content }}</a></p>
+            <p class="krac"><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.content }}</a></p>
 
           </div>
         </article>
     {% endfor %}
-    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current= 1, right_current=2) %}
-        {% if page_num %}
-            {% if posts.page == page_num %}
-                <a class="btn btn-info mb-4" href="{{ url_for('users.posts', page=page_num) }}"></a>
-            {% else %}
-                <a class="btn btn-outline-info mb-4" href="{{ url_for('users.posts', page=page_num) }}"></a>
-
-            {% endif %}
-        {% else %}
-        ...
-        {% endif %}
-     {% endfor %}
+    {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.prev_num) }}">Latest</a>{% else %}{% endif %}
+{% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.next_num) }}"> Older </a>{% else %} {% endif %}
 
 {% endblock content %}

@@ -1,40 +1,28 @@
-{% extends "layout.html" %}
-{% block content %}
 
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</head>
-
-    {% for post in posts %}
-<br>
-        <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
-                <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
-            </div>
-            <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
-            <p class="article-content" >{{ post.content }}</p>
-               <div>
-                   {% if post.img_filename %}
-             <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
-
-{% endif %}
-
-            </div>
-
-              <br>
-           <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
-
-          </div>
+<div class="content-section">
+   <form method=GET enctype=multipart/form-data action="search">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
 
 
+            <div class="form-group">
 
-        </article>
-    {% endfor %}
-<br>
-<br>
+                {% if form.q.errors %}
+                    {{ form.q(class="daxx", placeholder="What's Up?", rows="5") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.q.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.q(class="daxx", rows="4", placeholder="search... ") }}
+                {% endif %}
 
-0
-{% endblock content %}
+
+</div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>

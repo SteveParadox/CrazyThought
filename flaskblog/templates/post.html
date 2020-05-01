@@ -15,7 +15,7 @@
           </div>
           {% endif %}
       <h2 class="article-title">{{ post.title }}</h2>
-      <p class="article-content">{{ post.content }}</p>
+      <p class="krac">{{ post.content }}</p>
          {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
             </div>
@@ -28,7 +28,7 @@
          <form method="POST">
 
                 <div class="form-group">
-                    <textarea class="form-control form-control-lg" rows="5" name="message" placeholder="Message"
+                    <textarea class="form-control form-control-lg" rows="3" name="message" placeholder="Message"
                               onfocus="this.placeholder = ''" onblur="this.placeholder= 'Message'"
                               required="">
 

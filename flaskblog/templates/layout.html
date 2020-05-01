@@ -2,13 +2,28 @@
 <html>
 
 <head>
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1, shrink-to-fit=yes">
+
+     <!-- Site Metas -->
+   {% if title %}
+        <title>Anonymous Crazy thoughts - {{ title }}</title>
+    {% else %}
+        <title>Anonymous Crazy thoughts</title>
+    {% endif %}
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
     <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
 
        <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
 
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
 
@@ -68,7 +83,7 @@
                 {% if current_user.is_authenticated %}
 
 
-                .
+
                   <a class="nav-item nav-link" href="{{ url_for('users.account') }}">
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
@@ -80,10 +95,6 @@
                   <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
                   </a>
-            <!--    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 -->
 
 
                  <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
@@ -119,8 +130,30 @@
           {% endwith %}
           {% block content %}{% endblock %}
         </div>
+              <!--    <div class="col-md-4">
+           <div class="squa">
+
+              <h4 align="center" > Trending </h4>
+               <div class="colx">
+                   <hr>
+              <ul class="list-group">
+
+                  {% for sides in side %}
+
+                  <div class="nox"><a class="article-title" href="{{ url_for('posts.post', post_id = sides.id) }}">{{ sides.title }}</a></div>
 
 
+                  {% endfor %}
+                             </ul>
+
+
+          </div>
+
+           </div>
+
+
+      </div>
+      -->
       </div>
     </main>
     {% block script %}
@@ -132,5 +165,7 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="static/jquery-min.js"></script>
+<script src="static/script.js"></script>
 </body>
 </html>
