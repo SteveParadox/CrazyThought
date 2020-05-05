@@ -25,19 +25,33 @@
 
           {% if current_user.is_authenticated %}
 
-         <form method="POST">
-
-                <div class="form-group">
-                    <textarea class="form-control form-control-lg" rows="3" name="message" placeholder="Message"
-                              onfocus="this.placeholder = ''" onblur="this.placeholder= 'Message'"
-                              required="">
-
-                    </textarea>
-                     <button type="submit" class="btn btn-outline-info">Comment</button>
-                </div>
+<div class="content-section">
+   <form method=POST enctype=multipart/form-data action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group" >
 
 
-            </form>
+            <div class="form-group" aria-live="polite" >
+
+                {% if form.message.errors %}
+                    {{ form.message(class="daxx", placeholder="What's Up?", rows="5") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.message.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.message(class="daxx", rows="2", placeholder="Comment....") }}
+                {% endif %}
+
+
+</div>
+              </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
+        </div>
+    </form>
+</div>
      </div>
     </article>
 <article>
@@ -70,13 +84,21 @@
                      <h6  class="comment">
                          {{ comment.message }}
                      </h6>
+{% if comment.reply == current_user %}
 
+                <form action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+{% endif %}
 
-                  </div>
+           </div>
               </div>
-
+{% for commen in comments.items %}
+    {{commen.reply_message}}
+    {% endfor %}
 
               {% endfor %}
+
         <br>
         <br>
          {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}

@@ -17,7 +17,7 @@
                 <small class="text-muted"><i>{{ sidex.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
             </div>
 
-    <p class="krac"><a class="article-title"  id="krax" href="{{ url_for('posts.post', post_id = sidex.id) }}"> {{ sidex.content }}</a></p>
+    <p class="krax"><a class="article-title"   href="{{ url_for('posts.post', post_id = sidex.id) }}"> {{ sidex.content }}</a></p>
 </div>
  </article>
      {% endfor %}
