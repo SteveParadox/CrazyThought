@@ -61,7 +61,6 @@ def post(post_id):
                                                                                                    per_page=15)
 
     form= CommentForm()
-    form2 = ReplyForm()
 
 
 
@@ -78,29 +77,7 @@ def post(post_id):
 
 
 
-    return render_template('post.html', post=post, posts=posts, comments=comments, form=form, form2=form2)
-
-
-@posts.route("/post/<int:post_id>/comment/<int:comment_id>", methods=['POST'])
-def reply_comment(post_id, comment_id):
-    form2 = ReplyForm()
-    post = Post.query.get_or_404(post_id)
-    comment=Comment.query.get_or_404(comment_id)
-    commenta = Comment.query.filter_by(post_id=post.id, reply_message=Comment.reply_message).order_by(
-        Comment.pub_date.desc()).all()
-    if request.method == 'POST' and form2.validate_on_submit():
-        reply_messag = request.form.get('replys')
-        comment2 = Comment(reply_message=reply_messag, post_id=post.id, comment_id=comment.id, reply=current_user)
-        db.session.add(comment2)
-        db.session.commit()
-
-    return redirect(url_for(request.url, post_id=post.id, commenta=commenta, form2=form2))
-
-
-
-
-
-
+    return render_template('post.html', post=post, posts=posts, comments=comments, form=form)
 
 """
 
