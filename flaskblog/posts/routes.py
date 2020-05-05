@@ -50,34 +50,47 @@ def new_post():
                            form=form, legend='New Post')
 
 
-@posts.route("/post/<int:post_id>", methods=['POST', 'GET'])
+
+@posts.route("/post/<int:post_id>", methods=['POST','GET'])
 @login_required
 def post(post_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
-
     posts = Post.query.order_by(Post.id.desc()).all()
-    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
-                                                                                                   per_page=15)
-
+    comments= Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page, per_page=5)
     form= CommentForm()
-
-
-
-    if request.method == 'POST' and form.validate_on_submit():
-        message = request.form.get('message')
-        comment = Comment(message=message, post_id=post.id, reply=current_user)
+    if request.method== 'POST' and form.validate_on_submit():
+        message= request.form.get('message')
+        comment= Comment(message=message, post_id=post.id, reply=current_user)
 
         db.session.add(comment)
-        post.comments = post.comments + 1
-
+        post.comments= post.comments+1
         flash('your comment has been submitted', 'success')
         db.session.commit()
-
-
-
-
+        return redirect(request.url)
     return render_template('post.html', post=post, posts=posts, comments=comments, form=form)
+
+
+@posts.route("/post/<int:post_id>/comment/<int:comment_id>", methods=['POST'])
+def reply_comment(post_id, comment_id):
+    form2 = ReplyForm()
+    post = Post.query.get_or_404(post_id)
+    comment=Comment.query.get_or_404(comment_id)
+    commenta = Comment.query.filter_by(post_id=post.id, reply_message=Comment.reply_message).order_by(
+        Comment.pub_date.desc()).all()
+    if request.method == 'POST' and form2.validate_on_submit():
+        reply_messag = request.form.get('replys')
+        comment2 = Comment(reply_message=reply_messag, post_id=post.id, comment_id=comment.id, reply=current_user)
+        db.session.add(comment2)
+        db.session.commit()
+
+    return redirect(url_for(request.url, post_id=post.id, commenta=commenta, form2=form2))
+
+
+
+
+
+
 
 """
 
