@@ -91,7 +91,7 @@
 
 
                   <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'trending.png') }}">
 
                   </a>
 
@@ -99,6 +99,11 @@
                  <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
+
+                </a>
+                 <a class="nav-item nav-link" href="{{ url_for('posts.following') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'activity.png') }}">
 
                 </a>
 
@@ -113,7 +118,7 @@
     <a class="nav-item nav-link" href="about">About</a>
           <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout-outline.png') }}">
                 </a>
 
 
@@ -227,7 +232,7 @@ window.onclick = function(event) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="static/jquery-min.js"></script>
 <script src="static/script.js"></script>
-<script src="static/main.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="static/vue.js"></script>
 </body>
 </html>

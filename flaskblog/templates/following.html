@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<p align="center" class="nav-xx"> Activities </p>
+{% for post in posts %}
+ <div class="article-metadata" >
+ <h4> You commented on</h4>
+   <article class="media content-section" id="togga">
+
+       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.parser.author.image_file) }}">
+          <div class="media-body">
+
+            <div class="article-metadata">
+
+              <a class="mr-2" href="{{ url_for('users.user_post', username=post.parser.author.username) }}">{{ post.parser.author.username }}</a>
+                <small class="text-muted"><i>{{ post.parser.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
+            </div>
+
+            <p class="krax"  autocapitalize="sentences" aria-live="polite" > {{ post.parser.content }}</p>
+
+               <div>
+
+
+            </div>
+
+
+              <a class="article-title" href="{{ url_for('posts.post', post_id=post.post.id) }}"> {{ post.parser.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
+
+          </div>
+
+
+        </article>
+ </div>
+{% endfor %}
+{% endblock %}

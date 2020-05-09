@@ -6,30 +6,45 @@
 </head>
 
 
-<div class="content-section">
-   <form method=POST enctype=multipart/form-data action="">
+<div class="content-section" id="tog">
+   <form method=POST enctype=multipart/form-data action="" >
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
+        <fieldset class="form-group"  >
 
 
-            <div class="form-group">
+            <div class="form-group" aria-live="polite" >
 
                 {% if form.content.errors %}
-                    {{ form.content(class="daxx", placeholder="What's Up?", rows="5") }}
+                    {{ form.content(class="daxx", placeholder="What's Up?", id="tog", rows="5") }}
                     <div class="invalid-feedback">
                         {% for error in form.content.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.content(class="daxx", rows="3", placeholder="What's On Your Mind?") }}
+                    {{ form.content(class="daxx", id="togg", rows="3", placeholder="What's On Your Mind?") }}
                 {% endif %}
 
 
 </div>
+         <!--
+
+            , id="myBtn", onfocusin="myFunction()" ,onfocusout="myFunc()"
+
+            <script>
+function myFunction() {
+  var dus =document.getElementById("myBtn").style.height="120px";
+}
+
+
+function myFunc() {
+ document.getElementById("myBtn").style.height="70px";
+}
+</script>
+-->
         </fieldset>
         <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
         </div>
     </form>
 </div>
@@ -37,7 +52,7 @@
     {% for post in posts.items %}
 <br>
 
-        <article class="media content-section">
+        <article class="media content-section" id="togga">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
@@ -45,7 +60,7 @@
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
-            <p class="krax" autocapitalize="sentences">{{ post.content }}</p>
+            <p class="krax"  autocapitalize="sentences" aria-live="polite" > {{ post.content }}</p>
 
                <div>
                    {% if post.img_filename %}
@@ -68,7 +83,8 @@
 
               {% endif %}
 
-               <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}">  <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'share.png') }}"></a>
+
+              <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'tack.png') }}" id="toggleImage" onclick="toggleImage();" />
 
           </div>
 

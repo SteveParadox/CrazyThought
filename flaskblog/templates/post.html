@@ -15,12 +15,12 @@
           </div>
           {% endif %}
       <h2 class="article-title">{{ post.title }}</h2>
-      <p class="krac">{{ post.content }}</p>
+      <p class="krax">{{ post.content }}</p>
          {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
             </div>
 {% endif %}
-       
+
 
           {% if current_user.is_authenticated %}
 
@@ -86,15 +86,13 @@
 {% if comment.reply == current_user %}
 
                 <form action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
-            <input class="btn btn-danger" type="submit" value="Delete">
-          </form>
+                   <input type="submit" class="btn btn-danger btn-sm m-1" value="Delete" >
+                </form>
 {% endif %}
 
            </div>
               </div>
-{% for commen in comments.items %}
-    {{commen.reply_message}}
-    {% endfor %}
+
 
               {% endfor %}
 
