@@ -1,5 +1,6 @@
 import time
 import random
+from operator import itemgetter
 
 from flask import Blueprint, jsonify, url_for, redirect, json, flash
 from flask_login import login_required, current_user
@@ -7,11 +8,12 @@ from flask_login import login_required, current_user
 
 from flaskblog import db, abort
 from flaskblog.main.form import Searchform, SharePostForm, GetPostForm
-from flaskblog.models import Post, User, Comment
+from flaskblog.models import Post, User, Comment, PostSchema, UserSchema
 # from google.cloud import translate_v2 as translate
 from flask import render_template, request
 
 from flaskblog.posts.forms import PostForm
+from flask_marshmallow import Marshmallow
 
 '''from pusher import Pusher, pusher.
 import uuid
@@ -72,7 +74,6 @@ def home():
     gra = Comment.query.order_by(Comment.pub_date.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
-   
 
     if form.validate_on_submit():
         post = Post(content=form.content.data, author=current_user)
@@ -93,15 +94,15 @@ def home():
         flash('Your post has been created!', 'success')
         return redirect(url_for('main.home'))
 
-    return render_template('home.html', posts=posts, side=side, reload=time.time(), form=form)
+    return render_template('home.html', posts=posts, side=side, reload=time.time(),  form=form)
 
 
-@main.route('/search', methods=['GET', 'POST'])
-def search():
-    form = Searchform()
+@main.route('/about', methods=['GET', 'POST'])
+def about():
 
 
-    return render_template('search.html', form=form)
+
+    return render_template('about.html')
 
 
 '''
@@ -111,13 +112,46 @@ def feed():
     
 '''
 
-'''
+
+
+
+
+
+
 @main.route('/search', methods=['GET', 'POST'])
 def search():
+    searchbox =request.form.get("livebox")
+   # db.session.query(User).filter(User.username.data == 1).all()
+    results=  User.query.all()
+    user_schema = UserSchema(many=True)
+    res = user_schema.dump(results)
+    result = list(map(itemgetter('username'), res))
+    if 'Stephen Ford' in result:
+        print('found the name Stephen Ford')
+    else:
+        print('No Match')
+    return jsonify({'user': result})
+'''   x = result["username"]
+    x = thisdict.get("model")'''
+
+
+@main.route('/searchfile', methods=['GET', 'POST'])
+def searchfile():
     form = Searchform()
-    if request.method == 'POST' and form.validate_on_submit(): 
-        return redirect(url_for('search_results', query=form.search.data))
-    return render_template('home.html', form=form)
+    results = User.query.all()
+    user_schema = UserSchema(many=True)
+    res = user_schema.dump(results)
+    result = list(map(itemgetter('username'), res))
+    paxx = form.livebox.data
+
+    if paxx in result:
+        return render_template('search.html', form=form, paxx=paxx, result=result, author=paxx)
+    else:
+        return render_template('search.html', form=form)
+
+
+
+'''
 
 
 @main.route('/search_results/<query>')
@@ -127,3 +161,32 @@ def search_results(query):
     return render_template('search_results.html', query=query, results=results)
 
 '''
+@main.route('/max')
+def index():
+    return jsonify("Pong!")
+
+Languages=[
+{
+    'python':'1st rated',
+    'javascript': 'i hate but 2nd rated',
+    'c++': 'my ex crush but 3rd rated',
+    'java': 'just there as my 4th rated',
+
+
+},
+{
+    'vue.js':'1st rated',
+    'jquery': 'i hate but 2nd rated',
+    'react.js': 'my ex crush but 3rd rated',
+    'vanilla.js': 'just there as my 4th rated',
+
+
+}
+    ]
+
+
+
+
+@main.route('/home/list', methods=['GET'])
+def api_list():
+    return jsonify(Languages)

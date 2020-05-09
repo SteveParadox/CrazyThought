@@ -11,7 +11,7 @@ from wtforms.validators import DataRequired
 from flask_wtf.file import FileAllowed
 
 class Searchform(FlaskForm):
-    q= TextAreaField(DataRequired())
+    livebox= StringField(DataRequired())
     submit= SubmitField('Search')
 
 
