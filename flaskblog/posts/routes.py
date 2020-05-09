@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, abort, Blueprint
 from flaskblog import db
 from flaskblog.posts.forms import PostForm, UpdatePostForm, CommentForm, ReplyForm
-from flaskblog.models import Post, Comment
+from flaskblog.models import Post, Comment, User
 from flask_login import current_user, login_required
 from flaskblog.posts.utils import save_img
 import random
@@ -160,6 +160,7 @@ def delete_post(post_id):
     return redirect(url_for('main.home'))
 
 @posts.route("/post/<int:post_id>/comment/<int:comment_id>/delete", methods=['POST'])
+@login_required
 def delete_comment(post_id, comment_id):
     post = Post.query.get_or_404(post_id)
     comment=Comment.query.get_or_404(comment_id)
@@ -168,7 +169,12 @@ def delete_comment(post_id, comment_id):
     db.session.delete(comment)
     post.comments = post.comments - 1
     db.session.commit()
-
-
     flash('Your comment has been deleted!', 'success')
     return redirect(url_for('posts.post', post_id=post.id))
+
+@posts.route("/following", methods=['GET','POST'])
+def following():
+    posts = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
+
+
+    return render_template('following.html', posts=posts)
