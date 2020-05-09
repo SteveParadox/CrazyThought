@@ -1,8 +1,9 @@
 from datetime import datetime
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flaskblog import db, login_manager, app
+from flaskblog import db, login_manager, app, ma
 from flask_login import UserMixin
+from marshmallow_sqlalchemy import ModelSchema
 
 
 @login_manager.user_loader
@@ -11,6 +12,7 @@ def load_user(user_id):
 
 
 class User(db.Model, UserMixin):
+    __searchable__=['username']
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -19,6 +21,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     comments = db.relationship('Comment', backref='reply', lazy=True)
+
+
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -39,8 +43,8 @@ class User(db.Model, UserMixin):
 
 
 
-
 class Post(db.Model):
+    __searchable__ = ['content']
     id = db.Column(db.Integer, primary_key=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
@@ -59,6 +63,7 @@ class Post(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
+    reply_message = db.Column(db.Text)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String())
@@ -67,10 +72,33 @@ class Comment(db.Model):
     status = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return '<Comment %r>' % self.username
+        return '<Comment %r>' % self.name
 
 
 '''class Translate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 '''
+class UserSchema(ModelSchema):
+    class Meta:
+        fields= ('id', 'username', 'email', 'image_file', 'password', 'posts', 'comments' )
+
+        model = User
+user_schema= UserSchema()
+users_schema=  UserSchema(many=True)
+
+
+
+class PostSchema(ModelSchema):
+    class Meta:
+        model = Post
+post_schema= PostSchema()
+posts_schema=  PostSchema(many=True)
+
+
+class CommentSchema(ModelSchema):
+    class Meta:
+        model = Comment
+comment_schema= CommentSchema()
+comments_schema=  CommentSchema(many=True)
+
