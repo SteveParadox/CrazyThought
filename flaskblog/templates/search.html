@@ -1,28 +1,59 @@
-
-<div class="content-section">
-   <form method=GET enctype=multipart/form-data action="search">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-
-
-            <div class="form-group">
-
-                {% if form.q.errors %}
-                    {{ form.q(class="daxx", placeholder="What's Up?", rows="5") }}
+{% extends "layout.html" %}
+{% block content %}
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div align="center"> <fieldset class="form-group">
+                {{ form.livebox.label(class="btn btn-outline") }}
+       {% if form.livebox.errors %}
+                    {{ form.livebox(class="btn btn-outline-info") }}
                     <div class="invalid-feedback">
-                        {% for error in form.q.errors %}
+                        {% for error in form.livebox.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.q(class="daxx", rows="4", placeholder="search... ") }}
+                    {{ form.livebox(class="btn btn-outline-info") }}
                 {% endif %}
+ {{ form.submit(class="btn btn-outline-info") }}
+            </fieldset>
+            </div>
+        </form>
+    <p id = "datalist"></p>
+</body>
+<script>
+    $(document).ready(function(){
+        $("#livebox").on("input",function(e){
+            $("#datalist").empty();
+
+            $.ajax({
+                method:"post",
+                url:"/search",
+                data:{text:$("#livebox").val()},
+                success:function(res){
+                   console.log(res)
+                    var data = "<ul>";
+                    $.each(res,function(searchfile,value){
+                        data += "<li>"+value.result+"</li>";
+                    });
+                    data += "</ul>";
+                    $("#datalist").html(data);0
+                }
+            });
+        });
+    });
+</script>
 
 
-</div>
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
-        </div>
-    </form>
-</div>
+{% if paxx in result %}
+
+
+<a class="mr-2" href="{{ url_for('users.user_post', username=paxx) }}"><p align="center"> {{ paxx }}</a>
+{% else %}
+<p align="center">No Result Found</p>
+{% endif %}
+
+{% endblock %}
