@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-	var maxLength = 700;
+	var maxLength = 500;
 	$(".krax").each(function(){
 		var myStr = $(this).text();
 		if($.trim(myStr).length > maxLength){
