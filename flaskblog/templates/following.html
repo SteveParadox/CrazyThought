@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dous.html" %}
 {% block content %}
 <p align="center" class="nav-xx"> Activities </p>
 {% for post in posts %}
@@ -15,7 +15,7 @@
                 <small class="text-muted"><i>{{ post.parser.date_posted.strftime('%d/%b/%y   :   %r') }}</i></small>
             </div>
 
-            <p class="krax"  autocapitalize="sentences" aria-live="polite" > {{ post.parser.content }}</p>
+            <p class="krax"  autocapitalize="words" aria-live="polite" > {{ post.parser.content }}</p>
 
                <div>
 

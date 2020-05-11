@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dous.html" %}
 {% block content %}
 <div class="content-section">
     <form method="POST" action="">
@@ -16,7 +16,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.username(class="form-control form-control-lg") }}
+                {{ form.username(class="form-control form-control-lg", minlength="3") }}
                 {% endif %}
 
 
@@ -32,7 +32,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.email(class="form-control form-control-lg") }}
+                {{ form.email(class="form-control form-control-lg", minlength="2") }}
                 {% endif %}
 
 
@@ -46,7 +46,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.password(class="form-control form-control-lg") }}
+                {{ form.password(class="form-control form-control-lg" , minlength="8") }}
                 {% endif %}
 
 
@@ -60,7 +60,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.confirm_password(class="form-control form-control-lg") }}
+                {{ form.confirm_password(class="form-control form-control-lg" , minlength="8") }}
                 {% endif %}
 
 
