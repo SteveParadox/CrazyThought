@@ -69,7 +69,7 @@
                   </a>
 
 
-   <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
+   <a class="nav-item nav-link" href="{{ url_for('posts.tags') }}">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'pin.png') }}">
 
@@ -96,7 +96,12 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
+
+                     <div class="alert alert-{{ category }}">
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
                   {{ message }}
                 </div>
               {% endfor %}
