@@ -22,18 +22,11 @@ login_manager.session_protection = None
 def register():
     form = RegistrationForm()
     if request.method == 'POST':
-        if len(request.form['email']) < 1:
-            flash("E-mail cannot be empty!", 'danger')
-            return redirect(url_for('users.register'))
-        if len(request.form['username']) < 1 :
-            flash("Username cannot be empty!", 'danger')
-            return redirect(url_for('users.register'))
+
         if request.form['password'] != request.form['confirm_password']:
             flash("Passwords does not match!. Try again", 'danger')
             return redirect(url_for('users.register'))
-        if len(request.form['password']) < 1 and len(request.form['confirm_password']):
-            flash("Passwords cannot be empty!", 'danger')
-            return redirect(url_for('users.register'))
+
         if not email_regex.match(request.form['email']):
             flash("Invalid Email Address!", 'danger')
             return redirect(url_for('users.register'))
@@ -43,10 +36,6 @@ def register():
             flash("password must contain at least one digit!", 'danger')
             flash("password must not be less than 8 characters!", 'warning')
             return redirect(url_for('users.register'))
-        if len(request.form['password']) < 8 and len(request.form['confirm_password']) < 8:
-            flash("Passwords must be over 8 characters long!", 'danger')
-            return redirect(url_for('users.register'))
-
 
         user = User.query.filter_by(email=request.form.get('email')).first()
         if user:
@@ -96,7 +85,7 @@ def posts():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.filter_by(author=current_user) \
         .order_by(Post.date_posted.desc()) \
-        .paginate(page=page, per_page=10)
+        .paginate(page=page, per_page=20)
 
 
 
