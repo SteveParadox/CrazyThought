@@ -51,12 +51,14 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"> Anonymous Crazy thoughts</div></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx">Crazy Thoughts</div></a>
+        <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+          -->
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
+
 
             </div>
 
@@ -125,6 +127,34 @@
     {% block script %}
 
               {% endblock %}
+     <br>
+    <br>
+    <br>
+
+    <footer class="foot" >
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+{% if current_user.is_authenticated %}
+
+     <a  href="{{ url_for('users.account') }}">
+                      <img class="rounded-circle article-img"
+                           src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
+                  </a>
+
+
+                  <a href="{{ url_for('posts.explore') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
+                  </a>
+
+
+
+                <a  href="{{ url_for('users.posts') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
+                </a>
+
+     {% endif %}
+ </nav>
+    </footer>
 
 
     <!-- Optional JavaScript -->

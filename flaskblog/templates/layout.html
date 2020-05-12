@@ -10,9 +10,9 @@
 
      <!-- Site Metas -->
    {% if title %}
-        <title>Anonymous Crazy thoughts - {{ title }}</title>
+        <title>Crazy thoughts - {{ title }}</title>
     {% else %}
-        <title>Anonymous Crazy thoughts</title>
+        <title>Crazy thoughts</title>
     {% endif %}
     <meta name="keywords" content="">
     <meta name="description" content="">
@@ -35,9 +35,9 @@
 
 
     {% if title %}
-        <title>Anonymous Crazy Thoughts - {{ title }}</title>
+        <title>Crazy Thoughts - {{ title }}</title>
     {% else %}
-        <title>Anonymous Crazy Thoughts</title>
+        <title>Crazy Thoughts</title>
     {% endif %}
     <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
@@ -68,10 +68,11 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx">Anonymous Crazy Thoughts</div></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx">Crazy Thoughts</div></a>
+        <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+          -->
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
 
@@ -164,6 +165,7 @@ function myFuncti() {
 
 
 
+
 <script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -238,7 +240,59 @@ window.onclick = function(event) {
     {% block script %}
 
               {% endblock %}
+    <br>
+    <br>
+    <br>
 
+    <footer class="foot" >
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+{% if current_user.is_authenticated %}
+
+
+
+                  <a  href="{{ url_for('users.account') }}">
+                      <img class="rounded-circle article-img"
+                           src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
+                  </a>
+
+
+                  <a  href="{{ url_for('posts.explore') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'trending.png') }}">
+
+                  </a>
+
+
+                 <a  href="{{ url_for('users.posts') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
+
+                </a>
+                 <a  href="{{ url_for('posts.following') }}"  >
+
+                <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'activity.png') }}" >
+                     <script>
+                         function fuckyou() {
+                         var lax= 'activity'
+                         var x = document.getElementById("fuck");
+                            x.innerHTML = "Activity";
+                         console.log(lax)
+
+
+                         }
+                     </script>
+
+                </a>
+
+
+
+
+                {% else %}
+                    <a  href="{{ url_for('users.login') }}">Login</a>
+                    <a  href="{{ url_for('users.register') }}">Register</a>
+                {% endif %}
+
+ </nav>
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -250,5 +304,6 @@ window.onclick = function(event) {
 <script src="static/parsley.min.js"></script>
 <script src="static/jquery-1.12.4.min.js"></script>
 <!--<script src="static/main.js"></script>-->
+
 </body>
 </html>

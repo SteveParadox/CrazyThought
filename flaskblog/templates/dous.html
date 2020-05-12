@@ -105,6 +105,16 @@
     {% block script %}
 
               {% endblock %}
+     <br>
+    <br>
+    <br>
+
+    <footer class="foot" >
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+{% if current_user.is_authenticated %}
+     {% endif %}
+ </nav>
+    </footer>
 
 
     <!-- Optional JavaScript -->
