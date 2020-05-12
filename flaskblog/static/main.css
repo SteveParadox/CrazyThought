@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-steel {
-  background-color: #dddddd;
+  background-color: #fff;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -167,6 +167,16 @@ a.article-title:hover {
 .topnav a.active {
   background-color:#dddddd;
   color: white;
+}
+.foot{
+display: block;
+}
+
+@media all and (min-width:767px) {
+
+.foot{
+display: none;
+}
 }
 
 
@@ -1649,7 +1659,6 @@ border-radius: 10px;
 .nav-xx{
 font-size: 22px;
 font-family: 'Satisfy', cursive;
-
 }
 
 
