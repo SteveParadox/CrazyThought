@@ -73,6 +73,15 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           -->
+
+<a class="foot" href="{{ url_for('users.setting') }}">
+
+
+                <img class="dropbtn" src="{{ url_for('static', filename= 'gear.png') }}" >
+</a>
+
+
+
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
 
@@ -118,36 +127,11 @@
 
                 </a>
 
-<div class="nav-item nav-link">
+<a class="nav-item nav-link" href="{{ url_for('users.setting') }}">
 
 
-                <img class="dropbtn" src="{{ url_for('static', filename= 'gear.png') }}" onclick="yFunction()"  >
-
-    <div id="myDropdown" class="dropdown-content">
-    <a class="nav-item nav-link" href="" >About</a>
-    <div class="nav-item nav-link" onclick="myFuncti()">Dark Mode</div>
-    <a class="nav-item nav-link" href="about">About</a>
-          <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
-
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout-outline.png') }}">
-                </a>
-
-
-<script>
-function myFuncti() {
-   var element = document.body;
-   element.classList.toggle("dark-mode");
-    document.getElementById("tog").style.background="black";
-    document.getElementById("togg").style.background="black";
-    document.getElementById("togga").style.background="black";
-}
-</script>
-
-  </div>
-
-
-</div>
-
+                <img class="dropbtn" src="{{ url_for('static', filename= 'gear.png') }}" >
+</a>
 
 
 

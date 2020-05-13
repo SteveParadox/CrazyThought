@@ -14,9 +14,9 @@
 
 
     {% if title %}
-        <title>Anonymous Crazy thoughts - {{ title }}</title>
+        <title>Crazy thoughts - {{ title }}</title>
     {% else %}
-        <title>Anonymous Crazy thoughts</title>
+        <title>Crazy thoughts</title>
     {% endif %}
     <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
@@ -130,10 +130,10 @@
  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
 {% if current_user.is_authenticated %}
 
-     <a  href="{{ url_for('users.account') }}">
-                      <img class="rounded-circle article-img"
-                           src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
-                  </a>
+
+     <a  href="{{ url_for('main.home') }}">
+                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'house.png') }}">
+                     </a>
 
 
 

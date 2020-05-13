@@ -1,0 +1,13 @@
+{% extends "dous.html" %}
+{% block content %}
+
+
+ <a class="nav-item nav-link" href="" >About</a>
+    <a class="nav-item nav-link" href="about">About</a>
+
+<button class="btn btn-outline-info">Dark Mode</button>
+          <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout-outline.png') }}">
+                </a>
+{% endblock %}

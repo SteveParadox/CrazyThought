@@ -71,7 +71,11 @@
                   </a>
 
 
-  
+   <a class="nav-item nav-link" href="{{ url_for('posts.tags') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'pin.png') }}">
+
+                </a>
 
 
 
@@ -171,13 +175,17 @@
  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
 {% if current_user.is_authenticated %}
 
-      <a  href="{{ url_for('users.account') }}">
-                      <img class="rounded-circle article-img"
-                           src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
-                  </a>
+
+     <a  href="{{ url_for('main.home') }}">
+                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'house.png') }}">
+                     </a>
 
 
-  
+   <a  href="{{ url_for('posts.tags') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'pin.png') }}">
+
+                </a>
 
      {% endif %}
  </nav>
