@@ -66,19 +66,14 @@
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
 
-                  <a class="nav-item nav-link" href="{{ url_for('users.account') }}">
-                      <img class="rounded-circle article-img"
-                           src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
-                  </a>
-
+                    <a class="nav-item nav-link"  href="{{ url_for('main.home') }}">
+                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'house.png') }}">
+                     </a>
 
                   <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'trending.png') }}">
                   </a>
-            <!--    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 -->
+
 
 
                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
@@ -141,7 +136,7 @@
 
 
                   <a href="{{ url_for('posts.explore') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'writing.png') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'trending.png') }}">
                   </a>
 
 

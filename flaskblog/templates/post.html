@@ -14,7 +14,7 @@
 
           </div>
           {% endif %}
-      <h2 class="article-title">{{ post.title }}</h2>
+
       <p class="krax">{{ post.content }}</p>
          {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
@@ -63,12 +63,7 @@
 
               <div class="comment-list">
                   <div class="desc">
-                       <br>
-
-
-
-
-
+          <br>
                       <h5  class="comment">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
