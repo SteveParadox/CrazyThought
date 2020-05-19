@@ -293,7 +293,7 @@ color: azure;
 .nav-xy{
 
 font-size: 20px;
-font-family: 'Lobster Two', cursive;
+font-family: 'Bad Script', cursive;
 }
 
 .loader-frame{
@@ -374,6 +374,58 @@ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue"
  }
 
 
+
+.form-group[data-error].form-control form-control-lg{
+border-color: #c92432;
+color: #c92432;
+background: #fffafa;
+
+
+}
+
+
+.form-group[data-error]::after{
+content: attr(data-error);
+font-size: 0.85rem;
+color: #c92432;
+display: block;
+margin : 10px 0;
+
+}
+
+p * {
+  display: block;
+
+}
+
+
+/* This is our style for the invalid fields
+input:invalid{
+  border-color: #900;
+  background-color: #FDD;
+}
+*/
+
+input:focus:invalid {
+  outline: none;
+}
+
+/* This is the style of our error messages */
+.error {
+  width  : 100%;
+  padding: 0;
+
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}
 
 
 
