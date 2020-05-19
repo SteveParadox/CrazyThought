@@ -24,14 +24,14 @@
 
              <div class="form-group">
                 {{ form.email.label(class="form-control-label") }}
-                {% if form.email.errors %}z
+                {% if form.email.errors %}
                  {{ form.email(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.email.errors %}
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.email(class="form-control form-control-lg") }}
+                {{ form.email(class="form-control form-control-lg", type="email") }}
                 {% endif %}
 
 
@@ -173,7 +173,7 @@ padding-left: 2px;
 
     </div>
     <div class="modal-body">
-      <p>An open platform which provides resources for you to reach out to the world by share your random crazy thoughts, and  experiencing what other people feel as well.</p>
+      <p>An open platform which provides resources for you to reach out to the world by share your random crazy thoughts and  experiencing what other people feel as well.</p>
 
     </div>
 

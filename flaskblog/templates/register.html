@@ -16,7 +16,8 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.username(class="form-control form-control-lg", minlength="3") }}
+                {{ form.username(class="form-control form-control-lg", minlength="2", id='user') }}
+                <span class="error" aria-live="polite"></span>
                 {% endif %}
 
 
@@ -29,14 +30,17 @@
                  {{ form.email(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.email.errors %}
+                     <span>{{ error }}</span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.email(class="form-control form-control-lg", minlength="2") }}
+                {{ form.email(class="form-control form-control-lg", maxlength="30", type="email") }}
+
                 {% endif %}
 
 
             </div>
+
             <div class="form-group">
                 {{ form.password.label(class="form-control-label") }}
                 {% if form.password.errors %}
@@ -46,7 +50,8 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.password(class="form-control form-control-lg" , minlength="8") }}
+                {{ form.password(class="form-control form-control-lg" , pattern="^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(^[a-zA-Z0-9@\$=!:.#%]+$)", id="mail") }}
+                <span class="error" aria-live="polite"></span>
                 {% endif %}
 
 
@@ -72,10 +77,64 @@
 
     </form>
 
+
 </div>
 <div class="border-to[ pt-3">
     <small class="text-muted">
         Already Have An Account? <a class="ml-2" href="{{ url_for('users.login') }}"> Log in</a>
     </small>
 </div>
+
+<script>
+
+    const form  = document.getElementsByTagName('form')[0];
+
+const email = document.getElementById('mail');
+const emailError = document.querySelector('#mail + span.error');
+
+
+
+email.addEventListener('input', function (event) {
+  // Each time the user types something, we check if the
+  // form fields are valid.
+
+  if (email.validity.valid) {
+    // In case there is an error message visible, if the field
+    // is valid, we remove the error message.
+    emailError.innerHTML = ''; // Reset the content of the message
+    emailError.className = 'error'; // Reset the visual state of the message
+  } else {
+    // If there is still an error, show the correct error
+    showError();
+  }
+});
+
+form.addEventListener('submit', function (event) {
+  // if the email field is valid, we let the form submit
+
+  if(!email.validity.valid) {
+    // If it isn't, we display an appropriate error message
+    showError();
+    // Then we prevent the form from being sent by canceling the event
+    event.preventDefault();
+  }
+});
+
+function showError() {
+  if(email.validity.valueMissing) {
+    // If the field is empty
+    // display the following error message.
+    emailError.textContent = 'You need to enter a password .';
+  } else if(!email.validity.Pattern) {
+
+    emailError.textContent = 'Password must be at least 8 characters long, contain at least a lower case, an Upper case and a number ';
+  }
+
+  // Set the styling appropriately
+  emailError.className = 'error active';
+}
+
+
+
+</script>
 {%  endblock content %}

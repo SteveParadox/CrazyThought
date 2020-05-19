@@ -36,7 +36,8 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
+                        {{ form.email(class="form-control form-control-lg", maxlength="30") }}
+                     <span>{{ error }}</span>
                     {% endif %}
                 </div>
 

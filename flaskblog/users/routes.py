@@ -31,10 +31,8 @@ def register():
             flash("Invalid Email Address!", 'danger')
             return redirect(url_for('users.register'))
         if not password_regex.match(request.form['password']):
-            flash("password must contain at least one smallcase letter!", 'danger')
-            flash("password must contain at least one Capital case letter !", 'danger')
-            flash("password must contain at least one digit!", 'danger')
-            flash("password must not be less than 8 characters!", 'warning')
+            flash("password must contain at least one smallcase letter!, password must contain at least one Capital case letter !, password must contain at least one digit!, password must not be less than 8 characters!", 'danger')
+
             return redirect(url_for('users.register'))
 
         user = User.query.filter_by(email=request.form.get('email')).first()
@@ -61,7 +59,9 @@ def register():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
+
     form = LoginForm()
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):

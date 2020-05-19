@@ -1,9 +1,9 @@
 {% extends "nav_prof.html" %}
 {% block content %}
 {% if  posts.total  > 1 %}
-<h3 class="nav-xx">{{ posts.total }} posts by You</h3>
+<h3 class="nav-xy">{{ posts.total }} posts by You</h3>
 {% else %}
-<h3 class="nav-xx"> {{ posts.total }} post by You</h3>
+<h3 class="nav-xy"> {{ posts.total }} post by You</h3>
 {% endif %}
     {% for post in posts.items %}
         <article class="media content-section">
