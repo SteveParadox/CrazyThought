@@ -46,7 +46,7 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     __searchable__ = ['content']
     id = db.Column(db.Integer, primary_key=True)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -68,7 +68,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String())
     post = db.relationship('Post', backref=db.backref('post', lazy=True))
-    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
