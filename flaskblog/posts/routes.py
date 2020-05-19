@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, abort, Blueprint
+from flask import render_template, redirect, url_for, flash, request, abort, Blueprint, jsonify
 from flaskblog import db
 from flaskblog.posts.forms import PostForm, UpdatePostForm, CommentForm, ReplyForm
 from flaskblog.models import Post, Comment, User
@@ -17,6 +17,14 @@ def explore():
     side = (Post.query.order_by(Post.comments.desc()).all()[0:100])
     x=random.shuffle(side)
     return render_template('explore.html', side=side)
+
+
+@posts.route("/tags", methods=['GET','POST'])
+def tags():
+
+
+    return render_template('tags.html')
+
 
 
 
@@ -44,7 +52,7 @@ def new_post():
         print(u'Translation: {}'.format(translation['translatedText']))'''
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
+
         return redirect(url_for('main.home'))
     return render_template('create_post.html', title='New Post',
                            form=form, legend='New Post')
@@ -65,7 +73,6 @@ def post(post_id):
 
         db.session.add(comment)
         post.comments= post.comments+1
-        flash('your comment has been submitted', 'success')
         db.session.commit()
         return redirect(request.url)
     return render_template('post.html', post=post, posts=posts, comments=comments, form=form)
@@ -169,7 +176,6 @@ def delete_comment(post_id, comment_id):
     db.session.delete(comment)
     post.comments = post.comments - 1
     db.session.commit()
-    flash('Your comment has been deleted!', 'success')
     return redirect(url_for('posts.post', post_id=post.id))
 
 @posts.route("/following", methods=['GET','POST'])
