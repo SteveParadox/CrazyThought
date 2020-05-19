@@ -52,7 +52,7 @@ def share_post(post_id):
 
         db.session.add(poss)
         db.session.commit()
-        flash('Your post has been created!', 'success')
+
         return redirect(url_for('main.home', post_id=post.id))
     return render_template('share.html', title='Share Post', form=form,
                            legend='Share Post', post_id=post.id, post=post)
@@ -91,7 +91,7 @@ def home():
         print(u'Translation: {}'.format(translation['translatedText']))'''
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
+
         return redirect(url_for('main.home'))
 
     return render_template('home.html', posts=posts, side=side, reload=time.time(),  form=form)
@@ -183,6 +183,13 @@ Languages=[
 
 }
     ]
+
+
+
+@main.route('/total')
+def total():
+    return render_template('total.html')
+
 
 
 
