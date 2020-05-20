@@ -6,6 +6,7 @@ from flask_login import current_user, login_required
 from flaskblog.posts.utils import save_img
 import random
 #from google.cloud import translate_v2 as translate
+from flaskblog.users.decorator import check_confirmed
 
 posts = Blueprint('posts', __name__)
 
@@ -13,6 +14,7 @@ posts = Blueprint('posts', __name__)
 
 @posts.route("/explore", methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def explore():
     side = (Post.query.order_by(Post.comments.desc()).all()[0:100])
     x=random.shuffle(side)
@@ -31,6 +33,7 @@ def tags():
 
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
+
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
@@ -61,6 +64,7 @@ def new_post():
 
 @posts.route("/post/<int:post_id>", methods=['POST','GET'])
 @login_required
+@check_confirmed
 def post(post_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
@@ -128,6 +132,7 @@ def create_entry():
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
     comment = Comment.query.filter_by(post_id=post_id).all()
@@ -152,6 +157,7 @@ def update_post(post_id):
 
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
+@check_confirmed
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     comment = Comment.query.filter_by(post_id=post_id).all()
@@ -168,6 +174,7 @@ def delete_post(post_id):
 
 @posts.route("/post/<int:post_id>/comment/<int:comment_id>/delete", methods=['POST'])
 @login_required
+@check_confirmed
 def delete_comment(post_id, comment_id):
     post = Post.query.get_or_404(post_id)
     comment=Comment.query.get_or_404(comment_id)
@@ -179,6 +186,8 @@ def delete_comment(post_id, comment_id):
     return redirect(url_for('posts.post', post_id=post.id))
 
 @posts.route("/following", methods=['GET','POST'])
+@login_required
+@check_confirmed
 def following():
     posts = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
 
