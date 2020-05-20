@@ -47,7 +47,7 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     __searchable__ = ['content']
     id = db.Column(db.Integer, primary_key=True)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(tz=None))
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
