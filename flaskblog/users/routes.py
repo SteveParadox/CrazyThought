@@ -68,11 +68,6 @@ def register():
         if user:
             flash('This email is already taken by another user, Please try another one.', 'danger')
             return redirect(url_for('users.register'))
-    if request.method == 'POST':
-        user = User.query.filter_by(username=request.form.get('username')).first()
-        if user:
-            flash('This Username is already in use. Select a different username.', 'warning')
-            return redirect(url_for('users.register'))
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
