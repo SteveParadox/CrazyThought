@@ -26,20 +26,7 @@
                         {{ form.username(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg", maxlength="30") }}
-                     <span>{{ error }}</span>
-                    {% endif %}
-                </div>
+
 
                 <br>
                  <div class="input-file-container">
@@ -48,7 +35,7 @@
                       {{ form.picture.label(tabindex="0", class="input-file-trigger") }}
                     {% if form.picture.errors %}
                         {% for error in form.picture.errors %}
-                            <span class="text-danger">{{ error }}</span></br>
+                            <span class="text-danger">{{ error }}</span><br>
                         {% endfor %}
                     {% endif %}
                 </div>
