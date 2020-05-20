@@ -23,8 +23,8 @@ class Config:
 
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'fordstphn@gmail.com'
-    MAIL_PASSWORD = 'drstrange'
+    MAIL_USERNAME = 'crazythoughtverify@gmail.com'
+    MAIL_PASSWORD = 'saintvirus11'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     BABEL_DEFAULT_LOCALE = 'en'
