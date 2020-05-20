@@ -235,7 +235,7 @@ def setting():
 @login_required
 def unconfirmed():
     if current_user.confirmed:
-        return redirect('main.home')
+        return redirect(url_for('main.home'))
     return render_template('unconfirmed.html')
 
 
