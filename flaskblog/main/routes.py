@@ -15,6 +15,8 @@ from flask import render_template, request
 from flaskblog.posts.forms import PostForm
 from flask_marshmallow import Marshmallow
 
+from flaskblog.users.decorator import check_confirmed
+
 '''from pusher import Pusher, pusher.
 import uuid
 '''
@@ -63,6 +65,7 @@ def share_post(post_id):
 
 @main.route('/home', methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def home():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=30)
@@ -119,6 +122,7 @@ def feed():
 
 
 @main.route('/search', methods=['GET', 'POST'])
+@check_confirmed
 def search():
     searchbox =request.form.get("livebox")
    # db.session.query(User).filter(User.username.data == 1).all()
@@ -136,6 +140,7 @@ def search():
 
 
 @main.route('/searchfile', methods=['GET', 'POST'])
+@check_confirmed
 def searchfile():
     form = Searchform()
     results = User.query.all()
