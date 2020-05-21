@@ -64,10 +64,16 @@ def register():
 
             return redirect(url_for('users.register'))
 
+
         user = User.query.filter_by(email=request.form.get('email')).first()
         if user:
             flash('This email is already taken by another user, Please try another one.', 'danger')
             return redirect(url_for('users.register'))
+        user = User.query.filter_by(username=request.form.get('username')).first()
+        if user:
+            flash('This username is already taken by another user, Please try another one.', 'danger')
+            return redirect(url_for('users.register'))
+
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -142,18 +148,35 @@ def account():
     if user and user != current_user:
         flash('This email is already used by another user', 'danger')
         return redirect(url_for('users.account'))
+    user = User.query.filter_by(username=request.form.get('username')).first()
+    if user and user != current_user:
+        flash('This username is already used by another user', 'danger')
+        return redirect(url_for('users.account'))
+
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.username = form.username.data
-        current_user.email = form.email.data
+        if form.email.data != current_user.email:
+            current_user.email = form.email.data
+            current_user.confirmed = False
+            token = generate_confirmation_token(user.email)
+            confirm_url = url_for('users.confirm_email', token=token, _external=True)
+            html = render_template('confirm_url.html', confirm_url=confirm_url)
+            subject = "Please confirm your email"
+            send_email(user.email, subject, html)
+
+            login_user(user)
         db.session.commit()
-        flash('Your account has been updated!', 'success')
+        if form.email.data == current_user.email:
+            flash('Your account has been updated!', 'success')
         return redirect(url_for('users.account'))
+
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        current_user.confirmed = True
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     page = request.args.get('page', 1, type=int)
     posts = Post.query.filter_by(author=current_user) \
