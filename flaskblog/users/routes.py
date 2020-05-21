@@ -169,8 +169,8 @@ def account():
 
             login_user(user)
         db.session.commit()
-        if form.email.data == current_user.email:
-            flash('Your account has been updated!', 'success')
+    if form.email.data == current_user.email:
+        flash('Your account has been updated!', 'success')
         return redirect(url_for('users.account'))
 
     elif request.method == 'GET':
