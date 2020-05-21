@@ -14,7 +14,7 @@
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
             </div>
             <p class="krax">{{ post.content }}</p>
-                    <br>
+                   
 
 
               <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
