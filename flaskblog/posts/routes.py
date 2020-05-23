@@ -69,7 +69,7 @@ def post(post_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
     posts = Post.query.order_by(Post.id.desc()).all()
-    comments= Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page, per_page=5)
+    comments= Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page, per_page=20)
     form= CommentForm()
     if request.method== 'POST' and form.validate_on_submit():
         message= request.form.get('message')
