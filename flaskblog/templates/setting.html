@@ -5,6 +5,18 @@
 
           <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout-outline.png') }}">
+
+               <small>Logout</small> <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout-outline.png') }}">
                 </a>
+
+         <a class="nav-item nav-link" href="{{ url_for('main.tos') }}">
+
+             Terms of service
+         </a>
+
+
+         <a class="nav-item nav-link" href="{{ url_for('main.cookies') }}">
+
+             Cookies Policy
+         </a>
 {% endblock %}
