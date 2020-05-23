@@ -9,6 +9,7 @@
 
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
@@ -69,6 +70,13 @@
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
+
+
+   <a class="nav-item nav-link" href="{{ url_for('posts.tags') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'pin.png') }}">
+
+                </a>
 
 
 
