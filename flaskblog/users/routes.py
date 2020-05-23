@@ -200,7 +200,7 @@ def user_post(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user) \
         .order_by(Post.date_posted.desc()) \
-        .paginate(page=page, per_page=5)
+        .paginate(page=page, per_page=20)
 
     side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
     dox = len(side)
