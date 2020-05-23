@@ -68,7 +68,7 @@ def share_post(post_id):
 @check_confirmed
 def home():
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=30)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=100)
 
    #ejd= share_post(23)
 
