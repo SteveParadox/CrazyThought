@@ -70,6 +70,7 @@ def home():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=50)
 
+
    #ejd= share_post(23)
 
 
@@ -117,12 +118,17 @@ def feed():
 
 
 
+@main.route('/tos')
+def tos():
+    return render_template('tos.html')
 
 
 
+@main.route('/cookies')
+def cookies():
+    return render_template('cookies.html')
 
 @main.route('/search', methods=['GET', 'POST'])
-@check_confirmed
 def search():
     searchbox =request.form.get("livebox")
    # db.session.query(User).filter(User.username.data == 1).all()
