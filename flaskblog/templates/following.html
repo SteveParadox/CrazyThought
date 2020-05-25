@@ -12,7 +12,7 @@
             <div class="article-metadata">
 
               <a class="mr-2" href="{{ url_for('users.user_post', username=post.parser.author.username) }}">{{ post.parser.author.username }}</a>
-                <small class="text-muted"><i>{{ post.parser.date_posted.strftime('%d/%b/%y ') }}</i></small>
+                <small class="text-muted"><i>{{ post.parser.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
 
             <p class="krax"  autocapitalize="words" aria-live="polite" > {{ post.parser.content }}</p>

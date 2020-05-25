@@ -6,7 +6,7 @@
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
-       <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y ') }}</small>
+       <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
         {% if post.author == current_user %}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'refresh.png') }}"></a>
@@ -76,7 +76,7 @@ position: relative;">
                            <b> {{ comment.reply.username }} </b>
                      </h5>
                       <small  class="date" style="font-weight: 450;">
-                          {{ comment.pub_date.strftime('%d/%b/%y ') }}
+                          {{ comment.pub_date.strftime('%d/%b/%Y ') }}
                    </small>
 
 
