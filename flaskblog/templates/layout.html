@@ -39,22 +39,22 @@
     {% else %}
         <title>Crazy Thoughts</title>
     {% endif %}
-    <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="static/favicon/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="static/favicon/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="static/favicon/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="static/favicon/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="static/favicon/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="static/favicon/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="static/favicon/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="static/favicon/apple-icon-144x144.png">
-<link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
+   <link rel="apple-touch-icon" sizes="57x57" href="static/favico/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="static/favico/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="static/favico/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="static/favico/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="static/favico/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="static/favico/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="static/favico/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="static/favico/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="static/favico/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="static/favico/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="static/favico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="static/favico/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/favico/favicon-16x16.png">
+<link rel="manifest" href="static/favico/manifest.json">
 <meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="msapplication-TileImage" content="static/favicon/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 
 
@@ -68,7 +68,7 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx">Crazy Thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"> <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logox.jpg') }}">Crazy Thoughts</div></a>
         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -193,18 +193,24 @@ window.onclick = function(event) {
             {% endif %}
           {% endwith %}
           {% block content %}{% endblock %}
-        </div>
-              <!--<div class="col-md-4">
-               <div class="squa">
+        </div><div class="col-md-4">
+               <div class="squa" style="width: 363px;
+transition: .3s;
+border: 1px solid
 
-                  <h4 align="center" > Trending </h4>
+silver;
+border-radius:0;
+position: sticky;
+opacity: 5.2;
+visibility: visible;
+margin-top: 6rem;">
+
                    <div class="colx">
-                       <hr>
+
                   <ul class="list-group">
 
                       {% for sides in side %}
 
-                      <div class="nox"><a class="article-title" href="{{ url_for('posts.post', post_id = sides.id) }}">{{ sides.title }}</a></div>
 
 
                       {% endfor %}
@@ -214,11 +220,11 @@ window.onclick = function(event) {
               </div>
 
                </div>
-               -->
+
 
 
       </div>
-
+      </div>
 
     </main>
     {% block script %}
