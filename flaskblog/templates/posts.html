@@ -11,11 +11,9 @@
           <div class="media-body">
             <div class="article-metadata">
                 <p class="mr-2" >{{ post.author.username }}</p>
-                <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y   :   %r') }}</small>
+                <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%y ') }}</small>
             </div>
             <p class="krax">{{ post.content }}</p>
-                   
-
 
               <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
 
