@@ -1,16 +1,16 @@
 
 {% extends "loads.html" %}
 {% block content %}
-
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='others.css') }}">
 
 <div class="preload">
     <div class="logo">
-        <span style="color:silver">Crazy Thoughts</span>
+        <span style="color:black">Crazy Thoughts</span>
     </div>
     <div class="loader-frame">
         <div class="loader1" id="loader1"></div>
          <div class="loader2" id="loader2"></div>
-
+ <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logox.jpg') }}">
     </div>
     <script>
         (function() {

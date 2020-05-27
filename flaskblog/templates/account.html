@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='account.css') }}">
     <div class="content-section">
       <div class="media">
         <img class="rounded-circle account-img" src="{{ image_file }}">
@@ -26,7 +28,7 @@
                         {{ form.username(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">
+                <div class="form-group" >
                     {{ form.email.label(class="form-control-label") }}
 
                     {% if form.email.errors %}
@@ -43,7 +45,7 @@
 
 
                 <br>
-                 <div class="input-file-container">
+                 <div class="input-file-container" >
 
                     {{ form.picture(class="input-file") }}
                       {{ form.picture.label(tabindex="0", class="input-file-trigger") }}
