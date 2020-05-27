@@ -1773,7 +1773,9 @@ padding-top: 5px;
 
 .input-file-container {
   position: relative;
-  width: 225px;
+  width: 178px;
+font-size: 12px;
+margin-top: 0rem;
 }
 .js .input-file-trigger {
   display: block;
