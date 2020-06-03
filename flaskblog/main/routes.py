@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 
 from flaskblog import db, abort
 from flaskblog.main.form import Searchform, SharePostForm, GetPostForm
-from flaskblog.models import Post, User, Comment, PostSchema, UserSchema, Business
+from flaskblog.models import Post, User, Comment, PostSchema, UserSchema
 # from google.cloud import translate_v2 as translate
 from flask import render_template, request
 
