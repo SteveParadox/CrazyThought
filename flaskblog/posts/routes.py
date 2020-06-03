@@ -5,11 +5,10 @@ from flaskblog.models import Post, Comment, User
 from flask_login import current_user, login_required
 from flaskblog.posts.utils import save_img
 import random
-#from google.cloud import translate_v2 as translate
+# from google.cloud import translate_v2 as translate
 from flaskblog.users.decorator import check_confirmed
 
 posts = Blueprint('posts', __name__)
-
 
 
 @posts.route("/explore", methods=['GET', 'POST'])
@@ -17,29 +16,25 @@ posts = Blueprint('posts', __name__)
 @check_confirmed
 def explore():
     side = (Post.query.order_by(Post.comments.desc()).all()[0:100])
-    x=random.shuffle(side)
-    return render_template('explore.html', side=side)
+    x = random.shuffle(side)
+    return render_template('explore.html', side=side, title='Popular')
 
 
-@posts.route("/tags", methods=['GET','POST'])
+@posts.route("/tags", methods=['GET', 'POST'])
 def tags():
+    posts = Post.query.all()
 
-
-    return render_template('tags.html')
-
-
-
+    return render_template('tags.html', posts=posts)
 
 
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
-
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
         file = request.files['photo']
         pic_file = save_img(form.photo.data)
-        post = Post( content=form.content.data, author=current_user, img_data=file.read(),
+        post = Post(content=form.content.data, author=current_user, img_data=file.read(),
                     img_filename=pic_file)
         '''translate_client = translate.Client()
 
@@ -61,22 +56,22 @@ def new_post():
                            form=form, legend='New Post')
 
 
-
-@posts.route("/post/<int:post_id>", methods=['POST','GET'])
+@posts.route("/post/<int:post_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
 def post(post_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
     posts = Post.query.order_by(Post.id.desc()).all()
-    comments= Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page, per_page=20)
-    form= CommentForm()
-    if request.method== 'POST' and form.validate_on_submit():
-        message= request.form.get('message')
-        comment= Comment(message=message, post_id=post.id, reply=current_user)
+    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
+                                                                                                   per_page=20)
+    form = CommentForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        message = request.form.get('message')
+        comment = Comment(message=message, post_id=post.id, reply=current_user)
 
         db.session.add(comment)
-        post.comments= post.comments+1
+        post.comments = post.comments + 1
         db.session.commit()
         return redirect(request.url)
     return render_template('post.html', post=post, posts=posts, comments=comments, form=form)
@@ -86,7 +81,7 @@ def post(post_id):
 def reply_comment(post_id, comment_id):
     form2 = ReplyForm()
     post = Post.query.get_or_404(post_id)
-    comment=Comment.query.get_or_404(comment_id)
+    comment = Comment.query.get_or_404(comment_id)
     commenta = Comment.query.filter_by(post_id=post.id, reply_message=Comment.reply_message).order_by(
         Comment.pub_date.desc()).all()
     if request.method == 'POST' and form2.validate_on_submit():
@@ -96,11 +91,6 @@ def reply_comment(post_id, comment_id):
         db.session.commit()
 
     return redirect(url_for(request.url, post_id=post.id, commenta=commenta, form2=form2))
-
-
-
-
-
 
 
 """
@@ -172,12 +162,13 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))
 
+
 @posts.route("/post/<int:post_id>/comment/<int:comment_id>/delete", methods=['POST'])
 @login_required
 @check_confirmed
 def delete_comment(post_id, comment_id):
     post = Post.query.get_or_404(post_id)
-    comment=Comment.query.get_or_404(comment_id)
+    comment = Comment.query.get_or_404(comment_id)
     if comment.reply != current_user:
         abort(403)
     db.session.delete(comment)
@@ -185,11 +176,11 @@ def delete_comment(post_id, comment_id):
     db.session.commit()
     return redirect(url_for('posts.post', post_id=post.id))
 
-@posts.route("/following", methods=['GET','POST'])
+
+@posts.route("/following", methods=['GET', 'POST'])
 @login_required
 @check_confirmed
 def following():
     posts = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
 
-
-    return render_template('following.html', posts=posts)
+    return render_template('following.html', posts=posts, title='My Activities')
