@@ -74,7 +74,7 @@ def home():
    #ejd= share_post(23)
 
 
-    side = (Business.query.filter_by().order_by(Business.user_id.desc()).all()[0:5])
+    
     post = Post.query.order_by(Post.content.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
@@ -98,7 +98,7 @@ def home():
 
         return redirect(url_for('main.home'))
 
-    return render_template('home.html', posts=posts, side=side, reload=time.time(),  form=form , post=post)
+    return render_template('home.html', posts=posts, reload=time.time(),  form=form , post=post)
 
 
 @main.route('/about', methods=['GET', 'POST'])
