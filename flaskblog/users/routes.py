@@ -6,7 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from wtforms.validators import email
 
 from flaskblog import db, bcrypt, login_manager, app
-from flaskblog.models import User, Post
+from flaskblog.models import User, Post, Business
 from flask_login import login_user, logout_user, login_required
 
 from flaskblog.users.decorator import check_confirmed
@@ -24,8 +24,6 @@ users = Blueprint('users', __name__)
 login_manager.session_protection = None
 
                                         #^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])
-
-
 
 
 
@@ -77,7 +75,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=False)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=True)
         db.session.add(user)
         db.session.commit()
         token = generate_confirmation_token(user.email)
@@ -136,7 +134,7 @@ def posts():
 
 
 
-    return render_template('posts.html', posts=posts)
+    return render_template('posts.html', posts=posts, title='My posts')
 
 
 @users.route("/account", methods=['GET', 'POST'])
@@ -183,12 +181,10 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
-    dox = len(side)
-
+    cont = Business.query.filter_by(therapy=current_user).first()
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts, side=side, dox=dox)
+                           image_file=image_file, form=form, posts=posts,cont=cont)
 
 
 
@@ -202,10 +198,10 @@ def user_post(username):
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=20)
 
-    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
-    dox = len(side)
 
-    return render_template('user_posts.html', posts=posts, user=user, side=side, dox=dox)
+
+
+    return render_template('user_posts.html', posts=posts, user=user)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
@@ -243,7 +239,8 @@ def reset_token(token):
 @users.route('/setting')
 @check_confirmed
 def setting():
-    return render_template('setting.html')
+    cont= Business.query.filter_by(therapy=current_user).first()
+    return render_template('setting.html', title='Settings', cont=cont)
 
 
 
@@ -254,7 +251,7 @@ def setting():
 def unconfirmed():
     if current_user.confirmed:
         return redirect(url_for('main.home'))
-    return render_template('unconfirmed.html')
+    return render_template('unconfirmed.html', title='Unconfirmed')
 
 
 @users.route('/resend')
@@ -267,3 +264,15 @@ def resend_confirmation():
     send_email(current_user.email, subject, html)
     flash('A new confirmation email has been sent.', 'success')
     return redirect(url_for('users.unconfirmed'))
+
+
+@users.route('/users/<int:id>/<int:user_id>',methods=['GET', 'POST'])
+def delete_user(id, user_id):
+
+    user = User.query.get_or_404(id)
+    post = Post.query.get_or_404(user_id)
+
+    db.session.delete(user)
+    db.session.delete(post)
+    db.session.commit()
+    return '', 204
