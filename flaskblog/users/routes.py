@@ -239,8 +239,8 @@ def reset_token(token):
 @users.route('/setting')
 @check_confirmed
 def setting():
-    cont= Business.query.filter_by(therapy=current_user).first()
-    return render_template('setting.html', title='Settings', cont=cont)
+    
+    return render_template('setting.html', title='Settings')
 
 
 
