@@ -6,7 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from wtforms.validators import email
 
 from flaskblog import db, bcrypt, login_manager, app
-from flaskblog.models import User, Post, Business
+from flaskblog.models import User, Post
 from flask_login import login_user, logout_user, login_required
 
 from flaskblog.users.decorator import check_confirmed
@@ -181,10 +181,10 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    cont = Business.query.filter_by(therapy=current_user).first()
+    
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts,cont=cont)
+                           image_file=image_file, form=form, posts=posts)
 
 
 
