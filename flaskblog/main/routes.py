@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 
 from flaskblog import db, abort
 from flaskblog.main.form import Searchform, SharePostForm, GetPostForm
-from flaskblog.models import Post, User, Comment, PostSchema, UserSchema
+from flaskblog.models import Post, User, Comment, PostSchema, UserSchema, Business
 # from google.cloud import translate_v2 as translate
 from flask import render_template, request
 
@@ -74,8 +74,8 @@ def home():
    #ejd= share_post(23)
 
 
-    side = (Post.query.order_by(Post.comments.desc()).all()[0:10])
-    gra = Comment.query.order_by(Comment.pub_date.desc()).all()
+    side = (Business.query.filter_by().order_by(Business.user_id.desc()).all()[0:5])
+    post = Post.query.order_by(Post.content.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
 
@@ -98,7 +98,7 @@ def home():
 
         return redirect(url_for('main.home'))
 
-    return render_template('home.html', posts=posts, side=side, reload=time.time(),  form=form)
+    return render_template('home.html', posts=posts, side=side, reload=time.time(),  form=form , post=post)
 
 
 @main.route('/about', methods=['GET', 'POST'])
@@ -135,7 +135,7 @@ def search():
     results=  User.query.all()
     user_schema = UserSchema(many=True)
     res = user_schema.dump(results)
-    result = list(map(itemgetter('username'), res))
+    result = list(map(itemgetter('id'), res))
     if 'Stephen Ford' in result:
         print('found the name Stephen Ford')
     else:
