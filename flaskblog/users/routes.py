@@ -72,7 +72,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=True)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=False)
         db.session.add(user)
         db.session.commit()
         token = generate_confirmation_token(user.email)
@@ -171,7 +171,7 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    cont = Business.query.filter_by(therapy=current_user).first()
+   
     ip_request = requests.get('https://get.geojs.io/v1/ip.json')
     my_ip = ip_request.json()['ip']
     print(my_ip)
@@ -182,7 +182,7 @@ def account():
     geo_data = geo_datas['country']
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts, cont=cont, geo_data=geo_data)
+                           image_file=image_file, form=form, posts=posts, geo_data=geo_data)
 
 
 @users.route('/users/<string:username>')
