@@ -210,12 +210,7 @@ padding-left: 12px;">
 
 {% for sixe in side %}
                                     <article class="media content-section" id="togga" >
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + sixe.therapy.image_file) }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('business.account',  username=sixe.therapy.username) }}">Dr. {{ sixe.therapy.username }}</a>
-            </div>
-          </div>
+            
                         </article>
 
                       {% endfor %}
