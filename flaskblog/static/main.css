@@ -1,7 +1,12 @@
+
+@import url("https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext");
+
 body {
+
   background: #ffffff;
   color: #333333;
   margin-top: 1.8rem;
+
 }
 
 .rou{
@@ -9,6 +14,7 @@ height: 22px;
 width: 19px;
 
 }
+
 .daxx {
   width: 100%;
   border: 0;
@@ -18,6 +24,7 @@ width: 19px;
   padding: 20px 0 4px;
   margin: 0 0 20px;
   color: #777B7E;
+  font-family: 'Quicksand', sans-serif;
 }
 .daxx:focus {
   border-color: #6ECDF7;
@@ -35,6 +42,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .bg-steel {
   background-color: #fff;
+  border-bottom: 3px solid #8094e130;
+  box-shadow: 1px 0px 7px 4px #444;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -1699,7 +1708,9 @@ input:focus:invalid {
 
 
 
-
+a{
+outline:none;
+}
 
 .col-md-4{
  display:none;
@@ -1774,7 +1785,7 @@ padding-top: 5px;
 .input-file-container {
   position: relative;
   width: 178px;
-font-size: 12px;
+font-size: 11px;
 margin-top: 0rem;
 }
 .js .input-file-trigger {
@@ -1822,4 +1833,38 @@ margin-top: 0rem;
 
 
 
-       +-
+.item {
+  width: 100px;
+  Height: 100px;
+  background: #EEE;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.tooltip {
+  cursor: pointer;
+  position: fixed;
+  padding: 20px;
+  background: #EEE;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  display: none;
+  z-index: 1999;
+}
+.tooltip:after {
+  content: "X";
+  position: absolute;
+  background: rgba(0, 0, 0, 0.1);
+  top:0px;
+  right: 0px;
+  padding: 5px;
+  z-index:988;
+}
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
