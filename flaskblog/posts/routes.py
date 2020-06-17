@@ -22,13 +22,6 @@ def explore():
     return render_template('explore.html', side=side, title='Popular')
 
 
-@posts.route("/tags", methods=['GET', 'POST'])
-def tags():
-    posts = Post.query.all()
-
-    return render_template('tags.html', posts=posts)
-
-
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -189,6 +182,8 @@ def following():
 
 
 @posts.route('/report/<int:post_id>')
+@login_required
+@check_confirmed
 def report(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('report.html', post_id=post.id)
