@@ -51,7 +51,7 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logox.jpg') }}">Crazy Thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -66,19 +66,22 @@
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
 
-                    <a class="nav-item nav-link"  href="{{ url_for('main.home') }}">
-                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'house.png') }}">
+
+     <a class="nav-item nav-link" href="{{ url_for('main.home') }}" title="Home" aria-label="Home">
+                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
                      </a>
 
-                  <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'trending.png') }}">
+
+                  <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
+
                   </a>
 
 
+                <a class="nav-item nav-link" href="{{ url_for('users.posts') }}" title="My Posts" aria-label="My Posts">
 
-                <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
                 </a>
 
 
@@ -131,19 +134,19 @@
 {% if current_user.is_authenticated %}
 
      <a  href="{{ url_for('main.home') }}">
-                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'house.png') }}">
+                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
                      </a>
 
 
                   <a href="{{ url_for('posts.explore') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'trending.png') }}">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
                   </a>
 
 
 
                 <a  href="{{ url_for('users.posts') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
                 </a>
 
      {% endif %}

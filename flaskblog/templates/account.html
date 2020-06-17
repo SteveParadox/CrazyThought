@@ -1,16 +1,28 @@
-{% extends "base.html" %}
+{% extends "nav_prof.html" %}
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='account.css') }}">
-    <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ image_file }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{ current_user.username }}</h2>
-          <p class="text-secondary">{{ current_user.email }}</p>
+      <div class="wrapper">
+
+
+  <div class="profile-card js-profile-card">
+
+
+    <div class="profile-card__img">
+
+
+        <img alt="profile card" src="{{ image_file }}">
+
+    </div>
+       <div class="profile-card__cnt js-profile-cnt">
+      <div class="profile-card__name">@{{ current_user.username }}</div>
+          <div class="profile-card___txt">{{ current_user.email }}</div>
+
+
         </div>
-      </div>
-        <form method="POST" action="" enctype="multipart/form-data">
+
+
+        <form method="POST" action="" enctype="multipart/form-data" style="margin-left: 1rem;">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Account Info</legend>
@@ -43,48 +55,41 @@
                     {% endif %}
                 </div>
 
-
-                <br>
-                 <div class="input-file-container" >
-
-                    {{ form.picture(class="input-file") }}
-                      {{ form.picture.label(tabindex="0", class="input-file-trigger") }}
+<div class="avatar-upload">
+         <div class="avatar-edit">
+           {{ form.picture(class="") }}
+                      {{ form.picture.label() }}
                     {% if form.picture.errors %}
                         {% for error in form.picture.errors %}
                             <span class="text-danger">{{ error }}</span><br>
                         {% endfor %}
                     {% endif %}
-                </div>
+        </div>
+    </div>
+                <br>
 
-  <p class="file-return"></p>
-
-      <script>document.querySelector("html").classList.add('js');
-
-var fileInput  = document.querySelector( ".input-file" ),
-    button     = document.querySelector( ".input-file-trigger" ),
-    the_return = document.querySelector(".file-return");
-
-button.addEventListener( "keydown", function( event ) {
-    if ( event.keyCode == 13 || event.keyCode == 32 ) {
-        fileInput.focus();
-    }
-});
-button.addEventListener( "click", function( event ) {
-   fileInput.focus();
-   return false;
-});
-fileInput.addEventListener( "change", function( event ) {
-    the_return.innerHTML = this.value;
-});  </script>
+ <img class="rounded-circle article-img"  title="Location" aria-label="Location" src="{{ url_for('static', filename= 'images/location.png') }}"   />
+Location: <span class="btn btn-outline-info" style="font-size: 14px;height: 40px;
+">{{geo_data}}</span>
 
             </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
-            </div>
+             <div class="profile-card-ctr">
+                {{ form.submit(class="profile-card__button button--blue ") }}
+
+             </div>
+
+
+
         </form>
+
+
+{%if cont.licence_no %}
+<a class="nav-item nav-link" href="{{ url_for('business.my_account') }}">Doctor's Account</a>
+{% else %}
+{% endif %}
     </div>
 
-
+      </div>
 
 
 

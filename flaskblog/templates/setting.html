@@ -1,22 +1,75 @@
 {% extends "dous.html" %}
 {% block content %}
 
+{%if cont.licence_no %}
+{% else %}
+
+ <article class="media content-section">
+<a class="nav-item nav-link" href="{{ url_for('business.register') }}">Apply as a Psycologist</a>
+ </article>
 
 
-          <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">
+{% endif %}
+
+<div id="app" class="section">
 
 
-               <small>Logout</small> <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logout-outline.png') }}">
-                </a>
 
-         <a class="nav-item nav-link" href="{{ url_for('main.tos') }}">
+<settings> </settings>
 
-             Terms of service
+</div>
+ <article class="media content-section">
+         <a class="nav-item nav-link" id="myModal" href="#">
+             Report a problem
          </a>
+ </article>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
 
 
-         <a class="nav-item nav-link" href="{{ url_for('main.cookies') }}">
 
-             Cookies Policy
-         </a>
+<script>
+
+
+new jBox('Modal', {
+  width: 500,
+  height: 250,
+  attach: '#myModal',
+  title: 'Report Problem',
+  content: '<form method=POST enctype=multipart/form-data action="">{{ form.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" > {% if form.report_problem.errors %}{{ form.report_problem(class="daxx", placeholder="Report Problem", rows="5") }} <div class="invalid-feedback">{% for error in form.report_problem.errors %}<span>{{ error }}</span>{% endfor %}</div> {% else %} {{ form.report_problem(class="daxx", rows="3", placeholder="Report Problem", style='resize:none;') }}{% endif %}</div> </fieldset><div class="form-group">{{ form.submit(class="btn btn-outline-info", onclick="submit") }} </div>  </form>'
+
+});
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="static/vue.js"></script>
+<script src="static/main.js"></script>
 {% endblock %}

@@ -1,0 +1,78 @@
+{% extends "dous.html" %}
+{% block content %}
+<style>
+.collapsible {
+
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+  float:right;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+</style>
+<p>Why are you reporting this?</p>
+
+<a class="nav-item nav-link" href="#">Spamming</a>
+
+
+<a class="nav-item nav-link" href="#">Inappropriate Post</a>
+ <div class="content">
+   <article class="media content-section">
+<a class="nav-item nav-link" href="">I just don't like it </a>
+ </article>
+ <article class="media content-section">
+<a class="nav-item nav-link" href="">Violence</a>
+ </article>
+ <article class="media content-section">
+<a class="nav-item nav-link" href="">Nudty or sexual activity</a>
+ </article>
+
+
+
+  </div>
+
+
+
+<script>
+var coll = document.getElementsByClassName("nav-item nav-link");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+</script>
+{%endblock content%}

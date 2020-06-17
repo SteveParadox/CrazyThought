@@ -50,7 +50,7 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
          <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logox.jpg') }}">Crazy Thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -64,8 +64,7 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
-
-                  <a class="nav-item nav-link" href="{{ url_for('users.account') }}">
+  <a class="nav-item nav-link" href="{{ url_for('users.account') }}" title="My Account" aria-label="My Account">
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
@@ -73,7 +72,7 @@
 
    <a class="nav-item nav-link" href="{{ url_for('posts.tags') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'pin.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/pin.png') }}">
 
                 </a>
 
@@ -117,48 +116,24 @@
           <div class="col-md-4">
            <div class="squa">
 
-              <h4 align="center" > Trending </h4>
-               <div class="colx">
-                   <hr>
-              <ul class="list-group">
-
-                  {% for sides in side %}
-
-                  <div class="nox"><a class="article-title" href="{{ url_for('posts.post', post_id = sides.id) }}"><li>{{ sides.title }}</li></a></div>
-
-
-                  {% endfor %}
-                             </ul>
 
 
           </div>
 
-           </div>
+
               <div class="squa">
 
-              <h4 align="center" > Following </h4>
-                  <div class="colx">
-
-                   <hr>
-              <ul class="list-group">
-                  {% for post in posts.items %}
-                  {% for pos in post.title %}
-                  <li><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></li>
-                  {% endfor %}
-                  {% endfor %}
 
 
-              </ul>
 
-
-          </div>
-
-           </div>
           </div>
 
 
 
 
+
+
+</div>
 
 
              {% endif %}
@@ -181,7 +156,7 @@
 
  <!--  <a  href="{{ url_for('posts.tags') }}">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'pin.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/pin.png') }}">
 
                 </a>
                 -->

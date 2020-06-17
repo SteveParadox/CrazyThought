@@ -6,11 +6,42 @@
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
-       <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
+       <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}
+           {% if post.author == current_user %}
+                      {% else %}
+
+            <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
+{%endif%}
+           <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
+
+
+
+<script>
+
+
+new jBox('Modal', {
+  width: 300,
+  height: 250,
+  attach: '#myModal',
+  title: '<p align="center" style="margin-bottom: 0rem;">Report this post!</p>',
+  content: '<a class="nav-item nav-link" style="color:#aa0909;" href="{{ url_for('posts.report',  post_id=post.id) }}">Report post</a><a class="nav-item nav-link" href="">Cancel</a>'
+
+
+});
+
+
+
+</script>
+
+
+       </small>
+
         {% if post.author == current_user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'refresh.png') }}"></a>
-            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"><img class="rou" src="{{ url_for('static', filename= 'delete.png') }}"></button>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'images/refresh.png') }}"></a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"><img class="rou" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
 
           </div>
           {% endif %}
@@ -46,7 +77,7 @@ position: relative;">
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.message(class="daxx", rows="3", placeholder="Comment....") }}
+                    {{ form.message(class="daxx", rows="3", placeholder="Comment....", title="Comment!", style='resize:none;') }}
                 {% endif %}
 
 
@@ -66,9 +97,16 @@ position: relative;">
               {% for comment in comments.items %}
 
 
+
               <div class="comment-list">
+
                   <div class="desc">
+
           <br>
+                      {% if comment.reply == current_user %}
+                      {% else %}
+                       <img title="More" aria-label="More" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
+                        {% endif%}
                       <h5  class="comment">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
@@ -85,10 +123,15 @@ position: relative;">
                      </h6>
 {% if comment.reply == current_user %}
 
-                <form action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
-                                <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><img class="rou" src="{{ url_for('static', filename= 'delete.png') }}"></button>
+                <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
+
+                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><img class="rou" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
+
                 </form>
+
 {% endif %}
+
+
 
            </div>
               </div>
@@ -120,13 +163,13 @@ position: relative;">
   <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" style="background: #fff;">
           <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="background: #fff;">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <form action="{{ url_for('posts.delete_post', post_id=post.id) }}" method="POST">
             <input class="btn btn-danger" type="submit" value="Delete">

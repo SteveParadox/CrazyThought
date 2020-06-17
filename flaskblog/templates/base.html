@@ -9,7 +9,10 @@
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
- <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/filepond/dist/filepond.min.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
 
@@ -46,7 +49,7 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
          <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'logox.jpg') }}">Crazy Thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -61,7 +64,7 @@
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
 
-                  <a class="nav-item nav-link" href="{{ url_for('users.account') }}">
+                  <a class="nav-item nav-link" href="{{ url_for('users.account') }}" title="My Account" aria-label="My Account">
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
@@ -69,15 +72,15 @@
 
 
 
-                <a class="nav-item nav-link" href="{{ url_for('main.searchfile') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'search.png') }}">
+                <a class="nav-item nav-link" href="{{ url_for('main.searchfile') }}" title="Search" aria-label="Search">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/search.png') }}">
                   </a>
 
 
 
-                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
+                 <a class="nav-item nav-link" href="{{ url_for('users.posts') }}"  title="My Posts" aria-label="My Posts">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
                 </a>
 
 
@@ -94,6 +97,8 @@
 
 
 <br>
+    <br>
+
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8" style="margin-top: -2rem;">
@@ -131,28 +136,44 @@
 {% if current_user.is_authenticated %}
 
 
-     <a  href="{{ url_for('main.home') }}">
-                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'house.png') }}">
+     <a  href="{{ url_for('main.home') }}" title="Home" aria-label="Home">
+                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
                      </a>
 
 
 
 
-                <a  href="{{ url_for('main.searchfile') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'search.png') }}">
+                <a  href="{{ url_for('main.searchfile') }}" title="Search" aria-label="Search">
+                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/search.png') }}">
                   </a>
 
 
 
-                 <a  href="{{ url_for('users.posts') }}">
+                 <a  href="{{ url_for('users.posts') }}" title="My Posts" aria-label="My Posts">
 
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'post.png') }}">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
                 </a>
      {% endif %}
  </nav>
     </footer>
 
+<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js">
 
+</script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js">
+
+</script>
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js">
+
+</script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js">
+
+</script>
+
+
+<script src="https://unpkg.com/filepond/dist/filepond.min.js">
+
+</script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -162,3 +183,4 @@
 <script src="static/script.js"></script>
 </body>
 </html>
+

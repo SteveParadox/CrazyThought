@@ -17,21 +17,9 @@ if it's not present, don't show loader */
 	width: 100%;
 	height: 100%;
 	z-index: 99;
-	background: url(static/Preloader_2.gif) center no-repeat #fff;
+	background: url(static/images/Preloader_2.gif) center no-repeat #fff;
 }
 </style>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
-<script>
-	//paste this code under head tag or in a seperate js file.
-	// Wait for window load
-	$(window).load(function() {
-		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
-	});
-</script>
-
 
 <body>
 	<!-- Paste this code after body tag -->
@@ -42,6 +30,7 @@ if it's not present, don't show loader */
 
 
 <div class="content-section" id="tog">
+
    <form method=POST enctype=multipart/form-data action="" >
         {{ form.hidden_tag() }}
         <fieldset class="form-group"  >
@@ -57,24 +46,10 @@ if it's not present, don't show loader */
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.content(class="daxx", id="togg", rows="3", placeholder="What's On Your Mind?") }}
+                    {{ form.content(class="daxx", id="togg", rows="3", placeholder="What's On Your Mind?", title="Post Something!", style='resize: none;') }}
                 {% endif %}
 </div>
-         <!--
 
-            , id="myBtn", onfocusin="myFunction()" ,onfocusout="myFunc()"
-
-            <script>
-function myFunction() {
-  var dus =document.getElementById("myBtn").style.height="120px";
-}
-
-
-function myFunc() {
- document.getElementById("myBtn").style.height="70px";
-}
-</script>
--->
         </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
@@ -85,7 +60,7 @@ function myFunc() {
     {% for post in posts.items %}
 <br>
 
-        <article class="media content-section" id="togga" onclick="updateDiv()">
+        <article class="media content-section" >
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
@@ -106,12 +81,29 @@ function myFunc() {
 
 {% endif %}
             </div>
-              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'comment.png') }}"></a>
+              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+{% if post.author == current_user %}
+                      {% else %}
 
 
-            <!--  <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'tack.png') }}" id="toggleImag"  />
-            -->
 
+            <img class="rounded-circle article-img"  title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
+
+<script>
+    jQuery(document).ready(function($){
+
+$('.black-button').on({
+     'click': function(){
+
+     }
+ });
+
+});
+</script>
+
+
+
+{% endif %}
 
           </div>
 
@@ -120,6 +112,7 @@ function myFunc() {
 
    {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.prev_num) }}">Latest</a>{% else %}{% endif %}
 {% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.next_num) }}"> Older </a>{% else %} {% endif %}
+
 
 {% endblock content %}
 

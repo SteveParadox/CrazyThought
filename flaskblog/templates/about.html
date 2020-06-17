@@ -1,57 +1,420 @@
-
-<script>
-
-    const form  = document.getElementsByTagName('form')[0];
-
-const email = document.getElementById('mail');
-const emailError = document.querySelector('#mail + span.error');
-const username = document.getElementById('user');
-const usernameError = document.querySelector('#user + span.error');
+ <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-email.addEventListener('input', function (event) {
-  // Each time the user types something, we check if the
-  // form fields are valid.
 
-  if (email.validity.valid) {
-    // In case there is an error message visible, if the field
-    // is valid, we remove the error message.
-    emailError.innerHTML = ''; // Reset the content of the message
-    emailError.className = 'error'; // Reset the visual state of the message
-  } else {
-    // If there is still an error, show the correct error
-    showError();
-  }
-});
 
-form.addEventListener('submit', function (event) {
-  // if the email field is valid, we let the form submit
+<style>
+    .allUsersList{
+  width: 300px;
+  margin: 20px;
+}
+.allUsersList .card-header{
+  background: #683db8;
+  color: #FFF;
+  padding: 10px;
+}
+.allUsersList .image img{
+  border-radius: 16px;
+}
+.usersChatList{
+  position: absolute;
+  width: 250px;
+  bottom: 0;
+  margin-bottom: 0;
+  right: 360px;
+}
+.show{
+  display: block;
+}
+.thumb-user-list{
+  display: none;
+}
+.thumb-user-list .image img{
+  border-radius: 30px;
+  height: 32px;
+width: 32px;
+}
+.usersChatList .card-header{
+  background: #683db8;
+  font-size: 13px;
+}
+.chatBox{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  margin: 40px;
+  margin-bottom: 0;
+  font-size: 13px;
+}
+.chat-content{
+  overflow: auto;
+  height: 300px;
+}
+.chatBox .card{
+  border-radius: 4px;
+}
+.chatBox .card-header{
+  background: #683db8;
+}
+.header-title{
+  height: 50px;
+}
+.card-header-title i{
+  font-size: 10px;
+  color: #32e4cd;
+  margin-right: 6px;
+}
+.card-header .card-header-title{
+  color: #FFF;
+}
+.chat-content small{
+  margin: 0;
+}
+.chat-content p{
+  background: #ecf1f8;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+.my-content .media-content{
+  width: 80%;
+}
+.my-content .message{
+  float: right;
+  background: #683db8;
+  color: #FFF;
+  text-align: right;
+  padding: 10px;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+.my-content .chat-content small{
+  float: right;
+}
+.my-content small{
+  display: block;
+  float: right;
+  width: 100%;
+  text-align: right;
+}
+.chat-textarea{
+  font-size: 14px;
+  padding: 8px;
+  height: 40px;
+  width: 100%;
+  border: none;
+  overflow: auto;
+  outline: none;
 
-  if(!email.validity.valid) {
-    // If it isn't, we display an appropriate error message
-    showError();
-    // Then we prevent the form from being sent by canceling the event
-    event.preventDefault();
-  }
-});
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+}
+.chat-message-group{
 
-function showError() {
-  if(email.validity.valueMissing) {
-    // If the field is empty
-    // display the following error message.
-    emailError.textContent = 'You need to enter an e-mail address.';
-  } else if(email.validity.typeMismatch) {
-    // If the field doesn't contain an email address
-    // display the following error message.
-    emailError.textContent = 'Entered value needs to be an e-mail address.';
-  } else if(email.validity.tooShort) {
-    // If the data is too short
-    // display the following error message.
-    emailError.textContent = `Email should be at least ${ email.minLength } characters; you entered ${ email.value.length }.`;
-  }
-
-  // Set the styling appropriately
-  emailError.className = 'error active';
+}
+.chat-message-group .chat-thumb{
+  float: left;
+  width: 20%;
+}
+.chat-message-group .chat-messages{
+  float: left;
+  width: 80%;
+  margin-bottom: 20px;
+}
+.chat-message-group .message{
+  float: left;
+  padding: 10px;
+  background: #ecf1f8;
+  font-size: 13px;
+  border-radius: 5px;
+  margin-bottom: 3px;
+}
+.chat-messages .from{
+  float: left;
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 11px;
+}
+.chat-thumb img{
+  border-radius: 40px;
+  height: 32px;
+width: 32px;
+}
+.writer-user .chat-messages{
+  float: right;
+  width: 100%;
+}
+.writer-user .chat-messages .message{
+  float: right;
+  background: #683db8;
+  color: #FFF;
+}
+.writer-user .chat-messages .from{
+  float: left;
+  display: block;
+  width: 100%;
+  text-align: right;
+}
+.chat-message-group .typing{
+  float: left;
+}
+.chatBox .card-header-icon i{
+  color: #FFF;
+  font-size: 13px;
+}
+/* CSSS */
+.outside-box{
+  height: 100px;
+  background: #F8C;
+  width: 200px;
+  margin: 20px;
+  overflow: auto;
+}
+.outside-box .content-insider{
+  height: 300px;
+  background: #C9C;
+}
+/* CSS Spinner */
+.spinner {
+  margin: 0 30px;
+  width: 70px;
+  text-align: center;
 }
 
+.spinner > div {
+  width: 4px;
+  height: 4px;
+  background-color: #888;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+/* EmojiBox */
+.emojiBox{
+  width: 150px;
+  margin: 30px;
+}
+.emojiBox .box{
+  height: 100px;
+  padding: 4px;
+}
+/* */
+.card-header-title img{
+  border-radius: 40px;
+  height: 32px;
+width: 32px;
+}
+
+</style>
+
+
+<div id="chatApp">
+<div class="usersChatList">
+  <div class="card">
+    <a @click="expandChatList()">
+    <div class="card-header">
+      <p class="card-header-title">
+        <span class="tag is-primary">2</span>&nbsp;
+     Chats Ativos
+    </p>
+    </div>
+    </a>
+
+    <div id="userListBox" class="card-content thumb-user-list" :class="{show: showChatList}">
+ {% for sixe in side %}
+      <article class="media" @click="showUsuario('123')">
+        <figure class="media-left">
+          <p class="image is-32x32">
+            <img src="{{ url_for('static', filename= 'profile_pics/' + sixe.therapy.image_file) }}">
+
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong><a class="mr-2" href="{{ url_for('business.account',  username=sixe.therapy.username) }}">Dr. {{ sixe.therapy.username }}</a>
+     </strong>
+              <br>
+            </p>
+          </div>
+        </div>
+      </article>
+ {% endfor %}
+    </div>
+
+  </div>
+</div>
+<div class="chatBox" id="chatBox">
+  <div class="card">
+
+ <header class="card-header header-title" @click="toggleChat()">
+    <p class="card-header-title">
+      <i class="fa fa-circle is-online"></i> <img src="{{ url_for('static', filename= 'profile_pics/' + sie.therapy.image_file) }}">
+    </p>
+    <a class="card-header-icon">
+      <span class="icon">
+        <i class="fa fa-close"></i>
+      </span>
+    </a>
+  </header>
+
+ <div id="chatbox-area">
+  <div class="card-content chat-content">
+    <div class="content">
+      <div class="chat-message-group">
+        <div class="chat-thumb">
+          <figure class="image is-32x32">
+
+          <img src="{{ url_for('static', filename= 'profile_pics/' + x.therapy.image_file) }}">
+
+               </figure>
+        </div>
+        <div class="chat-messages">
+          <div class="message">Olá meu nome é Camila</div>
+          <div class="from">Hoje 04:55</div>
+        </div>
+      </div>
+      <div class="chat-message-group writer-user">
+        <div class="chat-messages">
+          <div class="message">Olá meu nome é Marinho</div>
+          <div class="from">Hoje 04:55</div>
+        </div>
+      </div>
+
+
+      </div>
+      <div class="chat-message-group">
+        <div class="typing">Typing</div>
+        <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+         </div>
+      </div>
+    </div>
+  </div>
+  <footer class="card-footer" id="chatBox-textbox">
+    <div style="width: 63%">
+      <textarea id="chatTextarea" class="chat-textarea" placeholder="Digite aqui" v-on:focus="expandTextArea()" v-on:blur="dexpandTetArea()"></textarea>
+    </div>
+    <div class="has-text-centered" style="width: 37%">
+      <a class="button is-white">
+        <i class="fa fa-smile-o fa-5" aria-hidden="true"></i>
+      </a>
+    <a class="button is-white">send</a></div>
+  </footer>
+  </div>
+</div>
+</div>
+<div class="emojiBox" style="display: none">
+  <div class="box">
+
+  </div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/vue"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+
+<script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+
+<script>
+    var firebaseApp = firebase.initializeApp({
+  apiKey: "AIzaSyC4cGXqwHlZC1iv9ZjeXaNqyzI-kMh7y6Y",
+    authDomain: "kupidochat-bd3c5.firebaseapp.com",
+    databaseURL: "https://kupidochat-bd3c5.firebaseio.com",
+    storageBucket: "kupidochat-bd3c5.appspot.com",
+    messagingSenderId: "972492700679"
+});
+
+var db = firebaseApp.database();
+
+var chatApp = db.ref('chatApp'); //chatApp
+
+var dirRef = chatApp.child('directory');
+var chatRef = chatApp.child('chats');
+var userRef = chatApp.child('users');
+
+
+var app = new Vue({
+  el: '#chatApp',
+  firebase: {
+    directory: dirRef
+  },
+  data: {
+    headUser: 'Marinho Gomes',
+    showChatList: false,
+    chatBoxArea: true,
+    currentChats: []
+  },
+  methods: {
+    showUsuario: function(id){
+      console.log(id);
+    },
+    expandTextArea: function(){
+      $('#chatBox-textbox').height(80);
+      $('#chatTextarea').height(60);
+    },
+    dexpandTetArea: function(){
+      $('#chatBox-textbox').height(60);
+      $('#chatTextarea').height(40);
+    },
+    toggleChat: function(){
+      if(this.chatBoxArea){
+        $('#chatbox-area').hide();
+      }else{
+        $('#chatbox-area').show();
+      }
+      this.chatBoxArea = !this.chatBoxArea;
+    },
+    openChatBox: function(info){
+
+    },
+    startChat: function(user){
+
+    },
+    expandChatList: function(){    $("#userListBox").slideToggle();
+      this.showChatList = !this.showChatList;
+
+    }
+  }
+})
+
+</script>
 
