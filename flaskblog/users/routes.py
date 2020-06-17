@@ -1,30 +1,27 @@
-import datetime
 import re
 
+import requests
 from flask import render_template, redirect, url_for, flash, request, Blueprint
-from itsdangerous import URLSafeTimedSerializer
-from wtforms.validators import email
-
-from flaskblog import db, bcrypt, login_manager, app
-from flaskblog.models import User, Post
 from flask_login import login_user, logout_user, login_required
 
+from flaskblog import db, bcrypt, login_manager
+from flaskblog.models import Post, Business, Admin
 from flaskblog.users.decorator import check_confirmed
 from flaskblog.users.email import send_email
 from flaskblog.users.forms import *
 from flaskblog.users.token import generate_confirmation_token, confirm_token
 from flaskblog.users.util import save_picture, send_reset_email
+
 email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 name_regex = re.compile(r'^[a-zA-Z]+$')
 password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")
-
 
 users = Blueprint('users', __name__)
 
 login_manager.session_protection = None
 
-                                        #^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])
 
+# ^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])
 
 
 @users.route('/confirm/<token>')
@@ -34,7 +31,7 @@ def confirm_email(token):
         email = confirm_token(token)
     except:
         flash('The confirmation link is invalid or has expired.', 'danger')
-    user = User.query.filter_by(email= email).first_or_404()
+    user = User.query.filter_by(email=email).first_or_404()
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
     else:
@@ -58,10 +55,11 @@ def register():
             flash("Invalid Email Address!", 'danger')
             return redirect(url_for('users.register'))
         if not password_regex.match(request.form['password']):
-            flash("password must contain at least one smallcase letter!, password must contain at least one Capital case letter !, password must contain at least one digit!, password must not be less than 8 characters!", 'danger')
+            flash(
+                "password must contain at least one smallcase letter!, password must contain at least one Capital case letter !, password must contain at least one digit!, password must not be less than 8 characters!",
+                'danger')
 
             return redirect(url_for('users.register'))
-
 
         user = User.query.filter_by(email=request.form.get('email')).first()
         if user:
@@ -71,7 +69,6 @@ def register():
         if user:
             flash('This username is already taken by another user, Please try another one.', 'danger')
             return redirect(url_for('users.register'))
-
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -87,16 +84,11 @@ def register():
         login_user(user)
 
         flash('A confirmation email has been sent via email.', 'success')
-        #flash('Your account has been created! Log in', 'success')
-
+        # flash('Your account has been created! Log in', 'success')
 
         return redirect(url_for("users.unconfirmed"))
 
-
     return render_template('register.html', title='Register', form=form)
-
-
-
 
 
 @users.route('/login', methods=['GET', 'POST'])
@@ -131,8 +123,6 @@ def posts():
     posts = Post.query.filter_by(author=current_user) \
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=20)
-
-
 
     return render_template('posts.html', posts=posts, title='My posts')
 
@@ -181,12 +171,18 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    
+    cont = Business.query.filter_by(therapy=current_user).first()
+    ip_request = requests.get('https://get.geojs.io/v1/ip.json')
+    my_ip = ip_request.json()['ip']
+    print(my_ip)
+
+    geo_request_url = 'https://get.geojs.io/v1/ip/geo/' + my_ip + '.json'
+    geo_request = requests.get(geo_request_url)
+    geo_datas = geo_request.json()
+    geo_data = geo_datas['country']
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts)
-
-
+                           image_file=image_file, form=form, posts=posts, cont=cont, geo_data=geo_data)
 
 
 @users.route('/users/<string:username>')
@@ -197,8 +193,6 @@ def user_post(username):
     posts = Post.query.filter_by(author=user) \
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=20)
-
-
 
 
     return render_template('user_posts.html', posts=posts, user=user)
@@ -235,15 +229,17 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-
-@users.route('/setting')
+@users.route('/setting', methods=['GET', 'POST'])
 @check_confirmed
 def setting():
-    
-    return render_template('setting.html', title='Settings')
-
-
-
+    form= ReportProblemForm()
+    cont = Business.query.filter_by(therapy=current_user).first()
+    if form.validate_on_submit():
+        report_problem= form.report_problem.data
+        report= Admin(report_a_problem=report_problem, adm=current_user)
+        db.session.add(report)
+        db.session.commit()
+    return render_template('setting.html', title='Settings', cont=cont, form=form)
 
 
 @users.route('/unconfirmed')
@@ -266,9 +262,8 @@ def resend_confirmation():
     return redirect(url_for('users.unconfirmed'))
 
 
-@users.route('/users/<int:id>/<int:user_id>',methods=['GET', 'POST'])
+@users.route('/users/<int:id>/<int:user_id>', methods=['GET', 'POST'])
 def delete_user(id, user_id):
-
     user = User.query.get_or_404(id)
     post = Post.query.get_or_404(user_id)
 
