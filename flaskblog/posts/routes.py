@@ -1,10 +1,12 @@
-from flask import render_template, redirect, url_for, flash, request, abort, Blueprint, jsonify
-from flaskblog import db
-from flaskblog.posts.forms import PostForm, UpdatePostForm, CommentForm, ReplyForm
-from flaskblog.models import Post, Comment, User
-from flask_login import current_user, login_required
-from flaskblog.posts.utils import save_img
 import random
+
+from flask import render_template, redirect, url_for, flash, request, abort, Blueprint
+from flask_login import current_user, login_required
+
+from flaskblog import db
+from flaskblog.models import Post, Comment
+from flaskblog.posts.forms import PostForm, UpdatePostForm, CommentForm, ReplyForm
+from flaskblog.posts.utils import save_img
 # from google.cloud import translate_v2 as translate
 from flaskblog.users.decorator import check_confirmed
 
@@ -184,3 +186,9 @@ def following():
     posts = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
 
     return render_template('following.html', posts=posts, title='My Activities')
+
+
+@posts.route('/report/<int:post_id>')
+def report(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('report.html', post_id=post.id)
