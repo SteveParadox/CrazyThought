@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template
 
-
 errors = Blueprint('errors', __name__)
 
 
@@ -19,3 +18,6 @@ def error_500(error):
     return render_template('errors/500.html'), 500
 
 
+@errors.app_errorhandler(418)
+def error_418(error):
+    return render_template('errors/418.html'), 418
