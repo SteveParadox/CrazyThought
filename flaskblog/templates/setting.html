@@ -1,7 +1,15 @@
 {% extends "dous.html" %}
 {% block content %}
 
+{%if cont.licence_no %}
+{% else %}
 
+ <article class="media content-section">
+<a class="nav-item nav-link" href="{{ url_for('business.register') }}">Apply as a Psycologist</a>
+ </article>
+
+
+{% endif %}
 
 <div id="app" class="section">
 
@@ -30,7 +38,7 @@ new jBox('Modal', {
   height: 250,
   attach: '#myModal',
   title: 'Report Problem',
-  content: '<form method=POST enctype=multipart/form-data action="">{{ form.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" > {% if form.report_problem.errors %}{{ form.report_problem(class="daxx", placeholder="Report Problem", rows="5") }} <div class="invalid-feedback">{% for error in form.report_problem.errors %}<span>{{ error }}</span>{% endfor %}</div> {% else %} {{ form.report_problem(class="daxx", rows="3", placeholder="Report Problem", style='resize:none;') }}{% endif %}</div> </fieldset><div class="form-group">{{ form.submit(class="btn btn-outline-info", onclick="submit") }} </div>  </form>'
+  content: '<form method=POST enctype=multipart/form-data action="">{{ form.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" > {% if form.report_problem.errors %}{{ form.report_problem(class="daxx", placeholder="Report Problem", rows="5") }} <div class="invalid-feedback">{% for error in form.report_problem.errors %}<span>{{ error }}</span>{% endfor %}</div> {% else %} {{ form.report_problem(class="daxx", rows="3",type="name", placeholder="Report Problem", style='resize:none;') }}{% endif %}</div> </fieldset><div class="form-group">{{ form.submit(class="btn btn-outline-info", onclick="submit") }} </div>  </form>'
 
 });
 

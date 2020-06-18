@@ -56,9 +56,13 @@
                 </div>
 
 <div class="avatar-upload">
+
          <div class="avatar-edit">
+
            {{ form.picture(class="") }}
+
                       {{ form.picture.label() }}
+
                     {% if form.picture.errors %}
                         {% for error in form.picture.errors %}
                             <span class="text-danger">{{ error }}</span><br>
@@ -69,8 +73,7 @@
                 <br>
 
  <img class="rounded-circle article-img"  title="Location" aria-label="Location" src="{{ url_for('static', filename= 'images/location.png') }}"   />
-Location: <span class="btn btn-outline-info" style="font-size: 14px;height: 40px;
-">{{geo_data}}</span>
+Location:
 
             </fieldset>
              <div class="profile-card-ctr">
@@ -83,6 +86,10 @@ Location: <span class="btn btn-outline-info" style="font-size: 14px;height: 40px
         </form>
 
 
+{%if cont.licence_no %}
+<a class="nav-item nav-link" href="{{ url_for('business.my_account') }}">Doctor's Account</a>
+{% else %}
+{% endif %}
     </div>
 
       </div>
