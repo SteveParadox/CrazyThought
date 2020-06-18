@@ -80,8 +80,8 @@ a.article-title:hover {
 }
 
 .article-img {
-  height: 35px;
-  width: 35px;
+  height: 29px;
+  width: 29px;
   margin-right: 0px;
 }
 
@@ -109,8 +109,8 @@ a.article-title:hover {
   margin-bottom: 16px;
 }
 .dropbtn {
-  width: 35px;
-  height: 35px;
+  width: 29px;
+  height: 29px;
   font-size: 16px;
   border: none;
   cursor: pointer;
