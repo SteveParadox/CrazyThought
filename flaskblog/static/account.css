@@ -366,7 +366,7 @@ bottom: 100%;
   border-color: #d6d6d6;
 }
 .avatar-upload .avatar-edit input + label:after {
-  content: "\f040";
+    content: "\3111";
   font-family: 'FontAwesome';
   color: #757575;
   position: absolute;
@@ -391,4 +391,14 @@ bottom: 100%;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+
+.roug{
+height: 25px;
+width: 25px;
+position: absolute;
+left: 4px;
+top: 5px;
+
 }
