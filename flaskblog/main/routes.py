@@ -69,7 +69,7 @@ def home():
     pots = Post.query.filter_by(author=current_user) \
         .order_by(Post.date_posted.desc()) \
         .paginate()
-    side = (Business.query.filter_by().order_by(Business.user_id.desc()).all()[0:5])
+   
     post = Post.query.order_by(Post.content.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
@@ -93,7 +93,7 @@ def home():
 
         return redirect(url_for('main.home'))
 
-    return render_template('home.html', posts=posts, pots=pots, side=side, reload=time.time(), form=form, post=post)
+    return render_template('home.html', posts=posts, pots=pots,  reload=time.time(), form=form, post=post)
 
 
 @main.route('/about', methods=['GET', 'POST'])
