@@ -2,7 +2,7 @@ import re
 
 import requests
 from flask import render_template, redirect, url_for, flash, request, Blueprint
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, user_loaded_from_cookie
 
 from flaskblog import db, bcrypt, login_manager
 from flaskblog.models import Post, Business, Admin
@@ -81,7 +81,7 @@ def register():
         subject = "Please confirm your email"
         send_email(user.email, subject, html)
 
-        login_user(user)
+        login_user(user, remember=True)
 
         flash('A confirmation email has been sent via email.', 'success')
         # flash('Your account has been created! Log in', 'success')
@@ -186,9 +186,12 @@ def user_post(username):
     posts = Post.query.filter_by(author=user) \
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=20)
+    pots = Post.query.filter_by(author=current_user) \
+        .order_by(Post.date_posted.desc()) \
+        .paginate()
 
 
-    return render_template('user_posts.html', posts=posts, user=user)
+    return render_template('user_posts.html', posts=posts, pots=pots,user=user)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
