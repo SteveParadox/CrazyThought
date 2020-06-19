@@ -171,11 +171,10 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    cont = Business.query.filter_by(therapy=current_user).first()
-
+   
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts, cont=cont)
+                           image_file=image_file, form=form, posts=posts)
 
 
 @users.route('/users/<string:username>')
@@ -229,13 +228,13 @@ def reset_token(token):
 @check_confirmed
 def setting():
     form= ReportProblemForm()
-    cont = Business.query.filter_by(therapy=current_user).first()
+    
     if form.validate_on_submit():
         report_problem= form.report_problem.data
         report= Admin(report_a_problem=report_problem, adm=current_user)
         db.session.add(report)
         db.session.commit()
-    return render_template('setting.html', title='Settings', cont=cont, form=form)
+    return render_template('setting.html', title='Settings', form=form)
 
 
 @users.route('/unconfirmed')
