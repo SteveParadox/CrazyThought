@@ -44,16 +44,17 @@ form2.content.data = post.content'''
 def share_post(post_id):
     post = Post.query.get_or_404(post_id)
     form = SharePostForm()
+    das= post.content
+
 
     if form.is_submitted():
         poss = Post(content=form.content.data, author=current_user)
-
         db.session.add(poss)
         db.session.commit()
 
         return redirect(url_for('main.home', post_id=post.id))
     return render_template('share.html', title='Share Post', form=form,
-                           legend='Share Post', post_id=post.id, post=post)
+                           legend='Share Post', post_id=post.id, post=post, das=das)
 
 
 @main.route('/home', methods=['GET', 'POST'])
@@ -65,7 +66,10 @@ def home():
 
     # ejd= share_post(23)
 
-    
+    pots = Post.query.filter_by(author=current_user) \
+        .order_by(Post.date_posted.desc()) \
+        .paginate()
+    side = (Business.query.filter_by().order_by(Business.user_id.desc()).all()[0:5])
     post = Post.query.order_by(Post.content.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
@@ -89,7 +93,7 @@ def home():
 
         return redirect(url_for('main.home'))
 
-    return render_template('home.html', posts=posts,  reload=time.time(), form=form, post=post)
+    return render_template('home.html', posts=posts, pots=pots, side=side, reload=time.time(), form=form, post=post)
 
 
 @main.route('/about', methods=['GET', 'POST'])
@@ -151,12 +155,15 @@ def searchfile():
     res = user_schema.dump(results)
     result = list(map(itemgetter('username'), res))
     paxx = form.livebox.data
+    pots = Post.query.filter_by(author=current_user) \
+        .order_by(Post.date_posted.desc()) \
+        .paginate()
 
 
     if paxx in result:
-        return render_template('search.html', form=form, paxx=paxx, result=result, author=paxx)
+        return render_template('search.html', form=form, paxx=paxx,pots=pots, result=result, author=paxx)
     else:
-        return render_template('search.html', form=form)
+        return render_template('search.html', form=form, pots=pots)
 
 
 '''
