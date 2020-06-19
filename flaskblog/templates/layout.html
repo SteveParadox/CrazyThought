@@ -98,14 +98,14 @@
 
                   <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-
+<span class="prex" style="right: 154px;">99</span>
                   </a>
 
 
                  <a class="nav-item nav-link" href="{{ url_for('users.posts') }}" title="My Posts " aria-label="My Posts">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
-
+<span class="prex" style="right: 106px;"> {{ pots.total }}</span>
                 </a>
                  <a id="fuck" class="nav-item nav-link" href="{{ url_for('posts.following') }}" title="My Activities" aria-label="My Activities" >
 
@@ -204,13 +204,18 @@ margin-bottom: 0.3rem;
 padding-left: 12px;">
 
                    <div class="colx">
-                      
+                       <p align="center" style="color:green;"> Talk to a Psycologist</p>
 
 
 
 {% for sixe in side %}
                                     <article class="media content-section" id="togga" >
-            
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + sixe.therapy.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('business.account',  username=sixe.therapy.username) }}">Dr. {{ sixe.therapy.username }}</a>
+            </div>
+          </div>
                         </article>
 
                       {% endfor %}
@@ -256,14 +261,14 @@ padding-left: 12px;">
 
                   <a  href="{{ url_for('posts.explore') }}">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-
+<span class="prex" style="right: 59%;">99</span>
                   </a>
 
 
                  <a  href="{{ url_for('users.posts') }}">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
-
+<span class="prex" style="right: 29%;"> {{ pots.total }}</span>
                 </a>
                  <a  href="{{ url_for('posts.following') }}"  >
 
