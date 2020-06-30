@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1, shrink-to-fit=yes">
+
+     <!-- Site Metas -->
+   {% if title %}
+        <title>Crazy thoughts - {{ title }}</title>
+    {% else %}
+        <title>Crazy thoughts</title>
+    {% endif %}
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="Stephen Ford">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+
+    <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
+       <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
+
+
+
+    <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+
+    {% if title %}
+        <title>Crazy Thoughts - {{ title }}</title>
+    {% else %}
+        <title>Crazy Thoughts</title>
+    {% endif %}
+      <link rel="apple-touch-icon" sizes="57x57" href="static/favico/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="static/favico/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="static/favico/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="static/favico/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="static/favico/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="static/favico/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="static/favico/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="static/favico/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="static/favico/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="static/favico/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="static/favico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="static/favico/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/favico/favicon-16x16.png">
+<link rel="manifest" href="static/favico/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="static/favicon/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+
+
+
+</head>
+<br>
+<br>
+<body >
+
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+
+                      <img  onclick="goBack()"  title="Back" aria-label="Back" class="rou" src="{{ url_for('static', filename= 'images/left-arrow.png') }}">
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx" style="position: relative;
+
+left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+
+
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+    </header>
+ <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+
+                    {{message}}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
+        </div>
+
+
+      </div>
+
+
+    </main>
+    {% block script %}
+
+              {% endblock %}
+     <br>
+    <br>
+    <br>
+
+    <footer class="foot" >
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+{% if current_user.is_authenticated %}
+     {% endif %}
+ </nav>
+    </footer>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="static/jquery-min.js"></script>
+<script src="static/script.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+<script>
+	//paste this code under head tag or in a seperate js file.
+	// Wait for window load
+	$(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut("slow");;
+	});
+</script>
+
+</body>
+</html>
