@@ -45,14 +45,12 @@ def create_app(config_class=Config):
     jwt.init_app(app)
 
     from flaskblog.users.routes import users
-    from flaskblog.api.routes import api
     from flaskblog.posts.routes import posts
     from flaskblog.main.routes import main
     from flaskblog.business.routes import business
     from flaskblog.errors.handlers import errors
 
     app.register_blueprint(users)
-    app.register_blueprint(api)
     app.register_blueprint(posts)
     app.register_blueprint(main)
     app.register_blueprint(business)
