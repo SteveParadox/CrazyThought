@@ -6,6 +6,9 @@
 {% else %}
 <h3 class="nav-xy"> {{ posts.total }} post by You</h3>
 {% endif %}
+
+
+
     {% for post in posts.items %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
@@ -15,9 +18,9 @@
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
             <p class="krax">{{ post.content }}</p>
-
+<span class="secd glow-button">
               <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
-
+</span>
           </div>
         </article>
     {% endfor %}

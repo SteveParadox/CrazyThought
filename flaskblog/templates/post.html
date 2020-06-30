@@ -7,11 +7,17 @@
       <div class="article-metadata">
         <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
        <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}
+
            {% if post.author == current_user %}
                       {% else %}
+<span class="secd glow-button" style="float: right;">
 
             <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
-{%endif%}
+</span>
+    {%endif%}
+           <span class="secd glow-button" style="float: right;">
+          <img class="rou" id="mode" title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style="float: right; cursor: pointer; margin-right: 4px;" />
+           </span>
            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
@@ -38,10 +44,45 @@ new jBox('Modal', {
 
        </small>
 
+<script>
+
+
+new jBox('Modal', {
+  width: 500,
+  height: 150,
+  attach: '#mode',
+  title: '<p align="center" style="margin-bottom: 0rem;">Share post!</p>',
+  content: '<form><input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/post/{{ post.id }}"> <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button></form>'
+
+});
+
+
+
+</script>
+          <script>
+function myFunction() {
+  var copyText = document.getElementById("myInput");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copied: " + copyText.value;
+}
+
+function outFunc() {
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copy to clipboard";
+}
+</script>
+
         {% if post.author == current_user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'images/refresh.png') }}"></a>
-            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"><img class="rou" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
+              <span class="secd glow-button" >  <a  href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'images/refresh.png') }}"></a></span>
+            <button class="secd glow-button" type="button" style="outline: none; width:33px;" data-toggle="modal" data-target="#deleteModal"><img class="rou" style="position: relative;
+    left: -5px;
+
+}" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
 
           </div>
           {% endif %}
@@ -91,7 +132,7 @@ position: relative;">
 <article>
 
 <div>
-          <div class="bg-info">
+          <div class="midder">
               <h5>{{ post.comments }} Comments</h5>
           </div>
               {% for comment in comments.items %}
@@ -124,9 +165,9 @@ position: relative;">
 {% if comment.reply == current_user %}
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
-
+<span class="secd glow-button">
                     <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><img class="rou" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
-
+</span>
                 </form>
 
 {% endif %}

@@ -29,7 +29,7 @@ if it's not present, don't show loader */
 
 
 
-<div class="content-section" id="tog">
+<div class="content-section" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
         {{ form.hidden_tag() }}
@@ -59,11 +59,12 @@ if it's not present, don't show loader */
 
     {% for post in posts.items %}
 
+
         <article class="media content-section" >
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span>{{ post.author.username }}</span></a>
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
@@ -71,7 +72,7 @@ if it's not present, don't show loader */
   <script>
       function updateDiv()
 {
-    $( "p" ).load(window.location.href + "p" );
+    $( "a" ).load(window.location.href + "a" );
     }
   </script>
                <div>
@@ -80,14 +81,24 @@ if it's not present, don't show loader */
 
 {% endif %}
             </div>
+
+
+<span class="secd glow-button">
               <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
-{% if post.author == current_user %}
+
+</span>
+              <span class="secd glow-button">
+              <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}" >
+<img class="rounded-circle article-img"  title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style=" cursor: pointer;" />
+               </a>
+              </span>
+              {% if post.author == current_user %}
                       {% else %}
 
 
-
-            <img class="rounded-circle article-img"  title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
-
+<span class="secd glow-button">
+            <img class="rounded-circle article-img"  title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style=" cursor: pointer;" />
+</span>
 <script>
     jQuery(document).ready(function($){
 

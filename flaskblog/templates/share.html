@@ -13,14 +13,42 @@
             <p class="article-content" >{{ post.content }}</p>
                <div>
                </div>
+
+              <script>
+function myFunction() {
+  var copyText = document.getElementById("myInput");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copied: " + copyText.value;
+}
+
+function outFunc() {
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copy to clipboard";
+}
+</script>
+<!--<script>
+document.write('http://' + document.domain + ':' + location.port + '/post/' + {{post_id}});
+
+</script>
+-->
           </div>
 
+
  </article>
+<script>
+console.log('http://' + document.domain + ':' + location.port + '/post/' + {{post_id}})
+
+</script>
 <form method=POST enctype=multipart/form-data action="">
      <fieldset class="form-group">
 
 
             <div class="form-group">
+
 
                 {% if form.content.errors %}
                     {{ form.content(class="daxx", rows="3") }}
@@ -40,4 +68,11 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
 </form>
+ <form>
+              <input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/post/{{ post_id }}">
+
+                  <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button>
+
+              </form>
+
 {% endblock content %}
