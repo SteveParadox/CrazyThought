@@ -58,7 +58,6 @@ if it's not present, don't show loader */
 </div>
 
     {% for post in posts.items %}
-<br>
 
         <article class="media content-section" >
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
