@@ -4,6 +4,6 @@ bottom: 45px;
 position: fixed;
 
 width: 66px;
-
+object-fit: cover;
 height: 66px;
 }

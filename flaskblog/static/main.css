@@ -86,6 +86,7 @@ a.article-title:hover {
   height: 29px;
   width: 29px;
   margin-right: 0px;
+  object-fit: cover;
 }
 
 .article-metadata {
