@@ -1,6 +1,7 @@
 {% extends "bast.html" %}
 {% block content %}
 <p align="center" class="nav-xy"> Activities </p>
+{%if  posts%}
 {% for post in posts %}
  <div class="article-metadata" >
  <h4> You commented on</h4>
@@ -30,5 +31,10 @@
 
         </article>
  </div>
+
 {% endfor %}
+{%else%}
+<br>
+<h1 align="center" style="opacity:0.6">  No recent activity </h1>
+{%endif%}
 {% endblock content %}

@@ -8,7 +8,7 @@
 {% endif %}
 
 
-
+{%if posts.items%}
     {% for post in posts.items %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
@@ -24,6 +24,11 @@
           </div>
         </article>
     {% endfor %}
+{%else%}
+<br>
+<br>
+<h1 align="center" style="opacity:0.6">  No recent post by you </h1>
+{%endif%}
     {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.prev_num) }}">Latest</a>{% else %}{% endif %}
 {% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.next_num) }}"> Older </a>{% else %} {% endif %}
 

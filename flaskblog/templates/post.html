@@ -132,9 +132,19 @@ position: relative;">
 <article>
 
 <div>
+
           <div class="midder">
-              <h5>{{ post.comments }} Comments</h5>
+              <h5>{{ post.comments }}{%if post.comments > 1%}
+                  Comments
+                   {%else%}
+                  Comment
+                  {%endif%}
+              </h5>
           </div>
+
+
+
+    {%if comments.items%}
               {% for comment in comments.items %}
 
 
@@ -179,6 +189,11 @@ position: relative;">
 
 
               {% endfor %}
+    {%else%}
+    <br>
+    <br>
+    <h3 align="center" style="opacity:0.3">  Be the first to comment </h3>
+    {%endif%}
 
         <br>
         <br>
