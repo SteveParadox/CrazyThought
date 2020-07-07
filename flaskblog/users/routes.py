@@ -195,11 +195,11 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-    cont = Business.query.filter_by(therapy=current_user).first()
+   
 
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts, cont=cont)
+                           image_file=image_file, form=form, posts=posts)
 
 
 @users.route('/users/<string:username>')
