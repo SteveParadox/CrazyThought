@@ -23,22 +23,23 @@
     {% else %}
         <title>Crazy thoughts</title>
     {% endif %}
-   <link rel="apple-touch-icon" sizes="57x57" href="static/favico/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="static/favico/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="static/favico/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="static/favico/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="static/favico/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="static/favico/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="static/favico/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="static/favico/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="static/favico/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="static/favico/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="static/favico/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="static/favico/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="static/favico/favicon-16x16.png">
-<link rel="manifest" href="static/favico/manifest.json">
+
+   <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='favico/apple-icon-57x57.png') }}">>
+<link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='favico/apple-icon-60x60.png') }}">>
+<link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='favico/apple-icon-72x72.png') }}">>
+<link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='favico/apple-icon-76x76.png') }}">>
+<link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='favico/apple-icon-114x114.png') }}">>
+<link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='favico/apple-icon-120x120.png') }}">>
+<link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='favico/apple-icon-144x144.png') }}">>
+<link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='favico/apple-icon-152x152.png') }}">>
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favico/apple-icon-180x180.png') }}">>
+<link rel="icon" type="image/png" sizes="192x192"  href="{{ url_for('static', filename='favico/android-icon-192x192.png') }}">>
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favico/favicon-32x32.png') }}">>
+<link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favico/favicon-96x96.png') }}">>
+<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favico/favicon-16x16.png') }}">>
+<link rel="manifest" href="{{ url_for('static', filename='favico/manifest.json') }}">
 <meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="static/favicon/ms-icon-144x144.png">
+<meta name="msapplication-TileImage" content="{{ url_for('static', filename='favicon/ms-icon-144x144.png') }}">>
 <meta name="theme-color" content="#ffffff">
 
 
@@ -62,7 +63,7 @@
 
             </div>
 
-            <!-- Navbar Right Side -->
+
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
 
@@ -159,7 +160,8 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="static/jquery-min.js"></script>
-<script src="static/script.js"></script>
+<script src= "{{ url_for('static', filename='jquery-min.js') }}"></script>
+
+<script src= "{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,39 @@
+{% extends "viddo.html" %}
+{% block content %}
+
+    <h3 class="nav-xy">Posts by {{ user.username }} ({{ posts.total }})</h3>
+
+    {% for post in posts.items %}
+
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.vids.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.vids.username) }}">{{ post.vids.username }}</a>
+                <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
+            </div>
+            <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
+            <a class="article-title" href="{{ url_for('posts.vid_post', videos_id = post.id) }}">
+             <video  >
+	 <source src="{{ url_for('static', filename= 'post_pics/' + post.img_filename) }}" type="video/mp4">
+ </video>
+            </a>
+
+          </div>
+        </article>
+    {% endfor %}
+
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current= 1, right_current=2) %}
+        {% if page_num %}
+            {% if posts.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('users.user_post', username=user.username, page=page_num) }}"></a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('users.user_post', username=user.username, page=page_num) }}"></a>
+
+            {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+     {% endfor %}
+
+{% endblock content %}

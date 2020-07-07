@@ -1,0 +1,41 @@
+{% extends "douxt.html" %}
+{% block content %}
+<p align="center" class="nav-xy"> Activities </p>
+{%if  posts%}
+{% for post in posts %}
+ <div class="article-metadata" >
+ <h4> You commented on</h4>
+   <article class="media content-section" id="togga">
+
+       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.vid.vids.image_file) }}">
+          <div class="media-body">
+
+            <div class="article-metadata">
+
+              <a class="mr-2" href="{{ url_for('users.user_post', username=post.vid.vids.username) }}">{{ post.vid.vids.username }}</a>
+                <small class="text-muted"><i>{{ post.vid.date_posted.strftime('%d/%b/%Y ') }}</i></small>
+            </div>
+<video>
+ <source src="{{ url_for('static', filename= 'post_pics/' + post.vid.img_filename) }}">
+
+              </video>
+               <div>
+
+
+            </div>
+<span class="secd glow-button">
+
+              <a class="article-title" href="{{ url_for('posts.vid_post', videos_id=post.vid.id) }}"> {{ post.vid.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+</span>
+          </div>
+
+
+        </article>
+ </div>
+
+{% endfor %}
+{%else%}
+<br>
+<h1 align="center" style="opacity:0.6">  No recent activity </h1>
+{%endif%}
+{% endblock content %}

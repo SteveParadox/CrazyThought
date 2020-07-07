@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -27,8 +28,12 @@ if it's not present, don't show loader */
 	<!-- Ends -->
 
 
-
-
+<nav class="navbar navbar-expand-md navbar-dark  ">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="/home"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/blogging.png') }}">Texts</div></a>
+        <a class="navbar-brand mr-4" href="/home/images"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/picture.png') }}">Images</div></a>
+            <a class="navbar-brand mr-4" href="/home/videos"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/youtube.png') }}">Videos</div></a>
+        </div></nav>
 <div class="content-section" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
@@ -56,6 +61,56 @@ if it's not present, don't show loader */
         </div>
     </form>
 </div>
+
+
+
+<div class="avatar-upload">
+         <div class="avatar-edit">
+           <img class="rou man"  id="myModal" src="{{ url_for('static', filename= 'images/picture.png') }}" >
+        </div>
+    </div>
+    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
+<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
+<script>
+new jBox('Modal', {
+  width: 500,
+  height: 250,
+  attach: '#myModal',
+  title: '<h4 align="center" style="color:purple;">Upload Photo</h4>',
+  content: '<form method=POST enctype=multipart/form-data action="">{{ form2.hidden_tag() }}<fieldset class="form-group"> <div class="avatar-upload">  <div class="avatar-edit">{{ form2.photo(class="") }}{{ form2.photo.label() }}{% if form2.photo.errors %}{% for error in form2.photo.errors %}<span class="text-danger">{{ error }}</span><br>{% endfor %}{% endif %}</div></div></fieldset>{{ form2.submit(class="btn btn-outline-info ") }}</form>'
+
+});
+
+
+</script>
+
+
+<div class="avatar-upload">
+         <div class="avatar-edit" style="right:4rem;">
+             <img class="rou man"  id="mModal" src="{{ url_for('static', filename= 'images/youtube.png') }}" >
+        </div>
+    </div>
+
+    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
+<link href="{{ url_for('static', filename='jbox.all.mn.css') }}" rel="stylesheet">
+<script>
+
+
+new jBox('Modal', {
+  width: 500,
+  height: 250,
+  attach: '#mModal',
+  title: '<h4 align="center" style="color:purple;">Upload Video</h4>',
+  content: '<form method=POST enctype=multipart/form-data action="">{{ form2.hidden_tag() }}<fieldset class="form-group"> <div class="avatar-upload">  <div class="avatar-edit">{{ form3.video(class="") }}{{ form3.video.label() }}{% if form3.video.errors %}{% for error in form3.video.errors %}<span class="text-danger">{{ error }}</span><br>{% endfor %}{% endif %}</div></div></fieldset>{{ form3.submit(class="btn btn-outline-info ") }}</form>'
+
+});
+
+
+</script>
+
+
 
     {% for post in posts.items %}
 
@@ -87,7 +142,7 @@ if it's not present, don't show loader */
               <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
 
 </span>
-              <span class="secd glow-button">
+              <!--<span class="secd glow-button">
               <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}" >
 <img class="rounded-circle article-img"  title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style=" cursor: pointer;" />
                </a>
@@ -114,7 +169,7 @@ $('.black-button').on({
 
 
 {% endif %}
-
+-->
           </div>
 
         </article>

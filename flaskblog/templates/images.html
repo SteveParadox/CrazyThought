@@ -1,0 +1,27 @@
+{% extends "vidda.html" %}
+{% block content %}
+ {% for post in posts.items %}
+
+
+        <article class="media content-section" >
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.imgs.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+
+                  <a class="mr-2" href="{{ url_for('users.user_post', username=post.imgs.username) }}"><span>{{ post.imgs.username }}</span></a>
+             <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
+
+            </div>
+              <div  style="overflow: hidden; width:100%;">
+ <img class="imgs"  style="" src="{{ url_for('static', filename= 'post_pics/' + post.photo_filename) }}">
+
+              </div>
+                  <span class="secd glow-button">
+              <a class="article-title" href="{{ url_for('posts.img_post', images_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+
+</span>
+            </div>
+        </article>
+{%endfor%}
+
+{% endblock content %}

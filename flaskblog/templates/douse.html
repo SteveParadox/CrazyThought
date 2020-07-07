@@ -21,7 +21,7 @@
     <meta charset="utf-8">
 
     <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
- <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
+
        <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
      <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
@@ -40,24 +40,24 @@
     {% else %}
         <title>Crazy Thoughts</title>
     {% endif %}
-
-   <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='favico/apple-icon-57x57.png') }}">>
-<link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='favico/apple-icon-60x60.png') }}">>
-<link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='favico/apple-icon-72x72.png') }}">>
-<link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='favico/apple-icon-76x76.png') }}">>
-<link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='favico/apple-icon-114x114.png') }}">>
-<link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='favico/apple-icon-120x120.png') }}">>
-<link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='favico/apple-icon-144x144.png') }}">>
-<link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='favico/apple-icon-152x152.png') }}">>
-<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favico/apple-icon-180x180.png') }}">>
-<link rel="icon" type="image/png" sizes="192x192"  href="{{ url_for('static', filename='favico/android-icon-192x192.png') }}">>
-<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favico/favicon-32x32.png') }}">>
-<link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favico/favicon-96x96.png') }}">>
-<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favico/favicon-16x16.png') }}">>
-<link rel="manifest" href="{{ url_for('static', filename='favico/manifest.json') }}">>
+    <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="static/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="static/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="static/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="static/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="static/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="static/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="static/favicon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="static/favicon/apple-icon-144x144.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
 <meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="{{ url_for('static', filename='favicon/ms-icon-144x144.png') }}">>
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
+
 
 
 
@@ -69,8 +69,15 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            {%if cont.licence_no %}
+ <a class="navbar-brand mr-4" href="{{ url_for('business.account',  username=cont.therapy.username) }}"><div class="nav-xx"> <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}"> Crazy Thoughts <small class="nav-xy">therapy</small></div></a>
+
+{% else %}
+
+           <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"> <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts <small class="nav-xy">therapy</small></div></a>
+
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
@@ -120,22 +127,13 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="static/jquery-min.js"></script>
 <script src="static/script.js"></script>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
-<script>
-	//paste this code under head tag or in a seperate js file.
-	// Wait for window load
-	$(window).load(function() {
-		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
-	});
-</script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="static/parsley.min.js"></script>
+<script src="static/jquery-1.12.4.min.js"></script>
+<!--<script src="static/main.js"></script>-->
 </body>
 </html>
