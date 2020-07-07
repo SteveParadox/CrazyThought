@@ -14,7 +14,6 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     __searchable__ = ['username']
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -22,10 +21,15 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
     business = db.relationship('Business', backref='therapy', lazy=True)
     patient = db.relationship('Patient', backref='pati', lazy=True)
     admin = db.relationship('Admin', backref='adm', lazy=True)
     comments = db.relationship('Comment', backref='reply', lazy=True)
+    images = db.relationship('Images', backref='imgs', lazy=True)
+    videos = db.relationship('Videos', backref='vids', lazy=True)
+    media_comments = db.relationship('Media_Comments', backref='reple', lazy=True)
+    media_comment = db.relationship('Media_Comment', backref='repli', lazy=True)
 
 
     def get_reset_token(self, expires_sec=1800):
@@ -47,14 +51,13 @@ class User(db.Model, UserMixin):
 
 class Post(db.Model):
     __searchable__ = ['content']
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
     # tag = db.Column(db.Integer,  nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    img_filename = db.Column(db.String())
-    img_data = db.Column(db.LargeBinary)
     comment = db.relationship('Comment', backref='parser', lazy=True)
     admin = db.relationship('Admin', backref='admini', lazy=True)
 
@@ -64,7 +67,37 @@ class Post(db.Model):
         return f"Post( '{self.date_posted}'), '{self.content}' "
 
 
+
+
+class Images(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    photo_filename = db.Column(db.String())
+    photo_data = db.Column(db.LargeBinary)
+    comments = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    media_comments = db.relationship('Media_Comments', backref='img', lazy=True)
+
+    def __repr__(self):
+        return f"Images( '{self.photo_filename}'), '{self.photo_data}' "
+
+
+class Videos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    img_filename = db.Column(db.String())
+    img_data = db.Column(db.LargeBinary)
+    comments = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    media_comment = db.relationship('Media_Comment', backref='vid', lazy=True)
+
+
+    def __repr__(self):
+        return f"Videos( '{self.img_filename}'), '{self.img_data}' "
+
+
 class Comment(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
     reply_message = db.Column(db.Text)
@@ -80,8 +113,38 @@ class Comment(db.Model):
         return '<Comment %r>' % self.name
 
 
-class Business(db.Model):
+class Media_Comment(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    videos_id = db.Column(db.Integer, db.ForeignKey('videos.id'), nullable=False)
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    status = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String())
+
+    def __repr__(self):
+        return '<Media_Comment %r>' % self.name
+
+
+class Media_Comments(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    images_id = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=False)
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    status = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String())
+
+    def __repr__(self):
+        return '<Media_Comment %r>' % self.name
+
+
+class Business(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     degree = db.Column(db.String(), nullable=False)
     licence_no = db.Column(db.String(), nullable=False, unique=True)
@@ -94,6 +157,7 @@ class Business(db.Model):
 
 
 class Patient(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     patient_post = db.Column(db.Text())
@@ -103,6 +167,7 @@ class Patient(db.Model):
 
 
 class Admin(db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
@@ -110,15 +175,22 @@ class Admin(db.Model):
     report_a_problem = db.Column(db.Text)
     report_post = db.Column(db.Text)
 
-
     def __repr__(self):
         return '<Admin %r>' % self.name
+
+
+class Client(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    subscription = db.Column(db.Integer)
+    earnings = db.Column(db.Integer)
+    total_users = db.Column(db.Integer)
 
 
 class UserSchema(ModelSchema):
     class Meta:
         fields = ('id', 'username', 'email', 'image_file', 'password', 'posts', 'comments')
-
         model = User
 
 
@@ -142,3 +214,30 @@ class CommentSchema(ModelSchema):
 
 comment_schema = CommentSchema()
 comments_schema = CommentSchema(many=True)
+
+
+class AdminSchema(ModelSchema):
+    class Meta:
+        model = Admin
+
+
+admin_schema = AdminSchema()
+admins_schema = AdminSchema(many=True)
+
+
+class Channel(db.Model):
+    __tablename__ = 'channels'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60))
+    from_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    msg = db.relationship('Message', backref='msg', lazy=True)
+
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text)
+    from_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'))

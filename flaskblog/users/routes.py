@@ -1,11 +1,12 @@
 import re
+from operator import itemgetter
 
 import requests
 from flask import render_template, redirect, url_for, flash, request, Blueprint
 from flask_login import login_user, logout_user, login_required, user_loaded_from_cookie
 
-from flaskblog import db, bcrypt, login_manager
-from flaskblog.models import Post, Business, Admin
+from flaskblog import db, bcrypt, login_manager, jsonify
+from flaskblog.models import Post, Business, Admin, AdminSchema, Images, Videos
 from flaskblog.users.decorator import check_confirmed
 from flaskblog.users.email import send_email
 from flaskblog.users.forms import *
@@ -81,7 +82,7 @@ def register():
         subject = "Please confirm your email"
         send_email(user.email, subject, html)
 
-        login_user(user, remember=True)
+        login_user(user)
 
         flash('A confirmation email has been sent via email.', 'success')
         # flash('Your account has been created! Log in', 'success')
@@ -110,6 +111,7 @@ def login():
 
 
 @users.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
@@ -125,6 +127,28 @@ def posts():
         .paginate(page=page, per_page=20)
 
     return render_template('posts.html', posts=posts, title='My posts')
+
+@users.route('/posts/images')
+@login_required
+@check_confirmed
+def image_posts():
+    page = request.args.get('page', 1, type=int)
+    posts = Images.query.filter_by(imgs=current_user) \
+        .order_by(Images.date_posted.desc()) \
+        .paginate(page=page, per_page=20)
+
+    return render_template('media_post.html', posts=posts, title='My posts')
+
+@users.route('/posts/videos')
+@login_required
+@check_confirmed
+def videos_posts():
+    page = request.args.get('page', 1, type=int)
+    posts = Videos.query.filter_by(vids=current_user) \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate(page=page, per_page=20)
+
+    return render_template('media_video.html', posts=posts, title='My posts')
 
 
 @users.route("/account", methods=['GET', 'POST'])
@@ -171,14 +195,16 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-   
+    cont = Business.query.filter_by(therapy=current_user).first()
+
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts)
+                           image_file=image_file, form=form, posts=posts, cont=cont)
 
 
 @users.route('/users/<string:username>')
 @check_confirmed
+@login_required
 def user_post(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
@@ -188,10 +214,52 @@ def user_post(username):
     pots = Post.query.filter_by(author=current_user) \
         .order_by(Post.date_posted.desc()) \
         .paginate()
+    posk = Post.query \
+        .order_by(Post.date_posted.desc()) \
+        .paginate()
+    poss = Images.query.filter_by(imgs=user).first()
+    ptss = Videos.query.filter_by(vids=user).first()
 
 
-    return render_template('user_posts.html', posts=posts, pots=pots,user=user)
+    return render_template('user_posts.html', poss=poss,ptss=ptss, posts=posts, pots=pots,user=user, posk=posk)
 
+
+@users.route('/users/images/<string:username>')
+@check_confirmed
+@login_required
+def user_imgs(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Images.query.filter_by(imgs=user) \
+        .order_by(Images.date_posted.desc()) \
+        .paginate(page=page, per_page=20)
+    pots = Images.query.filter_by(imgs=current_user) \
+        .order_by(Images.date_posted.desc()) \
+        .paginate()
+    posk = Images.query \
+        .order_by(Images.date_posted.desc()) \
+        .paginate()
+
+
+    return render_template('user_imgs.html', posts=posts, pots=pots,user=user, posk=posk)
+@users.route('/users/videos/<string:username>')
+@check_confirmed
+@login_required
+def user_vids(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Videos.query.filter_by(vids=user) \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate(page=page, per_page=20)
+    pots = Videos.query.filter_by(vids=current_user) \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate()
+    posk = Videos.query \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate()
+
+
+    return render_template('user_vids.html', posts=posts, pots=pots,user=user, posk=posk)
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
@@ -226,15 +294,16 @@ def reset_token(token):
 
 @users.route('/setting', methods=['GET', 'POST'])
 @check_confirmed
+@login_required
 def setting():
     form= ReportProblemForm()
-    
+    cont = Business.query.filter_by(therapy=current_user).first()
     if form.validate_on_submit():
         report_problem= form.report_problem.data
         report= Admin(report_a_problem=report_problem, adm=current_user)
         db.session.add(report)
         db.session.commit()
-    return render_template('setting.html', title='Settings', form=form)
+    return render_template('setting.html', title='Settings', cont=cont, form=form)
 
 
 @users.route('/unconfirmed')
@@ -266,3 +335,4 @@ def delete_user(id, user_id):
     db.session.delete(post)
     db.session.commit()
     return '', 204
+
