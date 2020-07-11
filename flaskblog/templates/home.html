@@ -34,6 +34,7 @@ if it's not present, don't show loader */
         <a class="navbar-brand mr-4" href="/home/images"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/picture.png') }}">Images</div></a>
             <a class="navbar-brand mr-4" href="/home/videos"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/youtube.png') }}">Videos</div></a>
         </div></nav>
+
 <div class="content-section" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
@@ -61,7 +62,6 @@ if it's not present, don't show loader */
         </div>
     </form>
 </div>
-
 
 
 <div class="avatar-upload">
@@ -94,7 +94,7 @@ new jBox('Modal', {
 
     <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
     <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
-<link href="{{ url_for('static', filename='jbox.all.mn.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
 <script>
 
 
@@ -111,9 +111,7 @@ new jBox('Modal', {
 </script>
 
 
-
     {% for post in posts.items %}
-
 
         <article class="media content-section" >
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
@@ -146,34 +144,66 @@ new jBox('Modal', {
               <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}" >
 <img class="rounded-circle article-img"  title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style=" cursor: pointer;" />
                </a>
-              </span>
+              </span>-->
               {% if post.author == current_user %}
                       {% else %}
 
 
 <span class="secd glow-button">
-            <img class="rounded-circle article-img"  title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style=" cursor: pointer;" />
+            <strike><img class="rounded-circle article-img"  title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style=" cursor: pointer;" />
+</strike>
 </span>
-<script>
-    jQuery(document).ready(function($){
 
-$('.black-button').on({
-     'click': function(){
-
-     }
- });
-
-});
-</script>
 
 
 
 {% endif %}
--->
+
           </div>
 
         </article>
     {% endfor %}
+     <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
+<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
+
+<script>
+
+
+new jBox('Modal', {
+  width: 300,
+  height: 250,
+  attach: 'strike',
+  title: '<p align="center" style="margin-bottom: 0rem;">Report this post!</p>',
+  content: ''
+});
+
+
+
+</script>
+
+    <div class="topic" >
+       <ul class="featured__item__pic__hover">
+                                <li><a href="#" id="topic"><i class="fa fa-group"></i></a></li>
+
+                            </ul>
+    </div>
+<script>
+
+
+new jBox('Modal', {
+  width: 500,
+  height: 200,
+  attach: '#topic',
+  title: '<h4 align="center" style="color:black;">Create Conversation</h4>',
+  content: '<form method=POST enctype=multipart/form-data action="">{{ form4.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" >{% if form4.name.errors %}{{ form4.name(class="daxx", placeholder="What's Up?", id="tog", rows="5") }}                    <div class="invalid-feedback">                        {% for error in form4.name.errors %}                            <span>{{ error }}</span>                        {% endfor %}                    </div>                {% else %}                    {{ form4.name(class="daxx",  rows="1", placeholder="Topic Name", title="Topic Name!", style='resize: none;') }}                {% endif %}</div>        </fieldset>        <div class="form-group">            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}        </div>    </form>'
+  });
+
+
+
+</script>
+
+
 
    {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.prev_num) }}">Latest</a>{% else %}{% endif %}
 {% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.next_num) }}"> Older </a>{% else %} {% endif %}
