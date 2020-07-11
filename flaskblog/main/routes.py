@@ -4,8 +4,9 @@ from flask import Blueprint, url_for, redirect
 from flask import render_template, request
 from flask_login import login_required, current_user
 from flaskblog import db
+from flaskblog.groups.forms import TopicForm
 from flaskblog.main.form import Searchform, SharePostForm, PhotoForm, VideoForm
-from flaskblog.models import Post, User, UserSchema, Business, Images, Videos
+from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic
 from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
 from flaskblog.main.utils import save_img as svimg
@@ -77,7 +78,14 @@ def home():
         db.session.commit()
         return redirect(url_for('main.home_videos'))
 
-    return render_template('home.html', posts=posts, pots=pots,form2=form2,form3=form3, posk=posk,side=side, reload=time.time(), form=form, post=post)
+    form4= TopicForm()
+    if form4.validate_on_submit():
+        topic = Topic(name=form4.name.data, creator=current_user)
+        db.session.add(topic)
+        db.session.commit()
+        return redirect(url_for('groups.topics'))
+
+    return render_template('home.html', posts=posts,form4=form4, pots=pots,form2=form2,form3=form3, posk=posk,side=side, reload=time.time(), form=form, post=post)
 
 
 @main.route('/home/images', methods=['GET', 'POST'])
