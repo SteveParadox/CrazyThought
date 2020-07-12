@@ -14,7 +14,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.imgs.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                <a class="" >{{ post.imgs.username }}</a>
+                <a class="" ><span style="text-transform: capitalize;">{{ post.imgs.username[0] }}</span>{{ post.imgs.username[1:] }}</a>
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
             <div  style="overflow: hidden; width:100%;">

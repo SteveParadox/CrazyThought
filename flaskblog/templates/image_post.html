@@ -5,7 +5,7 @@
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + images.imgs.image_file) }}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for('users.user_post', username=images.imgs.username) }}">{{ images.imgs.username }}</a>
+          <a class="mr-2" href="{{ url_for('users.user_post', username=images.imgs.username) }}"><span style="text-transform: capitalize;">{{ images.imgs.username[0] }}</span>{{ images.imgs.username[1:] }}</a>
 
 <small class="text-muted">{{ images.date_posted.strftime('%d/%b/%Y ') }}
            {% if images.imgs == current_user %}
@@ -155,7 +155,7 @@ position: relative;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reple.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reple.image_file) }}">
                           </a>
-                           <b> {{ comment.reple.username }} </b>
+                          <b> <span style="text-transform: capitalize;">{{ comment.reple.username[0] }}</span>{{ comment.reple.username [1:]}} </b>
                      </h5>
                       <small  class="date" style="font-weight: 450;">
                           {{ comment.pub_date.strftime('%d/%b/%Y ') }}

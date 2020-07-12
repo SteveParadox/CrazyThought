@@ -1,7 +1,7 @@
 {% extends "vidda.html" %}
 {% block content %}
 
-    <h3 class="nav-xy">Posts by {{ user.username }} ({{ posts.total }})</h3>
+<h3 class="nav-xy">Posts by <span style="text-transform: capitalize;">{{ user.username[0] }}</span>{{ user.username[1:] }} ({{ posts.total }})</h3>
 
     {% for post in posts.items %}
 
@@ -9,7 +9,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.imgs.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=post.imgs.username) }}">{{ post.imgs.username }}</a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.imgs.username) }}"><span style="text-transform: capitalize;">{{ post.imgs.username[0] }}</span>{{ post.imgs.username[1:] }}</a>
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
                     <a class="article-title" href="{{ url_for('posts.img_post', images_id = post.id) }}">

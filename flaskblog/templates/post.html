@@ -5,7 +5,7 @@
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">{{ post.author.username }}</a>
+          <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</a>
        <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}
 
            {% if post.author == current_user %}
@@ -86,6 +86,7 @@ function outFunc() {
 
           </div>
           {% endif %}
+      </div>
 
       <p class="krax">{{ post.content }}</p>
          {% if post.img_filename %}
@@ -162,7 +163,7 @@ position: relative;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
                           </a>
-                           <b> {{ comment.reply.username }} </b>
+                          <b> <span style="text-transform: capitalize;">{{ comment.reply.username[0] }}</span>{{ comment.reply.username[1:] }} </b>
                      </h5>
                       <small  class="date" style="font-weight: 450;">
                           {{ comment.pub_date.strftime('%d/%b/%Y ') }}

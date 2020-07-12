@@ -5,7 +5,7 @@
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + videos.vids.image_file) }}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for('users.user_post', username=videos.vids.username) }}">{{ videos.vids.username }}</a>
+          <a class="mr-2" href="{{ url_for('users.user_post', username=videos.vids.username) }}"><span style="text-transform: capitalize;">{{ videos.vids.username[0] }}</span>{{ videos.vids.username[1:] }}</a>
 
 <small class="text-muted">{{ videos.date_posted.strftime('%d/%b/%Y ') }}
            {% if videos.vids == current_user %}
@@ -86,11 +86,57 @@ function outFunc() {
           </div>
           {% endif %}
 
+<!--
 
- <video  >
+
+-->
+
+
+          <div id="frame"></div>
+
+
+              <div id="main">
+                  <div id="videoPanel">
+                      <img class="rou vide" style="width:60px; height:60px;" src= "{{ url_for('static', filename='images/play-button.png') }}" onclick="playOrPause()" id="playBtn"/>
+
+<video id="myVideo" autoplay >
 	 <source src="{{ url_for('static', filename= 'post_pics/' + videos.img_filename) }}" type="video/mp4">
+
+
+
  </video>
 
+
+</div>
+
+                  <div id="controls" style="display:none;">
+
+                      <div id="seek-bar" style="display:none;">
+                          <div id="fill"></div>
+
+
+                      </div>
+                      <table border="0">
+                          <tr>
+                              <td width="55%">
+                                  <div id="currentTime">00.00 / 00.00</div>
+
+                              </td>
+                              <td width="36%">
+
+                              </td>
+                              <td>
+                                  <img class="rou" src= "{{ url_for('static', filename='images/pin.png') }}" id="speaker"/>
+                              </td>
+                              <td>
+                                  <input type="range" id="volume" min="0" max="1" value="0.40" step="0.20"
+                                  onchange="changeVolume()"/>
+                              </td>
+                          </tr>
+                      </table>
+                  </div>
+              </div>
+   <script src= "{{ url_for('static', filename='jquery-1.10.2.min.js') }}"></script>
 
           {% if current_user.is_authenticated %}
 
@@ -158,7 +204,7 @@ position: relative;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.repli.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.repli.image_file) }}">
                           </a>
-                           <b> {{ comment.repli.username }} </b>
+                          <b> <span style="text-transform: capitalize;">{{ comment.repli.username[0] }}</span>{{ comment.repli.username[1:] }} </b>
                      </h5>
                       <small  class="date" style="font-weight: 450;">
                           {{ comment.pub_date.strftime('%d/%b/%Y ') }}

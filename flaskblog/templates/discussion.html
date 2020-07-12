@@ -5,7 +5,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + groups.group.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=groups.group.username) }}"><span>{{ groups.group.username }}</span></a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=groups.group.username) }}"><span><span style="text-transform: capitalize;">{{ groups.group.username[0] }}</span>{{ groups.group.username[1:] }}</span></a>
                 <small class="text-muted"><i>{{ groups.date_posted.strftime('%d/%b/%Y ') }}</i><span class="secd glow-button" style="float: right;">
           <img class="rou" id="mode" title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style="float: right; cursor: pointer; margin-right: 4px;" />
            </span>
@@ -72,6 +72,15 @@ function outFunc() {
 </script>
 
             </div>
+              {% if groups.group == current_user %}
+          <div>
+          <button class="secd glow-button" type="button" style="outline: none; width:33px;" data-toggle="modal" data-target="#deleteModal"><img class="rou" style="position: relative;
+    left: -5px;
+
+}" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
+
+          </div>
+          {% endif %}
                        <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ groups.content }} </p>
   <script>
       function updateDiv()
@@ -184,6 +193,24 @@ position: relative;">
     <h3 align="center" style="opacity:0.3">  Be the first to comment </h3>
     {%endif%}
 </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background: #fff;">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer" style="background: #fff;">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="{{ url_for('groups.delete_group', topics_id=topics.id, topics_name=topics.name, groups_id=groups.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 {%endblock content%}

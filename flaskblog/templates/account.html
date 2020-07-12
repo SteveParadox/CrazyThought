@@ -15,7 +15,7 @@
 
     </div>
        <div class="profile-card__cnt js-profile-cnt">
-      <div class="profile-card__name">@{{ current_user.username }}</div>
+           <div class="profile-card__name">@<span style="text-transform: capitalize;">{{ current_user.username[0] }}</span>{{ current_user.username[1:] }}</div>
           <div class="profile-card___txt">{{ current_user.email }}</div>
 
 
@@ -86,7 +86,10 @@ Location:
         </form>
 
 
-
+{%if cont.licence_no %}
+<a class="nav-item nav-link" href="{{ url_for('business.my_account') }}">Doctor's Account</a>
+{% else %}
+{% endif %}
     </div>
 
       </div>

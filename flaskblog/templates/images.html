@@ -1,5 +1,33 @@
 {% extends "vidda.html" %}
 {% block content %}
+
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<style>
+/* Paste this css to your style sheet file or under head tag */
+/* This only works with JavaScript,
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+	background: url(static/images/giphy.gif) center no-repeat #fff;
+}
+</style>
+
+<body>
+	<!-- Paste this code after body tag -->
+	<div class="se-pre-con"></div>
+	<!-- Ends -->
+
+
  {% for post in posts.items %}
 
 
@@ -8,7 +36,7 @@
           <div class="media-body">
             <div class="article-metadata">
 
-                  <a class="mr-2" href="{{ url_for('users.user_post', username=post.imgs.username) }}"><span>{{ post.imgs.username }}</span></a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.imgs.username) }}"><span><span style="text-transform: capitalize;">{{ post.imgs.username[0] }}</span>{{ post.imgs.username[1:] }}</span></a>
              <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
 
             </div>

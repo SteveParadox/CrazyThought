@@ -12,7 +12,7 @@
 
             <div class="article-metadata">
 
-              <a class="mr-2" href="{{ url_for('users.user_post', username=post.vid.vids.username) }}">{{ post.vid.vids.username }}</a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.vid.vids.username) }}"><span style="text-transform: capitalize;">{{ post.vid.vids.username[0] }}</span>{{ post.vid.vids.username[1:] }}</a>
                 <small class="text-muted"><i>{{ post.vid.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
 <video>

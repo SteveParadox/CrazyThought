@@ -1,4 +1,4 @@
-{% extends "nav_prof.html" %}
+{% extends "douxt.html" %}
 {% block content %}
 
 {% if  posts.total  > 1 %}
@@ -14,7 +14,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                <a class="" >{{ post.author.username }}</a>
+                <a class="" ><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</a>
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
             <p class="krax">{{ post.content }}</p>

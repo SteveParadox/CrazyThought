@@ -51,7 +51,7 @@ if it's not present, don't show loader */
 
        <article class="media content-section" >
             <div class="media-body">
-                <a class="article-title" href="{{ url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name) }}">    {{ topics.name }}</a> <strike><img  class="rou" style="float:right; cursor:pointer;"
+                <a class="article-title" href="{{ url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name) }}">    <span style="text-transform: capitalize;">{{ topics.name[0] }}</span>{{ topics.name[1:] }}</a> <strike><img  class="rou" style="float:right; cursor:pointer;"
                                                                                                                                                                  src="{{ url_for('static', filename= 'images/more(3).png' ) }}">
             </strike>
 

@@ -7,7 +7,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.vids.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                  <a class="mr-2" href="{{ url_for('users.user_post', username=post.vids.username) }}"><span>{{ post.vids.username }}</span></a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.vids.username) }}"><span><span style="text-transform: capitalize;">{{ post.vids.username[0] }}</span>{{ post.vids.username[1:] }}</span></a>
              <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
 
             </div>

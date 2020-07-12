@@ -13,7 +13,7 @@
             <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + sidex.vids.image_file) }}">
 <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('users.user_post', username=sidex.vids.username) }}">{{ sidex.vids.username }}</a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=sidex.vids.username) }}"><span style="text-transform: capitalize;">v{{ sidex.vids.username[0] }}</span>{{ sidex.vids.username[1:] }}</a>
                 <small class="text-muted"><i>{{ sidex.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
 
