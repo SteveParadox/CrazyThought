@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, url_for
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from flaskblog import db, request, abort
+from flaskblog import db, request, abort, flash
 from flaskblog.groups.forms import GroupPostForm, SearchPostForm, CommentForm
 from flaskblog.models import Groups, Topic, TopicSchema, Group_comment
 
@@ -46,6 +46,8 @@ def conversation(topics_id, topics_name):
                            topics_name=topics.name)
 
 
+
+
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>", methods=['POST', 'GET'])
 def discussion(topics_id, topics_name, groups_id):
     topics = Topic.query.get_or_404(topics_id, topics_name)
@@ -63,6 +65,24 @@ def discussion(topics_id, topics_name, groups_id):
     return render_template('discussion.html', groups_id=groups.id, post=post,
                            groups=groups, topics_id=topics.id,
                            topics_name=topics.name, topics=topics, form=form, gc=gc)
+
+
+
+
+@groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>/delete", methods=['POST', 'GET'])
+def delete_group(topics_id, topics_name, groups_id):
+    topics = Topic.query.get_or_404(topics_id, topics_name)
+    groups = Groups.query.get_or_404(groups_id)
+    gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).all()
+    if groups.group != current_user:
+        abort(403)
+
+    for o in gc:
+        db.session.delete(o)
+    db.session.delete(groups)
+    db.session.commit()
+    flash('Your post has been deleted!', 'success')
+    return redirect(url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name ))
 
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>/delete",
