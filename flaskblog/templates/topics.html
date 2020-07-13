@@ -46,7 +46,24 @@ if it's not present, don't show loader */
             </div>
         </form>
     <p id = "datalist"></p>
+<style>
+    .jBox-Modal .jBox-container, .jBox-Modal.jBox-closeButton-box::before {
+    background:
+black;
 
+color:
+white;
+    }
+    .jBox-Modal .jBox-title {
+    background:
+black;
+    }
+
+    .sa:hover i{
+    font-size: 22px;
+    }
+
+</style>
     {%for topics in topic.items %}
 
        <article class="media content-section" >
@@ -54,9 +71,17 @@ if it's not present, don't show loader */
                 <a class="article-title" href="{{ url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name) }}">    <span style="text-transform: capitalize;">{{ topics.name[0] }}</span>{{ topics.name[1:] }}</a> <strike><img  class="rou" style="float:right; cursor:pointer;"
                                                                                                                                                                  src="{{ url_for('static', filename= 'images/more(3).png' ) }}">
             </strike>
+                <a style="float:right;" class="article-title" title="My post on topic" href="{{ url_for('groups.my_conversation', topics_id=topics.id, topics_name=topics.name) }}"><span class="sa"><i style="height: 18px;" class="fa fa-plus-square-o"></i></span>
 
+                            </a>
+                 <a style="float:right;" class="article-title" title="Topic creator"  href="{{ url_for('users.user_post', username=topics.creator.username) }}"><span class="sa"><i style="height: 18px;" class="fa fa-info-circle"></i></span>
+
+                            </a>
+                <span style="float:right;" class="sa"><i style="height: 18px;" class="fa fa-share"></i></span>
             </div>
+
        </article>
+
 
 
 {% endfor %}
@@ -65,6 +90,7 @@ if it's not present, don't show loader */
     <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
 <link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
 
+
 <script>
 
 
@@ -72,9 +98,9 @@ new jBox('Modal', {
   width: 300,
   height: 250,
   attach: 'strike',
-  title: '<p align="center" style="margin-bottom: 0rem;">Report this post!</p>',
-  content: ''
-});
+  title: '<style>.jBox-Modal .jBox-title { background:black;}</style><p align="center" style="margin-bottom: 0rem;">More!</p>',
+  content: "<a href=''><p style='color:red;'>Report topic as inappropriate</p></a>"
+  });
 
 
 

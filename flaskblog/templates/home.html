@@ -2,6 +2,7 @@
 {% block content %}
 
 
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -52,7 +53,7 @@ if it's not present, don't show loader */
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.content(class="daxx", id="togg", rows="3", placeholder="What's On Your Mind?", title="Post Something!", style='resize: none;') }}
+                    {{ form.content(class="daxx", id="togg", rows="3",max="10", placeholder="What's On Your Mind?", title="Post Something!", style='resize: none;') }}
                 {% endif %}
 </div>
 
@@ -183,6 +184,7 @@ new jBox('Modal', {
 </script>
 
     <div class="topic" >
+
        <ul class="featured__item__pic__hover">
                                 <li><a href="#" id="topic"><i class="fa fa-group"></i></a></li>
 
@@ -196,7 +198,7 @@ new jBox('Modal', {
   height: 200,
   attach: '#topic',
   title: '<h4 align="center" style="color:black;">Create Conversation</h4>',
-  content: '<form method=POST enctype=multipart/form-data action="">{{ form4.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" >{% if form4.name.errors %}{{ form4.name(class="daxx", placeholder="What's Up?", id="tog", rows="5") }}                    <div class="invalid-feedback">                        {% for error in form4.name.errors %}                            <span>{{ error }}</span>                        {% endfor %}                    </div>                {% else %}                    {{ form4.name(class="daxx",  rows="1", placeholder="Topic Name", title="Topic Name!", style='resize: none;') }}                {% endif %}</div>        </fieldset>        <div class="form-group">            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}        </div>    </form>'
+  content: '<form method=POST enctype=multipart/form-data action="">{{ form4.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" >{% if form4.name.errors %}{{ form4.name(class="daxx", placeholder="What's Up?", id="tog", rows="5", max="10") }}                    <div class="invalid-feedback">                        {% for error in form4.name.errors %}                            <span>{{ error }}</span>                        {% endfor %}                    </div>                {% else %}                    {{ form4.name(class="daxx",  rows="1", placeholder="Topic Name", title="Topic Name!", style='resize: none;') }}                {% endif %}</div>        </fieldset>        <div class="form-group">            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}        </div>    </form>'
   });
 
 

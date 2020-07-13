@@ -1,0 +1,39 @@
+{% extends "groupx.html" %}
+{% block content %}
+
+
+{% for post in posts %}
+
+<h4 class="nav-xy">Your posts on this topic</h4>
+
+        <article class="media content-section" >
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.group.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.group.username) }}"><span><span style="text-transform: capitalize;">{{ post.group.username[0] }}</span>{{ post.group.username[1:] }}</span></a>
+                <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
+            </div>
+                       <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ post.content }} </p>
+  <script>
+      function updateDiv()
+{
+    $( "a" ).load(window.location.href + "a" );
+    }
+  </script>
+               <div>
+
+
+<span class="secd glow-button">
+              <a class="article-title" href="{{ url_for('groups.discussion',topics_id=topics.id,
+                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+
+</span>
+
+  </div>
+          </div>
+
+        </article>
+    {% endfor %}
+
+
+{% endblock content%}
