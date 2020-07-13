@@ -309,39 +309,27 @@ font-size: 20px;
 font-family: 'Lobster Two', cursive;
 }
 
-.loader-frame{
-width: 70px;
-height: 70px;
-margin: auto;
-position: relative;
+
+.mac{
+display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 30%; 
+  position: fixed;
+  top: 0;
+  left: 36%;
+  z-index: 9999;
+}
+
+.preloader{
+
+  transition: opacity 0.3s linear;
 }
 
 
-.loader1, .loader2 {
-
-position: absolute;
-border: 5px solid transparent;
-border-radius: 50%;
-}
-
-.loader1{
-width: 70px;
-height: 70px;
-border-top: 5px solid silver;
-border-bottom: 5px solid silver;
-animation: clockwisespin 2s linear 3;
-
-}
 
 
-.loader2{
-width: 60px;
-height: 60px;
-border-top: 5px solid #dddddd;
-border-bottom: 5px solid #dddddd;
-top: 5px; left: 5px;
-animation: anticlockwisespin 2s linear 3;
-}
 
 @keyframes clockwisespin{
 from {transform: rotate(0deg); }
