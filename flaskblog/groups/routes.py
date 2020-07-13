@@ -1,11 +1,11 @@
 from operator import itemgetter
 from flask import Blueprint, render_template, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 from werkzeug.utils import redirect
-
 from flaskblog import db, request, abort, flash
 from flaskblog.groups.forms import GroupPostForm, SearchPostForm, CommentForm
 from flaskblog.models import Groups, Topic, TopicSchema, Group_comment
+from flaskblog.users.decorator import check_confirmed
 
 groups = Blueprint('groups', __name__)
 
@@ -13,8 +13,8 @@ groups = Blueprint('groups', __name__)
 @groups.route('/topics', methods=['POST', 'GET'])
 def topics():
     topic = Topic.query.order_by(Topic.date_created.desc()).paginate()
-
     form = SearchPostForm()
+
     results = Topic.query.all()
     topics_schema = TopicSchema(many=True)
     res = topics_schema.dump(results)
@@ -27,6 +27,8 @@ def topics():
 
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
 def conversation(topics_id, topics_name):
     topics = Topic.query.get_or_404(topics_id, topics_name)
     form = GroupPostForm()
@@ -46,9 +48,20 @@ def conversation(topics_id, topics_name):
                            topics_name=topics.name)
 
 
+@groups.route("/topics/conversation/my_conversation/<int:topics_id>/<string:topics_name>", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def my_conversation(topics_id, topics_name):
+    topics = Topic.query.get_or_404(topics_id, topics_name)
+    posts = Groups.query.filter_by(topic_id=topics.id).filter_by(group=current_user).order_by(Groups.date_posted.desc()).all()
+
+    return render_template('my_convo.html', topics_id=topics.id, posts=posts, topics=topics,
+                           topics_name=topics.name)
 
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
 def discussion(topics_id, topics_name, groups_id):
     topics = Topic.query.get_or_404(topics_id, topics_name)
     groups = Groups.query.get_or_404(groups_id)
@@ -70,6 +83,8 @@ def discussion(topics_id, topics_name, groups_id):
 
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>/delete", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
 def delete_group(topics_id, topics_name, groups_id):
     topics = Topic.query.get_or_404(topics_id, topics_name)
     groups = Groups.query.get_or_404(groups_id)
@@ -87,6 +102,8 @@ def delete_group(topics_id, topics_name, groups_id):
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>/delete",
               methods=['POST', 'GET'])
+@login_required
+@check_confirmed
 def delete_discussion(topics_id, topics_name, groups_id, gc_id):
     topics = Topic.query.get_or_404(topics_id, topics_name)
     groups = Groups.query.get_or_404(groups_id)
