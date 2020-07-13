@@ -6,15 +6,16 @@ from flaskblog import db, request, abort, flash
 from flaskblog.groups.forms import GroupPostForm, SearchPostForm, CommentForm
 from flaskblog.models import Groups, Topic, TopicSchema, Group_comment
 from flaskblog.users.decorator import check_confirmed
+import  datetime
+
 
 groups = Blueprint('groups', __name__)
 
 
 @groups.route('/topics', methods=['POST', 'GET'])
 def topics():
-    topic = Topic.query.order_by(Topic.date_created.desc()).paginate()
     form = SearchPostForm()
-
+    topic = Topic.query.filter(Topic.date_created >= (datetime.datetime.now()-datetime.timedelta(days=1))).order_by(Topic.date_created.desc()).paginate()
     results = Topic.query.all()
     topics_schema = TopicSchema(many=True)
     res = topics_schema.dump(results)
