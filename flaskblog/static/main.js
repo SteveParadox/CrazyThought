@@ -2,10 +2,6 @@ Vue.component('settings',{
 
 template:`
 <div>
- <article class="media content-section">
-<a class="nav-item nav-link" href="/therapy/view-psycologist">Talk to a Psycologist</a>
- </article>
-
 
 
 
