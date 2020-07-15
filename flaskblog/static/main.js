@@ -2,6 +2,11 @@ Vue.component('settings',{
 
 template:`
 <div>
+ <article class="media content-section">
+<a class="nav-item nav-link" href="/therapy/view-psycologist">Talk to a Psycologist</a>
+ </article>
+
+
 
 
  <article class="media content-section">
@@ -20,13 +25,6 @@ template:`
  </article>
 
 
- <article class="media content-section">
-          <a class="nav-item nav-link" href="/logout">
-
-
-               <small>Logout</small> <img class="rounded-circle article-img" src="static/images/logout-outline.png">
-                </a>
- </article>
  <div>
 
 `
