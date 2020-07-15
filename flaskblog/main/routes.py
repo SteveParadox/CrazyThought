@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from flaskblog import db
 from flaskblog.groups.forms import TopicForm
 from flaskblog.main.form import Searchform, SharePostForm, PhotoForm, VideoForm
-from flaskblog.models import Post, User, UserSchema, Images, Videos, Topic
+from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic, Groups
 from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
 from flaskblog.main.utils import save_img as svimg
@@ -36,18 +36,18 @@ def share_post(post_id):
 
 
 @main.route('/home', methods=['GET', 'POST'])
-@login_required
-@check_confirmed
 def home():
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=50)
-    pots = Post.query.filter_by(author=current_user) \
+    global pots
+    pots = Post.query.filter_by() \
         .order_by(Post.date_posted.desc()) \
         .paginate()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=50)
+
     posk = Post.query\
         .order_by(Post.date_posted.desc()) \
         .paginate()
-    
+    side = (Topic.query.filter_by().order_by(Topic.name.desc()).all()[0:5])
     post = Post.query.order_by(Post.content.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
@@ -85,36 +85,47 @@ def home():
         db.session.commit()
         return redirect(url_for('groups.topics'))
 
-    return render_template('home.html', posts=posts,form4=form4, pots=pots,form2=form2,form3=form3, posk=posk, reload=time.time(), form=form, post=post)
+    if current_user.is_authenticated:
+        pots = Post.query.filter_by(author=current_user) \
+            .order_by(Post.date_posted.desc()) \
+            .paginate()
+    return render_template('home.html', posts=posts,form4=form4, pots=pots,form2=form2,form3=form3, posk=posk,side=side, reload=time.time(), form=form, post=post)
 
 
 @main.route('/home/images', methods=['GET', 'POST'])
-@login_required
-@check_confirmed
 def home_images():
-    page = request.args.get('page', 1, type=int)
-    posts = Images.query.filter_by(photo_filename=Images.photo_filename).order_by(Images.date_posted.desc()).paginate(page=page, per_page=20)
-    pots = Images.query.filter_by(imgs=current_user) \
+    pots = Images.query.filter_by() \
         .order_by(Images.date_posted.desc()) \
         .paginate()
+    page = request.args.get('page', 1, type=int)
+    posts = Images.query.filter_by(photo_filename=Images.photo_filename).order_by(Images.date_posted.desc()).paginate(page=page, per_page=20)
+
     posk = Images.query \
         .order_by(Images.date_posted.desc()) \
         .paginate()
+    if current_user.is_authenticated:
+        pots = Images.query.filter_by(imgs=current_user) \
+            .order_by(Images.date_posted.desc()) \
+            .paginate()
     return render_template('images.html', posts=posts, reload=time.time(), pots=pots, posk=posk)
 
 @main.route('/home/videos', methods=['GET', 'POST'])
-@login_required
-@check_confirmed
+
 def home_videos():
+    pots = Videos.query.filter_by() \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate()
     page = request.args.get('page', 1, type=int)
     posts = Videos.query.filter_by(img_filename=Videos.img_filename).order_by(Videos.date_posted.desc()).paginate(
         page=page, per_page=20)
-    pots = Videos.query.filter_by(vids=current_user) \
-        .order_by(Videos.date_posted.desc()) \
-        .paginate()
+
     posk = Videos.query \
         .order_by(Videos.date_posted.desc()) \
         .paginate()
+    if current_user.is_authenticated:
+        pots = Videos.query.filter_by(vids=current_user) \
+            .order_by(Videos.date_posted.desc()) \
+            .paginate()
     return render_template('videos.html', reload=time.time(), posts=posts, pots=pots, posk=posk)
 
 
