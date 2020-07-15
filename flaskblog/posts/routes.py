@@ -11,8 +11,6 @@ posts = Blueprint('posts', __name__)
 
 
 @posts.route("/explore", methods=['GET', 'POST'])
-@login_required
-@check_confirmed
 def explore():
     side = (Post.query.order_by(Post.comments.desc()).all()[0:100])
     x = random.shuffle(side)
@@ -20,16 +18,12 @@ def explore():
 
 
 @posts.route("/explore/images", methods=['GET', 'POST'])
-@login_required
-@check_confirmed
 def trending():
     side = (Images.query.order_by(Images.comments.desc()).all()[0:100])
     x = random.shuffle(side)
     return render_template('trending.html', side=side, title='Popular')
 
 @posts.route("/explore/videos", methods=['GET', 'POST'])
-@login_required
-@check_confirmed
 def trending_videos():
     side = (Videos.query.order_by(Videos.comments.desc()).all()[0:100])
     x = random.shuffle(side)
