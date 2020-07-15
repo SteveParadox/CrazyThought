@@ -83,8 +83,8 @@ a.article-title:hover {
 }
 
 .article-img {
-  height: 29px;
-  width: 29px;
+  height: 25px;
+  width: 25px;
   margin-right: 0px;
   object-fit: cover;
 }
@@ -113,8 +113,8 @@ a.article-title:hover {
   margin-bottom: 16px;
 }
 .dropbtn {
-  width: 29px;
-  height: 29px;
+  width: 25px;
+  height: 25px;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -2264,4 +2264,26 @@ width: 100%;
     }
 
 
+}
+
+.paz{
+padding: 2px;
+position: relative;
+top: -2px;
+}
+
+.bla{
+visibility: visible;
+}
+
+
+.ped{
+outline: none;
+width:33px;
+}
+
+.dua{
+position: relative;
+ padding: 1.5px;
+    left: -5px;
 }
