@@ -33,21 +33,17 @@ if it's not present, don't show loader */
 
 
 
-<script>
 
-    function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  var expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-</script>
+<br>
+    <br>
+<h1 align="center" class="nav-xy" style="color:black;"> Welcome Back</h1>
+    <h6 class="textes">Please sign in and stay connected, contribute to latest topics and posts that interests you.</h6>
 
 <div class="content-section" >
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">
+            <legend class="textes nav-xy" style="color:black;">
               Log in
             </legend>
 
