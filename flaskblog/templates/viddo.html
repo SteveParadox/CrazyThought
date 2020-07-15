@@ -80,17 +80,18 @@ function goBack() {
 </script>
             <a class="navbar-brand mr-4" href="/home"><div class="nav-xx" style="position: relative;
 
-left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
+left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Videos</div></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 
           </button>
+            {% if current_user.is_authenticated%}
           <a class="foot" href="{{ url_for('users.setting') }}">
 
 
                 <img class="dropbtn" src="{{ url_for('static', filename= 'images/gear.png') }}" >
 </a>
 
-
+{%endif%}
 
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
@@ -102,29 +103,39 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
 
-
-
                   <a class="nav-item nav-link" href="{{ url_for('users.account') }}" title="My Account" aria-label="My Account">
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
+                {% endif %}
+<a  class="nav-item nav-link" href="{{ url_for('groups.topics') }}" title="Conversation" aria-label="Conversation" >
 
+                <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/conversation.png') }}" >
+</a>
 
                   <a class="nav-item nav-link" href="{{ url_for('posts.trending_videos') }}" title="Popular Posts" aria-label="Popular Posts">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-<span class="prex" style="right: 154px;">
+{%if current_user.is_authenticated %}
+                      <span class="prex" style="right: 143px;">
     {%if posk.total < 99 %}
     {{posk.total}}
 {%else%}
     99
 {%endif%}</span>
-                  </a>
+                      {%else%}
+                         <span class="prex" style="right: 60px;">
+    {%if posk.total < 99 %}
+    {{posk.total}}
+{%else%}
+    99
+{%endif%}</span>
+                      {% endif %}                  </a>
 
-
+{% if current_user.is_authenticated%}
                  <a class="nav-item nav-link" href="{{ url_for('users.videos_posts') }}" title="My Posts " aria-label="My Posts">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
-<span class="prex" style="right: 106px;"> {{ pots.total }}</span>
+<span class="prex" style="right: 98px;"> {{ pots.total }}</span>
                 </a>
                  <a id="fuck" class="nav-item nav-link" href="{{ url_for('posts.video_following') }}" title="My Activities" aria-label="My Activities" >
 
@@ -141,7 +152,7 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
                      </script>
 
                 </a>
-
+ {% endif %}
 <a class="nav-item nav-link" href="{{ url_for('users.setting') }}" title="Settings" aria-label="Settings">
 
 
@@ -149,10 +160,6 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
 </a>
 
 
-                {% else %}
-                    <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
-                    <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
-                {% endif %}
             </div>
           </div>
         </div>
@@ -194,11 +201,14 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
+<a  href="{{ url_for('groups.topics') }}" title="Conversation" aria-label="Conversation" >
 
+                <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/conversation.png') }}" >
+</a>
 
                   <a  href="{{ url_for('posts.trending_videos') }}">
                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-<span class="prex" style="right: 59%;"> {%if posk.total < 99 %}
+<span class="prex" style="right: 45%;"> {%if posk.total < 99 %}
     {{posk.total}}
 {%else%}
     99
@@ -209,20 +219,12 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
                  <a  href="{{ url_for('users.videos_posts') }}">
 
                 <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
-<span class="prex" style="right: 29%;"> {{ pots.total }}</span>
+<span class="prex" style="right: 23%;"> {{ pots.total }}</span>
                 </a>
                  <a  href="{{ url_for('posts.video_following') }}"  >
 
                 <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/activity.png') }}" >
              </a>
-
-
-
-
-                {% else %}
-                    <a  href="{{ url_for('users.login') }}">Login</a>
-                    <a  href="{{ url_for('users.register') }}">Register</a>
-
 
  </nav>
     </footer>

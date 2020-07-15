@@ -79,8 +79,7 @@ function outFunc() {
         {% if post.author == current_user %}
           <div>
               <span class="secd glow-button" >  <a  href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'images/refresh.png') }}"></a></span>
-            <button class="secd glow-button" type="button" style="outline: none; width:33px;" data-toggle="modal" data-target="#deleteModal"><img class="rou" style="position: relative;
-    left: -5px;
+            <button class="secd glow-button ped" type="button" data-toggle="modal" data-target="#deleteModal"><img class="rou dua" style="
 
 }" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
 
@@ -176,8 +175,8 @@ position: relative;">
 {% if comment.reply == current_user %}
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
-<span class="secd glow-button">
-                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><img class="rou" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
+<span class="secd  bla">
+                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><img class="rou paz glow-button" style="border-radius: 50%;" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
 </span>
                 </form>
 
