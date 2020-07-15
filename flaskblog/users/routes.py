@@ -73,7 +73,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=False)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=True)
         db.session.add(user)
         db.session.commit()
         token = generate_confirmation_token(user.email)
@@ -195,16 +195,16 @@ def account():
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=10)
 
-   
+    cont = Business.query.filter_by(therapy=current_user).first()
 
 
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts=posts)
+                           image_file=image_file, form=form, posts=posts, cont=cont)
 
 
 @users.route('/users/<string:username>')
-@check_confirmed
 @login_required
+@check_confirmed
 def user_post(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
@@ -225,8 +225,8 @@ def user_post(username):
 
 
 @users.route('/users/images/<string:username>')
-@check_confirmed
 @login_required
+@check_confirmed
 def user_imgs(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
@@ -243,8 +243,8 @@ def user_imgs(username):
 
     return render_template('user_imgs.html', posts=posts, pots=pots,user=user, posk=posk)
 @users.route('/users/videos/<string:username>')
-@check_confirmed
 @login_required
+@check_confirmed
 def user_vids(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
@@ -293,11 +293,11 @@ def reset_token(token):
 
 
 @users.route('/setting', methods=['GET', 'POST'])
-@check_confirmed
-@login_required
 def setting():
     form= ReportProblemForm()
-    cont = Business.query.filter_by(therapy=current_user).first()
+    cont = Business.query.filter_by().first()
+    if current_user.is_authenticated:
+        cont = Business.query.filter_by(therapy=current_user).first()
     if form.validate_on_submit():
         report_problem= form.report_problem.data
         report= Admin(report_a_problem=report_problem, adm=current_user)
