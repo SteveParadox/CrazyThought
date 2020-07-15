@@ -15,7 +15,7 @@ groups = Blueprint('groups', __name__)
 @groups.route('/topics', methods=['POST', 'GET'])
 def topics():
     form = SearchPostForm()
-    topic = Topic.query.filter(Topic.date_created >= (datetime.datetime.now()-datetime.timedelta(days=1))).order_by(Topic.date_created.desc()).paginate()
+    topic = Topic.query.filter(Topic.date_created >= (datetime.datetime.now()-datetime.timedelta(days=7))).order_by(Topic.date_created.desc()).paginate()
     results = Topic.query.all()
     topics_schema = TopicSchema(many=True)
     res = topics_schema.dump(results)
@@ -31,9 +31,8 @@ def topics():
 @login_required
 @check_confirmed
 def conversation(topics_id, topics_name):
-    topics = Topic.query.get_or_404(topics_id, topics_name)
+    topics = Topic.query.get_or_404(topics_id)
     form = GroupPostForm()
-
     if form.validate_on_submit():
         post = Groups(content=form.content.data, group=current_user, topic_id=topics.id)
         db.session.add(post)
@@ -53,7 +52,7 @@ def conversation(topics_id, topics_name):
 @login_required
 @check_confirmed
 def my_conversation(topics_id, topics_name):
-    topics = Topic.query.get_or_404(topics_id, topics_name)
+    topics = Topic.query.get_or_404(topics_id)
     posts = Groups.query.filter_by(topic_id=topics.id).filter_by(group=current_user).order_by(Groups.date_posted.desc()).all()
 
     return render_template('my_convo.html', topics_id=topics.id, posts=posts, topics=topics,
@@ -64,7 +63,7 @@ def my_conversation(topics_id, topics_name):
 @login_required
 @check_confirmed
 def discussion(topics_id, topics_name, groups_id):
-    topics = Topic.query.get_or_404(topics_id, topics_name)
+    topics = Topic.query.get_or_404(topics_id)
     groups = Groups.query.get_or_404(groups_id)
     post = Groups.query.all()
     form = CommentForm()
@@ -87,7 +86,7 @@ def discussion(topics_id, topics_name, groups_id):
 @login_required
 @check_confirmed
 def delete_group(topics_id, topics_name, groups_id):
-    topics = Topic.query.get_or_404(topics_id, topics_name)
+    topics = Topic.query.get_or_404(topics_id)
     groups = Groups.query.get_or_404(groups_id)
     gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).all()
     if groups.group != current_user:
@@ -106,7 +105,7 @@ def delete_group(topics_id, topics_name, groups_id):
 @login_required
 @check_confirmed
 def delete_discussion(topics_id, topics_name, groups_id, gc_id):
-    topics = Topic.query.get_or_404(topics_id, topics_name)
+    topics = Topic.query.get_or_404(topics_id)
     groups = Groups.query.get_or_404(groups_id)
     gc = Group_comment.query.get_or_404(gc_id)
     if gc.disc != current_user:
