@@ -47,10 +47,11 @@ def home():
     posk = Post.query\
         .order_by(Post.date_posted.desc()) \
         .paginate()
-    side = (Topic.query.filter_by().order_by(Topic.name.desc()).all()[0:5])
+    side = (Groups.query.filter_by().order_by(Groups.comments.desc()).all()[0:5])
     post = Post.query.order_by(Post.content.desc()).all()
     gry = (Post.query.order_by(Post.content).all())
     form = PostForm()
+
 
     if form.validate_on_submit():
         post = Post(content=form.content.data, author=current_user)
