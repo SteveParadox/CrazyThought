@@ -231,7 +231,7 @@ padding-left: 12px;">
                                     <article class="media content-section" id="togga" >
                       <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('groups.conversation', topics_id=sixe.id, topics_name=sixe.name) }}"> {{ sixe.name }}</a>
+              <a class="mr-2" href="{{ url_for('groups.conversation', topics_id=sixe.title.id, topics_name=sixe.title.name) }}"> {{ sixe.title.name }}</a>
             </div>
           </div>
                         </article>
@@ -275,6 +275,7 @@ padding-left: 12px;">
                       <img class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
+     {% endif %}
 
 <a  href="{{ url_for('groups.topics') }}" title="Conversation" aria-label="Conversation" >
 
@@ -283,11 +284,19 @@ padding-left: 12px;">
 
                   <a  href="{{ url_for('posts.explore') }}">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-<span class="prex" style="right: 45%;"> {%if posk.total < 99 %}
+{% if current_user.is_authenticated %}
+                      <span class="prex" style="right: 45%;"> {%if posk.total < 99 %}
     {{posk.total}}
 {%else%}
     99
 {%endif%}</span>
+                      {%else%}
+                                           <span class="prex" style="right: 4%;"> {%if posk.total < 99 %}
+    {{posk.total}}
+{%else%}
+    99
+{%endif%}</span>
+                      {% endif %}
                   </a>
 
 {% if current_user.is_authenticated%}
@@ -317,11 +326,6 @@ padding-left: 12px;">
 
 
 
-
-                {% else %}
-                    <a  href="{{ url_for('users.login') }}">Login</a>
-                    <a  href="{{ url_for('users.register') }}">Register</a>
-                {% endif %}
 
  </nav>
     </footer>
