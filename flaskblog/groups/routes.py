@@ -28,8 +28,6 @@ def topics():
 
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>", methods=['POST', 'GET'])
-@login_required
-@check_confirmed
 def conversation(topics_id, topics_name):
     topics = Topic.query.get_or_404(topics_id)
     form = GroupPostForm()
