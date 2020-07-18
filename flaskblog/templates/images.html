@@ -44,9 +44,8 @@ if it's not present, don't show loader */
  <img class="imgs"  style="" src="{{ url_for('static', filename= 'post_pics/' + post.photo_filename) }}">
 
               </div>
-                  <span class="secd glow-button">
-              <a class="article-title" href="{{ url_for('posts.img_post', images_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
-
+                  <span class="">
+              <a class="article-title" href="{{ url_for('posts.img_post', images_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
 </span>
             </div>
         </article>
