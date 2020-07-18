@@ -35,8 +35,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
 
-
-    {% if title %}
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+   {% if title %}
         <title>Crazy Thoughts - {{ title }}</title>
     {% else %}
         <title>Crazy Thoughts</title>
@@ -140,7 +140,9 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
 <script src= "{{ url_for('static', filename='jquery-min.js') }}"></script>
 
 <script src= "{{ url_for('static', filename='script.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+ 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
 <script>
