@@ -18,8 +18,8 @@
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
             <p class="krax">{{ post.content }}</p>
-<span class="secd glow-button">
-              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+<span class="">
+              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
 </span>
           </div>
         </article>
