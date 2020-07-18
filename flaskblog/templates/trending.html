@@ -21,9 +21,9 @@
  <img class="imgs"  style="" src="{{ url_for('static', filename= 'post_pics/' + sidex.photo_filename) }}">
 
               </div>
-    <span class="secd glow-button">
-     <a class="article-title" href="{{ url_for('posts.img_post', images_id=sidex.id) }}"> {{ sidex.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
-    </span>
+    <span class="">
+     <a class="article-title" href="{{ url_for('posts.img_post', images_id=sidex.id) }}"> {{ sidex.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+</span>
 </div>
 
 
