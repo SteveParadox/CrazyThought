@@ -9,12 +9,18 @@ body {
 
 }
 
+.fat{
+font-size:30px;
+}
 .rou{
 height: 22px;
 width: 19px;
 
 }
 
+#navbar {
+  transition: bottom 0.3s;
+}
 .daxx {
   width: 100%;
   border: 0;
