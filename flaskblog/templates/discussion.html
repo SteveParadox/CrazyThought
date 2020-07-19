@@ -6,16 +6,17 @@
           <div class="media-body">
             <div class="article-metadata">
                 <a class="mr-2" href="{{ url_for('users.user_post', username=groups.group.username) }}"><span><span style="text-transform: capitalize;">{{ groups.group.username[0] }}</span>{{ groups.group.username[1:] }}</span></a>
-                <small class="text-muted"><i>{{ groups.date_posted.strftime('%d/%b/%Y ') }}</i><span class="secd glow-button" style="float: right;">
-          <img class="rou" id="mode" title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style="float: right; cursor: pointer; margin-right: 4px;" />
-           </span>
-                 {% if groups.group!= current_user %}
+                <small class="text-muted"><i>{{ groups.date_posted.strftime('%d/%b/%Y ') }}</i><span  style="float: right;">
+       {% if groups.group!= current_user %}
 
-<span class="secd glow-button" style="float: right;">
+<span  style="float: right;">
 
             <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
 </span>
     {%endif%}
+          <img class="rou" id="mode" title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style="float: right; cursor: pointer; margin-right: 4px;" />
+           </span>
+          
 </small>
    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
     <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
@@ -74,8 +75,7 @@ function outFunc() {
             </div>
               {% if groups.group == current_user %}
           <div>
-          <button class="secd glow-button ped" type="button" data-toggle="modal" data-target="#deleteModal"><img class="rou dua" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
-
+          <a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:23px;" class="fa fa-trash-o"></i></a>
           </div>
           {% endif %}
                        <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ groups.content }} </p>
@@ -146,22 +146,20 @@ position: relative;">
                   <div class="desc">
 
           <br>
-                      {% if gcs.disc == current_user %}
-                      {% else %}
-                       <img title="More" aria-label="More" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
-                        {% endif%}
-                      <h5  class="comment">
+                     
+                      <h5  class="comment" style="margin-bottom: 0px;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=gcs.disc.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + gcs.disc.image_file) }}">
                           </a>
-                           <b> {{ gcs.disc.username }} </b>
+                           <b> <span style="font-size: 16px;"><span style="text-transform: capitalize;">
+{{ gcs.disc.username[0] }}</span>{{ gcs.disc.username[1:] }}</span> </b>
                      </h5>
                       <small  class="date" style="font-weight: 450;">
                           {{ gcs.pub_date.strftime('%d/%b/%Y ') }}
                    </small>
 
 
-                     <h6  class="comment" style="font-weight:380;">
+                      <h6  class="comment" style="font-weight:380; font-size: 14px;">
                          {{ gcs.message }}
                      </h6>
 
@@ -170,10 +168,8 @@ position: relative;">
 {% if gcs.disc == current_user %}
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('groups.delete_discussion', topics_id=topics.id, topics_name=topics.name, groups_id=groups.id, gc_id=gcs.id) }}" method="POST">
-<span class="secd bla">
-                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><img class="rou paz" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>
-</span>
-                </form>
+<a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:20px;" class="fa fa-trash-o"></i></a>
+      </form>
 
 {% endif %}
 
