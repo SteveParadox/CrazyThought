@@ -131,7 +131,7 @@
     <br>
 
     <footer class="foot" >
- <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom" id="navbar">
 {% if current_user.is_authenticated %}
 
      <a  href="{{ url_for('main.home') }}">
@@ -163,7 +163,18 @@
 <script src= "{{ url_for('static', filename='jquery-min.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-
+<script>
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function() {
+var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbar").style.bottom = "0";
+  } else {
+    document.getElementById("navbar").style.bottom = "-60px";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
 <script src= "{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
