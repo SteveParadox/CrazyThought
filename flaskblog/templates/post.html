@@ -10,12 +10,12 @@
 
            {% if post.author == current_user %}
                       {% else %}
-<span class="secd glow-button" style="float: right;">
+<span  style="float: right;">
 
             <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
 </span>
     {%endif%}
-           <span class="secd glow-button" style="float: right;">
+           <span  style="float: right;">
           <img class="rou" id="mode" title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style="float: right; cursor: pointer; margin-right: 4px;" />
            </span>
            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -78,7 +78,7 @@ function outFunc() {
 
         {% if post.author == current_user %}
           <div>
-              <span class="secd glow-button" >  <a  href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'images/refresh.png') }}"></a></span>
+                <a  href="{{ url_for('posts.update_post', post_id=post.id) }}"><img class="rou" src="{{ url_for('static', filename= 'images/refresh.png') }}"></a>
             <button class="secd glow-button ped" type="button" data-toggle="modal" data-target="#deleteModal"><img class="rou dua" style="
 
 }" src="{{ url_for('static', filename= 'images/delete.png') }}"></button>

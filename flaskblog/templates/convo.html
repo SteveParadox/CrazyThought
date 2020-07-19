@@ -51,9 +51,10 @@
                <div>
 
 
-<span class="">
+<span >
               <a class="article-title" href="{{ url_for('groups.discussion',topics_id=topics.id,
-                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size: 23px;" class="fa fa-comments-o"></i></a>
+
 </span>
 
   </div>
@@ -68,7 +69,7 @@
 {%endif%}
 
 {% if current_user.is_anonymous %}
-<h4 align="center" style="opacity:0.3">  Login to contribute to post! </h4>
+
 {% if posts.items %}
 
 {% for post in posts.items %}
@@ -93,7 +94,8 @@
 
 <span class="secd glow-button">
               <a class="article-title" href="{{ url_for('groups.discussion',topics_id=topics.id,
-                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+
 </span>
 
   </div>
@@ -101,7 +103,8 @@
 
         </article>
     {% endfor %}
-
+{%else%}
+<h3 align="center" style="opacity:0.3">  Login to contribute to post </h3>
 
 {% endif%}
 {% endif%}
