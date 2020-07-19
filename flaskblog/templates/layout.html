@@ -267,7 +267,7 @@ padding-left: 12px;">
     <br>
 
     <footer class="foot" >
- <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom" id="navbar">
 {% if current_user.is_authenticated %}
 
 
@@ -355,7 +355,18 @@ padding-left: 12px;">
 </script>
 
 
-
+<script>
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function() {
+var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbar").style.bottom = "0";
+  } else {
+    document.getElementById("navbar").style.bottom = "-60px";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
 
 
 </body>
