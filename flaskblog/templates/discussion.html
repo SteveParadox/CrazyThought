@@ -168,7 +168,8 @@ position: relative;">
 {% if gcs.disc == current_user %}
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('groups.delete_discussion', topics_id=topics.id, topics_name=topics.name, groups_id=groups.id, gc_id=gcs.id) }}" method="POST">
-<a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:20px;" class="fa fa-trash-o"></i></a>
+ <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+</span>
       </form>
 
 {% endif %}

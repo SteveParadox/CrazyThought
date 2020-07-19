@@ -194,7 +194,10 @@ position: relative;">
                   <div class="desc">
 
           <br>
-                      
+                      {% if comment.repli == current_user %}
+                      {% else %}
+                       <img title="More" aria-label="More" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
+                        {% endif%}
                        <h5  class="comment" style="margin-bottom: 0px;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.repli.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.repli.image_file) }}">
@@ -212,7 +215,9 @@ position: relative;">
 {% if comment.repli == current_user %}
 
                <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_videos_comment', videos_id=videos.id, comment_id=comment.id) }}" method="POST">
-     <a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:20px;" class="fa fa-trash-o"></i></a>
+<span >
+                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+</span>
                 </form>
 
 {% endif %}

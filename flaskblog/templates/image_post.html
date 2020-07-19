@@ -164,7 +164,8 @@ position: relative;">
 {% if comment.reple == current_user %}
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_images_comment', images_id=images.id, comment_id=comment.id) }}" method="POST">
- <a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:20px;" class="fa fa-trash-o"></i></a>
+  <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+</span>
                 </form>
 
 {% endif %}
