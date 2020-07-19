@@ -101,6 +101,11 @@
 
                 <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/conversation.png') }}" >
 </a>
+		     {% if not current_user.is_authenticated %}
+	 <a class=" nav-item nav-link article-title" style="height: 20px;" href="{{ url_for('users.login') }}">
+<i style="font-size:24px;" class="fa fa-sign-in"></i>
+</a>
+	 {%endif%}
 
                   <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
