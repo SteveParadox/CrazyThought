@@ -23,9 +23,9 @@
                <div>
 
 
-<span class="secd glow-button">
+<span>
               <a class="article-title" href="{{ url_for('groups.discussion',topics_id=topics.id,
-                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size: 23px;" class="fa fa-comments-o"></i></a>
 
 </span>
 
