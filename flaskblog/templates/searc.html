@@ -1,0 +1,42 @@
+{% extends "bast.html" %}
+{% block content %}
+<body>
+<form>
+<input style="width: 100%; height: 50px;" class="form-control" type="search" placeholder="Search..." id="livebox">
+    </form>
+<section class="article-content">
+
+ <span id="datalist" ></span>
+
+</section>
+
+</body>
+
+<script src="{{ url_for('static', filename='ajax.js') }}"></script>
+<script >
+    $(document).ready(function(){
+    $("#livebox").keyup(function(e){
+                text= $("#livebox").val();
+
+               $.ajax({
+                method: "post",
+                url: '/searche',
+                data: {text: text},
+                success: function(res){
+
+                var data = "<ul>";
+                $.each(res,function(index,value){
+                if(value.name != -1 ){
+                data += '<a class="nav-link" href="users/'+value.username+'"><li style="padding: 0;" class="nav-link"><img style="height: 35px; width: 35px;" class="rounded-circle article-img" src="static/profile_pics/'+value.image_file+'"  height="40" width="40"/> <span class="article-title">'+value.username+'  </span> | <span class="text-muted"> '+value.email+' </span> </li></a>';
+               }
+                });
+                data += "</ul>";
+                $("#datalist").html(data);
+            }
+          });
+          });
+          });
+
+</script>
+
+{% endblock content %}

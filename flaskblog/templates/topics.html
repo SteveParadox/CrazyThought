@@ -1,51 +1,45 @@
-{% extends "douxt.html" %}
+{% extends "bast.html" %}
 {% block content %}
 
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</head>
-<style>
-/* Paste this css to your style sheet file or under head tag */
-/* This only works with JavaScript,
-if it's not present, don't show loader */
-.no-js #loader { display: none;  }
-.js #loader { display: block; position: absolute; left: 100px; top: 0; }
-.se-pre-con {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 99;
-	background: url(static/images/Preloader_2.gif) center no-repeat #fff;
-}
-</style>
-
-<body>
-	<!-- Paste this code after body tag -->
-	<div class="se-pre-con"></div>
-	<!-- Ends -->
 
 
-    <form method="POST" action="" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div align="center"> <fieldset class="form-group">
-                {{ form.content.label(class="btn btn-outline") }}
-       {% if form.content.errors %}
-                    {{ form.content(class="btn btn-outline-info") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.content.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.content(class="btn btn-outline-info") }}
-                {% endif %}
- {{ form.submit(class="btn btn-outline-info") }}
-            </fieldset>
-            </div>
-        </form>
-    <p id = "datalist"></p>
+
+
+<form>
+<input style="width: 100%; height: 50px;" class="form-control" type="search" placeholder="Search Topics..." id="livebox">
+    </form>
+ <span id="datalist" ></span>
+<br>
+
+
+
+<script src="{{ url_for('static', filename='ajax.js') }}"></script>
+<script >
+    $(document).ready(function(){
+    $("#livebox").keyup(function(e){
+                text= $("#livebox").val();
+
+               $.ajax({
+                method: "post",
+                url: '/topics/search',
+                data: {text: text},
+                success: function(res){
+    console.log(res);
+                var data = "<ul>";
+                $.each(res,function(index,value){
+                if(value.name != -1 ){
+                data += '<a class="nav-link" href="topics/conversation/'+value.id+'/'+value.name+'"><li style="padding: 0;" class="nav-link"> <span class="article-title">'+value.name+'  </span>  </li></a>';
+               }
+                });
+                data += "</ul>";
+                $("#datalist").html(data);
+            }
+          });
+          });
+          });
+
+</script>
+
 <style>
     .jBox-Modal .jBox-container, .jBox-Modal.jBox-closeButton-box::before {
     background:
