@@ -1,6 +1,6 @@
 import time
 from operator import itemgetter
-from flask import Blueprint, url_for, redirect
+from flask import Blueprint, url_for, redirect, jsonify
 from flask import render_template, request
 from flask_login import login_required, current_user
 from flaskblog import db
@@ -145,24 +145,17 @@ def tos():
 def cookies():
     return render_template('cookies.html')
 
-@main.route('/searchfile', methods=['GET', 'POST'])
+@main.route('/search', methods=['GET', 'POST'])
 @login_required
 @check_confirmed
 def searchfile():
-    form = Searchform()
-    results = User.query.all()
+    return  render_template('searc.html')
+
+@main.route('/searche', methods=['POST'])
+def search():
+    data= request.form.get('text')
+    results = User.query.filter_by(username=data).all()
     user_schema = UserSchema(many=True)
     res = user_schema.dump(results)
-    result = list(map(itemgetter('username'), res))
-    paxx = form.livebox.data
-    pots = Post.query.filter_by(author=current_user) \
-        .order_by(Post.date_posted.desc()) \
-        .paginate()
-    posk = Post.query \
-        .order_by(Post.date_posted.desc()) \
-        .paginate()
-    if paxx in result:
-        return render_template('search.html', form=form, paxx=paxx,pots=pots, posk=posk,result=result, author=paxx)
-    else:
-        return render_template('search.html', form=form, pots=pots, posk=posk)
-
+    return jsonify(res)
+    
