@@ -1,5 +1,5 @@
 from operator import itemgetter
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, jsonify
 from flask_login import current_user, login_required
 from werkzeug.utils import redirect
 from flaskblog import db, request, abort, flash
@@ -15,7 +15,7 @@ groups = Blueprint('groups', __name__)
 @groups.route('/topics', methods=['POST', 'GET'])
 def topics():
     form = SearchPostForm()
-    topic = Topic.query.filter(Topic.date_created >= (datetime.datetime.now()-datetime.timedelta(days=7))).order_by(Topic.date_created.desc()).paginate()
+    topic = Topic.query.filter(Topic.date_created >= (datetime.datetime.now()-datetime.timedelta(days=47))).order_by(Topic.date_created.desc()).paginate()
     results = Topic.query.all()
     topics_schema = TopicSchema(many=True)
     res = topics_schema.dump(results)
@@ -25,6 +25,14 @@ def topics():
         return render_template('search.html', form=form, paxx=paxx)
 
     return render_template('topics.html', topic=topic, form=form)
+
+@groups.route('/topics/search', methods=['POST'])
+def topic_search():
+    data= request.form.get('text')
+    results = Topic.query.filter_by(name=data).all()
+    topic_schema = TopicSchema(many=True)
+    res = topic_schema.dump(results)
+    return jsonify(res)
 
 
 @groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>", methods=['POST', 'GET'])
