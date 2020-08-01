@@ -28,7 +28,7 @@
                 var data = "<ul>";
                 $.each(res,function(index,value){
                 if(value.name != -1 ){
-                data += '<a class="nav-link" href="topics/conversation/'+value.id+'/'+value.name+'"><li style="padding: 0;" class="nav-link"> <span class="article-title">'+value.name+'  </span>  </li></a>';
+                data += '<span> Search result for: "'+text+'" </span><a class="nav-link" href="topics/conversation/'+value.id+'/'+value.name+'"><li style="padding: 0;" class="nav-link"> <span class="article-title">'+value.name+'  </span>  </li></a>';
                }
                 });
                 data += "</ul>";

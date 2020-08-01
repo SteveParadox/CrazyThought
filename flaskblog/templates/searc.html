@@ -6,7 +6,8 @@
     </form>
 <section class="article-content">
 
- <span id="datalist" ></span>
+
+    <span id="datalist" ></span>
 
 </section>
 
@@ -17,6 +18,7 @@
     $(document).ready(function(){
     $("#livebox").keyup(function(e){
                 text= $("#livebox").val();
+            console.log(text);
 
                $.ajax({
                 method: "post",
@@ -27,7 +29,8 @@
                 var data = "<ul>";
                 $.each(res,function(index,value){
                 if(value.name != -1 ){
-                data += '<a class="nav-link" href="users/'+value.username+'"><li style="padding: 0;" class="nav-link"><img style="height: 35px; width: 35px;" class="rounded-circle article-img" src="static/profile_pics/'+value.image_file+'"  height="40" width="40"/> <span class="article-title">'+value.username+'  </span> | <span class="text-muted"> '+value.email+' </span> </li></a>';
+
+                data += '<span> Search result for: "'+text+'" </span> <a class="nav-link" href="users/'+value.username+'"><li style="padding: 0;" class="nav-link"><img style="height: 35px; width: 35px;" class="rounded-circle article-img" src="static/profile_pics/'+value.image_file+'"  height="40" width="40"/> <span class="article-title">'+value.username+'  </span> | <span class="text-muted"> '+value.email+' </span> </li></a>';
                }
                 });
                 data += "</ul>";
