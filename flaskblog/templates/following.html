@@ -2,6 +2,14 @@
 {% block content %}
 <p align="center" class="nav-xy"> Activities </p>
 {%if  posts%}
+
+<style>
+    .fa-heart::before {
+
+    content: "\f107";
+
+}
+</style>
 {% for post in posts %}
  <div class="article-metadata" >
  <h4> You commented on</h4>
