@@ -17,6 +17,24 @@ height: 22px;
 width: 19px;
 
 }
+.read-more{
+text-align: center;
+color:#17a2b8;
+background-color:transparent;
+background-image: none;
+border-color: #17a2b8;
+border: 2px solid #9ec4ca3b;
+width: 100px;
+border-radius: 7px;
+transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.read-more:hover {
+color:#1458c2;
+background-color:#9ec4ca3b;
+border-color:#17a2b8;
+text-decoration: none;
+}
 
 #navbar {
   transition: bottom 0.3s;
