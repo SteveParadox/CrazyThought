@@ -25,7 +25,7 @@
             </div>
             <p class="krax">{{ post.content }}</p>
 <span class="">
-              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+              <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
 </span>
           </div>
         </article>
