@@ -78,7 +78,7 @@ function outFunc() {
 
         {% if post.author == current_user %}
           <div>
-                <a  href="{{ url_for('posts.update_post', post_id=post.id) }}"><i style="font-size:23px;" class="fa fa-edit"></i></a>
+                <a  href="{{ url_for('posts.update_post', public_id=post.public_id) }}"><i style="font-size:23px;" class="fa fa-edit"></i></a>
             <a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:23px;" class="fa fa-trash-o"></i></a>
 
           </div>
@@ -94,7 +94,7 @@ function outFunc() {
 
           {% if current_user.is_authenticated %}
 
-     </div>
+
 
     </article>
 
@@ -152,7 +152,7 @@ position: relative;">
                   <div class="desc">
 
           <br>
-                      
+
                       <h5  class="comment" style="margin-bottom: 0px;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
@@ -170,12 +170,14 @@ position: relative;">
                      </h6>
 {% if comment.reply == current_user %}
 
-                <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
-
-          <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+               <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_comment', public_id=post.public_id, comment_id=comment.id) }}" method="POST">
+<span >
+                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
 </span>
-
                 </form>
+
+
+
 
 {% endif %}
 
@@ -197,9 +199,9 @@ position: relative;">
          {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
         {% if posts.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('posts.post', post_id=post.id, page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-info mb-4" href="{{ url_for('posts.post', public_id=post.public_id, page=page_num) }}">{{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.post', post_id=post.id, page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.post', public_id=post.public_id, page=page_num) }}">{{ page_num }}</a>
         {% endif %}
       {% else %}
         ...
