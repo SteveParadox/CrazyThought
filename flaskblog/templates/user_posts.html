@@ -20,7 +20,7 @@
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
-            <p class="krax"><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.content }}</a></p>
+            <p class="krax"><a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">{{ post.content }}</a></p>
              {% if post.img_filename %}
              <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
 
