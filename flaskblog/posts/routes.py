@@ -54,25 +54,25 @@ def new_post():
                            form=form, legend='New Post')
 
 
-@posts.route("/post/<int:post_id>", methods=['POST', 'GET'])
+@posts.route("/post/<string:public_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def post(post_id):
+def post(public_id):
     page = request.args.get('page', 1, type=int)
-    post = Post.query.get_or_404(post_id)
-    posts = Post.query.order_by(Post.id.desc()).all()
-    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
+    post = Post.query.filter_by(public_id=public_id).first()
+    posts = Post.query.order_by(Post.public_id.desc()).all()
+    comments = Comment.query.filter_by(post_id=post.public_id).order_by(Comment.pub_date.desc()).paginate(page=page,
                                                                                                    per_page=20)
     form = CommentForm()
     if request.method == 'POST' and form.validate_on_submit():
         message = request.form.get('message')
-        comment = Comment(message=message, post_id=post.id, reply=current_user)
+        comment = Comment(message=message, post_id=post.public_id, reply=current_user)
 
         db.session.add(comment)
         post.comments = post.comments + 1
         db.session.commit()
         return redirect(request.url)
-    return render_template('post.html', post=post, posts=posts, comments=comments, form=form, title='Posts')
+    return render_template('post.html', post=post, public_id=post.public_id,posts=posts, comments=comments, form=form, title='Posts')
 
 
 @posts.route("/post/<int:post_id>/comment/<int:comment_id>", methods=['POST'])
@@ -91,12 +91,12 @@ def reply_comment(post_id, comment_id):
     return redirect(url_for(request.url, post_id=post.id, commenta=commenta, form2=form2))
 
 
-@posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
+@posts.route("/post/<string:public_id>/update", methods=['GET', 'POST'])
 @login_required
 @check_confirmed
-def update_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    comment = Comment.query.filter_by(post_id=post_id).all()
+def update_post(public_id):
+    post = Post.query.filter_by(public_id=public_id).first()
+    comment = Comment.query.filter_by(post_id=public_id).all()
     posk = Post.query \
         .order_by(Post.date_posted.desc()) \
         .paginate()
@@ -114,7 +114,7 @@ def update_post(post_id):
         post.content = form.content.data
         db.session.commit()
         flash('Your post has been updated!', 'success')
-        return redirect(url_for('posts.post', post_id=post.id))
+        return redirect(url_for('posts.post', public_id=post.public_id))
     elif request.method == 'GET':
 
         form.content.data = post.content
@@ -140,18 +140,18 @@ def delete_post(post_id):
     return redirect(url_for('main.home'))
 
 
-@posts.route("/post/<int:post_id>/comment/<int:comment_id>/delete", methods=['POST'])
+@posts.route("/post/<string:public_id>/comment/<int:comment_id>/delete", methods=['POST'])
 @login_required
 @check_confirmed
-def delete_comment(post_id, comment_id):
-    post = Post.query.get_or_404(post_id)
+def delete_comment(public_id, comment_id):
+    post = Post.query.filter_by(public_id=public_id).first()
     comment = Comment.query.get_or_404(comment_id)
     if comment.reply != current_user:
         abort(403)
     db.session.delete(comment)
     post.comments = post.comments - 1
     db.session.commit()
-    return redirect(url_for('posts.post', post_id=post.id))
+    return redirect(url_for('posts.post', public_id=post.public_id))
 
 
 @posts.route("/following", methods=['GET', 'POST'])
