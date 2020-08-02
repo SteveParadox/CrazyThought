@@ -11,6 +11,7 @@ from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
 from flaskblog.main.utils import save_img as svimg
 from flaskblog.users.decorator import check_confirmed
+import shortuuid
 
 main = Blueprint('main', __name__)
 
@@ -54,7 +55,7 @@ def home():
 
 
     if form.validate_on_submit():
-        post = Post(content=form.content.data, author=current_user)
+        post = Post(content=form.content.data, author=current_user, public_id=str(shortuuid.uuid()))
         db.session.add(post)
         db.session.commit()
 
