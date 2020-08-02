@@ -15,7 +15,7 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     __searchable__ = ['username']
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
+    username = db.Column(db.String(20),  nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
@@ -82,6 +82,7 @@ class Groups(db.Model):
 
 class Group_comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    pub_id = db.Column(db.String(50), unique=True)
     message = db.Column(db.Text, nullable=False)
     reply_message = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -96,6 +97,7 @@ class Post(db.Model):
     __searchable__ = ['content']
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    public_id= db.Column(db.String(50), unique=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
@@ -114,6 +116,7 @@ class Post(db.Model):
 
 class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    plic_id = db.Column(db.String(50), unique=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     photo_filename = db.Column(db.String())
     photo_data = db.Column(db.LargeBinary)
@@ -127,6 +130,7 @@ class Images(db.Model):
 
 class Videos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    publ_id = db.Column(db.String(50), unique=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     img_filename = db.Column(db.String())
     img_data = db.Column(db.LargeBinary)
