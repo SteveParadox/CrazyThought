@@ -49,5 +49,4 @@ pyOpenSSL==18.0.0
 python-dotenv==0.8.2
 six==1.11.0
 textblob==0.15.1
-urllib3==1.23
 shortuuid==0.5.0
