@@ -145,7 +145,7 @@ new jBox('Modal', {
 
 
 <span >
-              <a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+              <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
 </span>
               <!--<span class="secd glow-button">
               <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}" >
