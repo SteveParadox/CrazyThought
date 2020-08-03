@@ -35,41 +35,41 @@ def topic_search():
     return jsonify(res)
 
 
-@groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>", methods=['POST', 'GET'])
-def conversation(topics_id, topics_name):
-    topics = Topic.query.get_or_404(topics_id)
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>", methods=['POST', 'GET'])
+def conversation(pub_id, topics_name):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
     form = GroupPostForm()
     if form.validate_on_submit():
         post = Groups(content=form.content.data, group=current_user, topic_id=topics.id)
         db.session.add(post)
         db.session.commit()
 
-        return redirect(url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name))
+        return redirect(url_for('groups.conversation', pub_id=topics.pub_id, topics_name=topics.name))
 
     page = request.args.get('page', 1, type=int)
     posts = Groups.query.filter_by(topic_id=topics.id).order_by(Groups.date_posted.desc()).paginate(page=page,
                                                                                                     per_page=50)
 
-    return render_template('convo.html', topics_id=topics.id, posts=posts, form=form, topics=topics,
+    return render_template('convo.html', pub_id=topics.pub_id, posts=posts, form=form, topics=topics,
                            topics_name=topics.name)
 
 
-@groups.route("/topics/conversation/my_conversation/<int:topics_id>/<string:topics_name>", methods=['POST', 'GET'])
+@groups.route("/topics/conversation/my_conversation/<string:pub_id>/<string:topics_name>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def my_conversation(topics_id, topics_name):
-    topics = Topic.query.get_or_404(topics_id)
+def my_conversation(pub_id, topics_name):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
     posts = Groups.query.filter_by(topic_id=topics.id).filter_by(group=current_user).order_by(Groups.date_posted.desc()).all()
 
-    return render_template('my_convo.html', topics_id=topics.id, posts=posts, topics=topics,
+    return render_template('my_convo.html', pub_id=topics.pub_id, posts=posts, topics=topics,
                            topics_name=topics.name)
 
 
-@groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>", methods=['POST', 'GET'])
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def discussion(topics_id, topics_name, groups_id):
-    topics = Topic.query.get_or_404(topics_id)
+def discussion(pub_id, topics_name, groups_id):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
     groups = Groups.query.get_or_404(groups_id)
     post = Groups.query.all()
     form = CommentForm()
@@ -82,17 +82,17 @@ def discussion(topics_id, topics_name, groups_id):
     gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).paginate()
 
     return render_template('discussion.html', groups_id=groups.id, post=post,
-                           groups=groups, topics_id=topics.id,
+                           groups=groups, pub_id=topics.pub_id,
                            topics_name=topics.name, topics=topics, form=form, gc=gc)
 
 
 
 
-@groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>/delete", methods=['POST', 'GET'])
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/delete", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def delete_group(topics_id, topics_name, groups_id):
-    topics = Topic.query.get_or_404(topics_id)
+def delete_group(pub_id, topics_name, groups_id):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
     groups = Groups.query.get_or_404(groups_id)
     gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).all()
     if groups.group != current_user:
@@ -103,15 +103,15 @@ def delete_group(topics_id, topics_name, groups_id):
     db.session.delete(groups)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
-    return redirect(url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name ))
+    return redirect(url_for('groups.conversation', pub_id=topics.pub_id, topics_name=topics.name ))
 
 
-@groups.route("/topics/conversation/<int:topics_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>/delete",
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>/delete",
               methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def delete_discussion(topics_id, topics_name, groups_id, gc_id):
-    topics = Topic.query.get_or_404(topics_id)
+def delete_discussion(pub_id, topics_name, groups_id, gc_id):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
     groups = Groups.query.get_or_404(groups_id)
     gc = Group_comment.query.get_or_404(gc_id)
     if gc.disc != current_user:
@@ -120,5 +120,5 @@ def delete_discussion(topics_id, topics_name, groups_id, gc_id):
     groups.comments = groups.comments - 1
     db.session.commit()
     return redirect(url_for('groups.discussion', groups_id=groups.id,
-                            groups=groups, topics_id=topics.id,
+                            groups=groups, pub_id=topics.pub_id,
                             topics_name=topics.name, topics=topics, gc=gc))
