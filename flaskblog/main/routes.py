@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from flaskblog import db
 from flaskblog.groups.forms import TopicForm
 from flaskblog.main.form import Searchform, SharePostForm, PhotoForm, VideoForm
-from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic, Groups
+from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic, Groups, PostSchema
 from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
 from flaskblog.main.utils import save_img as svimg
@@ -36,6 +36,15 @@ def share_post(post_id):
                            legend='Share Post', post_id=post.id, post=post, das=das)
 
 
+@main.route('/home/data', methods=['GET', 'POST'])
+def data():
+    post = Post.query.order_by(Post.content.desc()).all()
+
+    post_schema = PostSchema(many=True)
+    res = post_schema.dump(post)
+
+    return jsonify(res)
+
 @main.route('/home', methods=['GET', 'POST'])
 def home():
     global pots
@@ -44,7 +53,6 @@ def home():
         .paginate()
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=50)
-
     posk = Post.query\
         .order_by(Post.date_posted.desc()) \
         .paginate()
@@ -65,7 +73,7 @@ def home():
     if form2.validate_on_submit():
         file = request.files['photo']
         photo_file = save_img(form2.photo.data)
-        post = Images(photo_filename=photo_file, photo_data=file.read(), imgs=current_user)
+        post = Images(photo_filename=photo_file, photo_data=file.read(), imgs=current_user, plic_id=str(shortuuid.uuid()))
         db.session.add(post)
         db.session.commit()
 
@@ -75,14 +83,14 @@ def home():
     if form3.validate_on_submit():
         file = request.files['video']
         pic_file = svimg(form3.video.data)
-        post = Videos(img_filename=pic_file, img_data=file.read(), vids=current_user)
+        post = Videos(img_filename=pic_file, img_data=file.read(), vids=current_user,publ_id=str(shortuuid.uuid()))
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('main.home_videos'))
 
     form4= TopicForm()
     if form4.validate_on_submit():
-        topic = Topic(name=form4.name.data, creator=current_user)
+        topic = Topic(name=form4.name.data, creator=current_user , pub_id=str(shortuuid.uuid()))
         db.session.add(topic)
         db.session.commit()
         return redirect(url_for('groups.topics'))
