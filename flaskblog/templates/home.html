@@ -130,7 +130,7 @@ new jBox('Modal', {
                 <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</span></a>
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
-            <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
+            <h5><a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">{{ post.title }}</a></h5>
             <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ post.content }}</p>
   <script>
       function updateDiv()
