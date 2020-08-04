@@ -57,13 +57,14 @@ class Topic(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     groups = db.relationship('Groups', backref='title', lazy=True)
-
+    pub_id = db.Column(db.String(50), unique=True)
 
 class Groups(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
+    group_love = db.Column(db.Integer, default=0)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'), nullable=False)
     #user= db.relationship(User, secondary='link')
@@ -82,8 +83,8 @@ class Groups(db.Model):
 
 class Group_comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    pub_id = db.Column(db.String(50), unique=True)
     message = db.Column(db.Text, nullable=False)
+    group_upvote = db.Column(db.Integer, default=0)
     reply_message = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String())
@@ -101,6 +102,7 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
+    love = db.Column(db.Integer, default=0)
     # tag = db.Column(db.Integer,  nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comment = db.relationship('Comment', backref='parser', lazy=True)
@@ -117,6 +119,7 @@ class Post(db.Model):
 class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     plic_id = db.Column(db.String(50), unique=True)
+    img_love = db.Column(db.Integer, default=0)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     photo_filename = db.Column(db.String())
     photo_data = db.Column(db.LargeBinary)
@@ -131,6 +134,7 @@ class Images(db.Model):
 class Videos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     publ_id = db.Column(db.String(50), unique=True)
+    video_love = db.Column(db.Integer, default=0)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     img_filename = db.Column(db.String())
     img_data = db.Column(db.LargeBinary)
@@ -148,6 +152,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
     reply_message = db.Column(db.Text)
+    upvote = db.Column(db.Integer, default=0)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String())
@@ -164,6 +169,7 @@ class Comment(db.Model):
 class Media_Comment(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    img_upvote = db.Column(db.Integer, default=0)
     message = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     videos_id = db.Column(db.Integer, db.ForeignKey('videos.id'), nullable=False)
@@ -178,6 +184,7 @@ class Media_Comment(db.Model):
 class Media_Comments(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    video_upvote = db.Column(db.Integer, default=0)
     message = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     images_id = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=False)
