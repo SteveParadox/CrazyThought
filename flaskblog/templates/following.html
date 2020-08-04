@@ -1,40 +1,32 @@
 {% extends "bast.html" %}
 {% block content %}
 <p align="center" class="nav-xy"> Activities </p>
-{%if  posts%}
-
-<style>
-    .fa-heart::before {
-
-    content: "\f107";
-
-}
-</style>
-{% for post in posts %}
+{%if  follow%}
+{% for fol in follow %}
  <div class="article-metadata" >
  <h4> You commented on</h4>
    <article class="media content-section" id="togga">
 
-       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.parser.author.image_file) }}">
+       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + fol.parser.author.image_file) }}">
           <div class="media-body">
 
             <div class="article-metadata">
 
-                <a class="mr-2" href="{{ url_for('users.user_post', username=post.parser.author.username) }}"><span style="text-transform: capitalize;">{{ post.parser.author.username[0] }}</span>{{ post.parser.author.username[1:] }}</a>
-                <small class="text-muted"><i>{{ post.parser.date_posted.strftime('%d/%b/%Y ') }}</i></small>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=fol.parser.author.username) }}"><span style="text-transform: capitalize;">{{ fol.parser.author.username[0] }}</span>{{ fol.parser.author.username[1:] }}</a>
+                <small class="text-muted"><i>{{ fol.parser.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
 
-            <p class="krax"  autocapitalize="words" aria-live="polite" > {{ post.parser.content }}</p>
+            <p class="krax"  autocapitalize="words" aria-live="polite" > {{ fol.parser.content }}</p>
 
                <div>
 
 
             </div>
-<span class="">
+<span >
 
-              <a class="article-title" href="{{ url_for('posts.post', post_id=post.post.id) }}"> {{ post.parser.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+              <a class="article-title" href="{{ url_for('posts.post', public_id=fol.public_id) }}"> {{ fol.parser.comments }}  <i style="font-size: 23px;" class="fa fa-comment-o"></i></a>
 </span>
-          </div> 
+          </div>
 
 
         </article>

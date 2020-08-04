@@ -145,7 +145,6 @@ position: relative;">
 
                   <div class="desc">
 
-          <br>
                      
                       <h5  class="comment" style="margin-bottom: 0px;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=gcs.disc.username) }}">
@@ -167,7 +166,7 @@ position: relative;">
 
 {% if gcs.disc == current_user %}
 
-                <form title="Delete" aria-label="Delete" action="{{ url_for('groups.delete_discussion', topics_id=topics.id, topics_name=topics.name, groups_id=groups.id, gc_id=gcs.id) }}" method="POST">
+                <form title="Delete" aria-label="Delete" action="{{ url_for('groups.delete_discussion', pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id, gc_id=gcs.id) }}" method="POST">
  <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
 </span>
       </form>
@@ -198,7 +197,7 @@ position: relative;">
         </div>
         <div class="modal-footer" style="background: #fff;">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <form action="{{ url_for('groups.delete_group', topics_id=topics.id, topics_name=topics.name, groups_id=groups.id) }}" method="POST">
+          <form action="{{ url_for('groups.delete_group', pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id) }}" method="POST">
             <input class="btn btn-danger" type="submit" value="Delete">
           </form>
         </div>

@@ -44,8 +44,9 @@ if it's not present, don't show loader */
  <img class="imgs"  style="" src="{{ url_for('static', filename= 'post_pics/' + post.photo_filename) }}">
 
               </div>
-                  <span class="">
-              <a class="article-title" href="{{ url_for('posts.img_post', images_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+                  <span >
+              <a class="article-title" href="{{ url_for('posts.img_post', plic_id=post.plic_id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}<i style="font-size: 23px;" class="fa fa-comment-o"></i></a>
+
 </span>
             </div>
         </article>

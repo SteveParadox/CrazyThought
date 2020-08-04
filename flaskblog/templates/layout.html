@@ -35,7 +35,6 @@
 
      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
 
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
    <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='favico/apple-icon-57x57.png') }}">
 <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='favico/apple-icon-60x60.png') }}">
@@ -56,15 +55,15 @@
 <meta name="theme-color" content="#ffffff">
 
 
-
+ 
 
 </head>
 <br>
 <br>
 <body>
 
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+    <header class="site-header" >
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" >
         <div class="container">
             <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"> <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,13 +100,13 @@
 
                 <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/conversation.png') }}" >
 </a>
-		     {% if not current_user.is_authenticated %}
-	 <a class=" nav-item nav-link article-title" style="height: 20px;" href="{{ url_for('users.login') }}">
+
+{% if not current_user.is_authenticated %}
+<a class="nav-item nav-link article-title" style="height: 20px;" href="{{ url_for('users.login') }}">
 <i style="font-size:24px;" class="fa fa-sign-in"></i>
 </a>
-	 {%endif%}
-
-                  <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
+{%endif%}
+                  <a class=" nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
 {%if current_user.is_authenticated %}
                       <span class="prex" style="right: 143px;">
@@ -237,7 +236,7 @@ padding-left: 12px;">
 
                       <div class="media-body" style="margin-bottom:1.5rem;">
             <div class="article-metadata">
-              <a class="article-title" href="{{ url_for('groups.conversation', topics_id=sixe.title.id, topics_name=sixe.title.name) }}"> {{ sixe.title.name }}</a>
+              <a class="article-title" href="{{ url_for('groups.conversation', pub_id=sixe.title.pub_id, topics_name=sixe.title.name) }}"> {{ sixe.title.name }}</a>
             </div>
           </div>
 
@@ -287,11 +286,12 @@ padding-left: 12px;">
 
                 <img  class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/conversation.png') }}" >
 </a>
-	 {% if not current_user.is_authenticated %}
-	 <a class="article-title" style="height: 20px;" href="{{ url_for('users.login') }}">
+{% if not current_user.is_authenticated %}
+<a class="article-title" style="height: 20px;" href="{{ url_for('users.login') }}">
 <i style="font-size:24px;" class="fa fa-sign-in"></i>
 </a>
-	 {%endif%}
+{%endif%}
+
 
                   <a  href="{{ url_for('posts.explore') }}">
                        <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
@@ -352,9 +352,7 @@ padding-left: 12px;">
 
 <script src="static/vue.js"></script>
 <script src="static/main.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+
 <script>
 	//paste this code under head tag or in a seperate js file.
 	// Wait for window load
@@ -377,7 +375,6 @@ var currentScrollPos = window.pageYOffset;
   prevScrollpos = currentScrollPos;
 }
 </script>
-
 
 </body>
 </html>

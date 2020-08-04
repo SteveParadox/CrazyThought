@@ -95,8 +95,7 @@ function outFunc() {
 
               <div id="main">
                   <div id="videoPanel">
-                      <img class="rou vide" style="width:60px; height:60px;" src= "{{ url_for('static', filename='images/play-button.png') }}" onclick="playOrPause()" id="playBtn"/>
-
+                     <i  class="fa fa-play" style="font-size: 27px; color:#f00510;" onclick="playOrPause(this)" id="playBtn"></i>
 <video id="myVideo" autoplay >
 	 <source src="{{ url_for('static', filename= 'post_pics/' + videos.img_filename) }}" type="video/mp4">
 
@@ -214,7 +213,7 @@ position: relative;">
                      </h6>
 {% if comment.repli == current_user %}
 
-               <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_videos_comment', videos_id=videos.id, comment_id=comment.id) }}" method="POST">
+               <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_videos_comment', publ_id=videos.publ_id, comment_id=comment.id) }}" method="POST">
 <span >
                     <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
 </span>
@@ -240,9 +239,9 @@ position: relative;">
          {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
         {% if videos.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('posts.vid_post', videos_id=videos.id, page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-info mb-4" href="{{ url_for('posts.vid_post', publ_id=videos.publ_id, page=page_num) }}">{{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.vid_post', videos_id=videos.id, page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.vid_post', publ_id=videos.publ_id, page=page_num) }}">{{ page_num }}</a>
         {% endif %}
       {% else %}
         ...

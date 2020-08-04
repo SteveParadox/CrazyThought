@@ -1,4 +1,4 @@
-{% extends "bast.html" %}
+{% extends "douxt.html" %}
 {% block content %}
 
 
@@ -28,7 +28,7 @@
                 var data = "<ul>";
                 $.each(res,function(index,value){
                 if(value.name != -1 ){
-                data += '<span> Search result for: "'+text+'" </span><a class="nav-link" href="topics/conversation/'+value.id+'/'+value.name+'"><li style="padding: 0;" class="nav-link"> <span class="article-title">'+value.name+'  </span>  </li></a>';
+                data += '<span> Search result for: "'+text+'" </span><a class="nav-link" href="topics/conversation/'+value.pub_id+'/'+value.name+'"><li style="padding: 0;" class="nav-link"> <span class="article-title">'+value.name+'  </span>  </li></a>';
                }
                 });
                 data += "</ul>";
@@ -52,7 +52,9 @@ white;
     background:
 black;
     }
-
+.fa{
+font-size:17px;
+}
     .sa:hover i{
     font-size: 22px;
     }
@@ -62,16 +64,16 @@ black;
 
        <article class="media content-section" >
             <div class="media-body">
-                <a class="article-title" href="{{ url_for('groups.conversation', topics_id=topics.id, topics_name=topics.name) }}">    <span style="text-transform: capitalize;">{{ topics.name[0] }}</span>{{ topics.name[1:] }}</a> <strike><img  class="rou" style="float:right; cursor:pointer;"
+                <a class="article-title" href="{{ url_for('groups.conversation', pub_id=topics.pub_id, topics_name=topics.name) }}">    <span style="text-transform: capitalize;">{{ topics.name[0] }}</span>{{ topics.name[1:] }}</a> <strike><img  class="rou" style="float:right; cursor:pointer;"
                                                                                                                                                                  src="{{ url_for('static', filename= 'images/more(3).png' ) }}">
             </strike>
-                <a style="float:right;" class="article-title" title="My post on topic" href="{{ url_for('groups.my_conversation', topics_id=topics.id, topics_name=topics.name) }}"><span class="sa"><i style="height: 18px;" class="fa fa-plus-square-o"></i></span>
+                <a style="float:right;" class="article-title" title="My post on topic" href="{{ url_for('groups.my_conversation', pub_id=topics.pub_id, topics_name=topics.name) }}"><span class="sa"><i style=" height: 18px;" class="fa fa-plus-square-o"></i></span>
 
                             </a>
-                 <a style="float:right;" class="article-title" title="Topic creator"  href="{{ url_for('users.user_post', username=topics.creator.username) }}"><span class="sa"><i style="height: 18px;" class="fa fa-info-circle"></i></span>
+                 <a style="float:right;" class="article-title" title="Topic creator"  href="{{ url_for('users.user_post', username=topics.creator.username) }}"><span class="sa"><i style="height: 18px; " class="fa fa-info-circle"></i></span>
 
                             </a>
-                <span style="float:right;" class="sa"><i style="height: 18px;" class="fa fa-share"></i></span>
+                <span style="float:right; " class="sa"><i style="height: 18px; " class="fa fa-share"></i></span>
             </div>
 
        </article>

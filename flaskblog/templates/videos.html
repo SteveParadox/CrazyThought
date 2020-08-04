@@ -15,8 +15,9 @@
 	 <source src="{{ url_for('static', filename= 'post_pics/' + post.img_filename) }}" type="video/mp4">
  </video>
 
-            <span class="">
-              <a class="article-title" href="{{ url_for('posts.vid_post', videos_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+            <span >
+              <a class="article-title" href="{{ url_for('posts.vid_post', publ_id=post.publ_id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size: 23px;" class="fa fa-comment-o"></i></a>
+
 </span>
           </div>
         </article>

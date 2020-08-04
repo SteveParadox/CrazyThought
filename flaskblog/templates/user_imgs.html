@@ -12,7 +12,7 @@
                 <a class="mr-2" href="{{ url_for('users.user_post', username=post.imgs.username) }}"><span style="text-transform: capitalize;">{{ post.imgs.username[0] }}</span>{{ post.imgs.username[1:] }}</a>
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
-                    <a class="article-title" href="{{ url_for('posts.img_post', images_id = post.id) }}">
+                    <a class="article-title" href="{{ url_for('posts.img_post', plic_id = post.plic_id) }}">
 
              <img align="center" class="imgs" src="{{  url_for('static', filename= 'post_pics/' + post.photo_filename) }}">
             </a>

@@ -13,7 +13,7 @@
                 <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', post_id = post.id) }}">{{ post.title }}</a></h5>
-            <a class="article-title" href="{{ url_for('posts.vid_post', videos_id = post.id) }}">
+            <a class="article-title" href="{{ url_for('posts.vid_post', publ_id = post.publ_id) }}">
              <video  >
 	 <source src="{{ url_for('static', filename= 'post_pics/' + post.img_filename) }}" type="video/mp4">
  </video>

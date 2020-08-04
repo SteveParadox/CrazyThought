@@ -5,13 +5,6 @@
 <div class="nav-xy">
     <p align="center" ><b>Popular Posts</b></p>
 </div>
-<style>
-    .fa-heart::before {
-
-    content: "\f107";
-
-}
-</style>
  {% for sidex in side %}
 
 
@@ -25,9 +18,9 @@
             </div>
 
     <p class="krax"> {{ sidex.content }}</p>
-    <span class="">
-     <a class="article-title" href="{{ url_for('posts.post', public_id=sidex.public_id) }}"> {{ sidex.comments }}  <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
-</span>
+    <span >
+        <a class="article-title" href="{{ url_for('posts.post', public_id=sidex.public_id) }}"> {{ sidex.comments }} <i style="font-size: 23px;" class="fa fa-comment-o"></i>  </a>
+    </span>
 </div>
 
 

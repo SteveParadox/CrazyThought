@@ -1,6 +1,7 @@
 {% extends "groupx.html" %}
 {% block content %}
 {% if current_user.is_authenticated %}
+ {% if current_user.confirmed==True %}
 <div class="content-section" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
@@ -28,13 +29,7 @@
     </form>
 </div>
 
-<style>
-    .fa-heart::before {
 
-    content: "\f107";
-
-}
-</style>
 {% if posts.items %}
 
 {% for post in posts.items %}
@@ -58,7 +53,7 @@
 
 
 <span >
-              <a class="article-title" href="{{ url_for('groups.discussion',topics_id=topics.id,
+              <a class="article-title" href="{{ url_for('groups.discussion',pub_id=topics.pub_id,
                            topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size: 23px;" class="fa fa-comments-o"></i></a>
 
 </span>
@@ -73,7 +68,7 @@
  <h3 align="center" style="opacity:0.3">  Be the first to post on topic </h3>
 {%endif%}
 {%endif%}
-
+{% endif %}
 {% if current_user.is_anonymous %}
 
 {% if posts.items %}
@@ -98,9 +93,9 @@
                <div>
 
 
-<span class="secd glow-button">
-              <a class="article-title" href="{{ url_for('groups.discussion',topics_id=topics.id,
-                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/comment.png') }}"></a>
+<span >
+              <a class="article-title" href="{{ url_for('groups.discussion',pub_id=topics.pub_id,
+                           topics_name=topics.name, groups_id=post.id) }}" title="Comments" aria-label="Comments"> {{ post.comments }}<i style="font-size: 23px;" class="fa fa-comment-o"></i></a>
 
 </span>
 

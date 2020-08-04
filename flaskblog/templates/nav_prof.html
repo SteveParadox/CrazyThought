@@ -15,30 +15,31 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+ <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
 
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
     {% if title %}
         <title>Crazy Thoughts - {{ title }}</title>
     {% else %}
         <title>Crazy Thoughts</title>
     {% endif %}
-      <link rel="apple-touch-icon" sizes="57x57" href="static/favico/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="static/favico/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="static/favico/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="static/favico/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="static/favico/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="static/favico/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="static/favico/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="static/favico/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="static/favico/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="static/favico/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="static/favico/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="static/favico/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="static/favico/favicon-16x16.png">
-<link rel="manifest" href="static/favico/manifest.json">
+
+   <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='favico/apple-icon-57x57.png') }}">>
+<link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='favico/apple-icon-60x60.png') }}">>
+<link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='favico/apple-icon-72x72.png') }}">>
+<link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='favico/apple-icon-76x76.png') }}">>
+<link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='favico/apple-icon-114x114.png') }}">>
+<link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='favico/apple-icon-120x120.png') }}">>
+<link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='favico/apple-icon-144x144.png') }}">>
+<link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='favico/apple-icon-152x152.png') }}">>
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favico/apple-icon-180x180.png') }}">>
+<link rel="icon" type="image/png" sizes="192x192"  href="{{ url_for('static', filename='favico/android-icon-192x192.png') }}">>
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favico/favicon-32x32.png') }}">>
+<link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favico/favicon-96x96.png') }}">>
+<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favico/favicon-16x16.png') }}">>
+<link rel="manifest" href="{{ url_for('static', filename='favico/manifest.json') }}">
 <meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="static/favicon/ms-icon-144x144.png">
+<meta name="msapplication-TileImage" content="{{ url_for('static', filename='favicon/ms-icon-144x144.png') }}">>
 <meta name="theme-color" content="#ffffff">
 
 
@@ -70,6 +71,12 @@
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
 
+
+   <a class="nav-item nav-link" href="{{ url_for('posts.tags') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/pin.png') }}">
+
+                </a>
 
 
 
@@ -142,12 +149,19 @@
     <br>
 
     <footer class="foot" >
- <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom" id="navbar">
+ <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom">
 {% if current_user.is_authenticated %}
 
 
 
 
+
+ <!--  <a  href="{{ url_for('posts.tags') }}">
+
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/pin.png') }}">
+
+                </a>
+                -->
 
      {% endif %}
  </nav>
@@ -161,18 +175,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="static/jquery-min.js"></script>
 <script src="static/script.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script>
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function() {
-var currentScrollPos = window.pageYOffset;
-  if (prevScrollpos > currentScrollPos) {
-    document.getElementById("navbar").style.bottom = "0";
-  } else {
-    document.getElementById("navbar").style.bottom = "-60px";
-  }
-  prevScrollpos = currentScrollPos;
-}
-</script>
 </body>
 </html>
