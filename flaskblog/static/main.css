@@ -2293,6 +2293,11 @@ width: 100%;
     }
 
 
+
+}
+
+   .fa:hover {
+  color: blue;
 }
 
 .paz{
@@ -2321,4 +2326,7 @@ position: relative;
 padding: 1px 30px;
  color:#999;
  text-align: center;
+}
+.comment-list{
+border-bottom: 1.6px solid #ddf;
 }
