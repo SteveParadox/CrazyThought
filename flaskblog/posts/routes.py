@@ -158,8 +158,8 @@ def delete_comment(public_id, comment_id):
 @login_required
 @check_confirmed
 def following():
-    posts = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
-    return render_template('following.html', posts=posts, title='My Activities')
+    follow = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
+    return render_template('following.html',follow=follow, title='My Activities')
 
 @posts.route("/following/images", methods=['GET', 'POST'])
 @login_required
@@ -186,12 +186,12 @@ def report(post_id):
     return render_template('report.html', post_id=post.id)
 
 
-@posts.route("/post/images/<int:images_id>", methods=['POST', 'GET'])
+@posts.route("/post/images/<string:plic_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def img_post(images_id):
+def img_post(plic_id):
     page = request.args.get('page', 1, type=int)
-    images=Images.query.get_or_404(images_id)
+    images=Images.query.filter_by(plic_id=plic_id).first()
     form = CommentsForm()
     comments = Media_Comments.query.filter_by(images_id=images.id).order_by(Media_Comments.pub_date.desc()).paginate(page=page,
                                                                                                    per_page=20)
@@ -204,7 +204,7 @@ def img_post(images_id):
         return redirect(request.url)
     return render_template('image_post.html', images=images, form=form, comments=comments)
 
-@posts.route("/post/images/<int:images_id>/delete", methods=['POST'])
+@posts.route("/post/images/<int:images_id>/delete", methods=['GET', 'POST'])
 @login_required
 @check_confirmed
 def delete_images(images_id):
@@ -222,26 +222,26 @@ def delete_images(images_id):
     return redirect(url_for('main.home'))
 
 
-@posts.route("/post/images/<int:images_id>/comment/<int:comment_id>/delete", methods=['POST'])
+@posts.route("/post/images/<string:plic_id>/comment/<int:comment_id>/delete", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def delete_images_comment(images_id, comment_id):
-    images=Images.query.get_or_404(images_id)
+def delete_images_comment(plic_id, comment_id):
+    images=Images.query.filter_by(plic_id=plic_id).first()
     comment = Media_Comments.query.get_or_404(comment_id)
     if comment.reple != current_user:
         abort(403)
     db.session.delete(comment)
     images.comments = images.comments - 1
     db.session.commit()
-    return redirect(url_for('posts.img_post', images_id=images.id))
+    return redirect(url_for('posts.img_post', plic_id=images.plic_id))
 
 
-@posts.route("/post/videos/<int:videos_id>", methods=['POST', 'GET'])
+@posts.route("/post/videos/<string:publ_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
-def vid_post(videos_id):
+def vid_post(publ_id):
     page = request.args.get('page', 1, type=int)
-    videos=Videos.query.get_or_404(videos_id)
+    videos=Videos.query.filter_by(publ_id=publ_id).first()
     form = CommentsForm()
     comments = Media_Comment.query.filter_by(videos_id=videos.id).order_by(Media_Comment.pub_date.desc()).paginate(page=page,
                                                                                                    per_page=20)
@@ -256,7 +256,7 @@ def vid_post(videos_id):
 
 
 
-@posts.route("/post/videos/<int:videos_id>/delete", methods=['POST'])
+@posts.route("/post/videos/<int:videos_id>/delete", methods=['GET','POST'])
 @login_required
 @check_confirmed
 def delete_videos(videos_id):
@@ -273,15 +273,15 @@ def delete_videos(videos_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))
 
-@posts.route("/post/videos/<int:videos_id>/comment/<int:comment_id>/delete", methods=['POST'])
+@posts.route("/post/videos/<string:publ_id>/comment/<int:comment_id>/delete", methods=['GET','POST'])
 @login_required
 @check_confirmed
-def delete_videos_comment(videos_id, comment_id):
-    videos=Videos.query.get_or_404(videos_id)
+def delete_videos_comment(publ_id, comment_id):
+    videos=Videos.query.filter_by(publ_id=publ_id).first()
     comment = Media_Comment.query.get_or_404(comment_id)
     if comment.repli != current_user:
         abort(403)
     db.session.delete(comment)
     videos.comments = videos.comments - 1
     db.session.commit()
-    return redirect(url_for('posts.vid_post', videos_id=videos.id))
+    return redirect(url_for('posts.vid_post', publ_id=videos.publ_id))
