@@ -38,6 +38,7 @@ if it's not present, don't show loader */
             <a class="navbar-brand mr-4" href="/home/videos"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/youtube.png') }}">Videos</div></a>
         </div></nav>
 {% if current_user.is_authenticated%}
+	{% if current_user.confirmed==True%}
 <div class="content-section" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
@@ -112,6 +113,7 @@ new jBox('Modal', {
 
 </script>
 {% endif %}
+	{% endif %}
 <style>
     .fa-heart::before {
 
