@@ -186,6 +186,7 @@ new jBox('Modal', {
 
 </script>
 {%if current_user.is_authenticated %}
+	{% if current_user.confirmed==True%}
     <div class="topic" >
 
        <ul class="featured__item__pic__hover">
@@ -208,6 +209,7 @@ new jBox('Modal', {
 
 </script>
     {% endif %}
+	 {% endif %}
 
 
 
