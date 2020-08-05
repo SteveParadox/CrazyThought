@@ -14,7 +14,12 @@ font-size:30px;
 }
 .rou{
 height: 22px;
-width: 19px;
+width: 19px;	
+}
+
+ .fa-bar::before {
+
+    content: "\f107";
 
 }
 .read-more{
