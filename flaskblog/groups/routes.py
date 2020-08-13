@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import redirect
 from flaskblog import db, request, abort, flash
 from flaskblog.groups.forms import GroupPostForm, SearchPostForm, CommentForm
-from flaskblog.models import Groups, Topic, TopicSchema, Group_comment
+from flaskblog.models import Groups, Topic, TopicSchema, Group_comment, GroupReplyComment
 from flaskblog.users.decorator import check_confirmed
 import  datetime
 
@@ -69,6 +69,7 @@ def my_conversation(pub_id, topics_name):
 @login_required
 @check_confirmed
 def discussion(pub_id, topics_name, groups_id):
+    page = request.args.get('page', 1, type=int)
     topics = Topic.query.filter_by(pub_id=pub_id).first()
     groups = Groups.query.get_or_404(groups_id)
     post = Groups.query.all()
@@ -79,13 +80,33 @@ def discussion(pub_id, topics_name, groups_id):
         groups.comments = groups.comments + 1
         db.session.commit()
         return redirect(request.url)
-    gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).paginate()
+    gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).paginate(page=page, per_page=20)
 
     return render_template('discussion.html', groups_id=groups.id, post=post,
                            groups=groups, pub_id=topics.pub_id,
                            topics_name=topics.name, topics=topics, form=form, gc=gc)
 
 
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def reply_discussion(pub_id, topics_name, groups_id, gc_id):
+    #data= request.form.get('text')
+    page = request.args.get('page', 1, type=int)
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
+    groups = Groups.query.get_or_404(groups_id)
+    comment = Group_comment.query.filter_by(id=gc_id).first()
+    rc= GroupReplyComment.query.filter_by(group_comment=comment.id).order_by(GroupReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    form = CommentForm()
+    if form.validate_on_submit():
+        rc = GroupReplyComment(message=form.message.data, g_reply=current_user, group_comment=comment.id)
+        db.session.add(rc)
+        comment.replys=comment.replys + 1
+        db.session.commit()
+        return redirect(url_for('groups.reply_discussion', pub_id=topics.pub_id, groups_id=groups.id, gc_id=comment.id, topics_name=topics.name ))
+    return render_template('group_discussion.html', groups_id=groups.id,
+                           groups=groups, pub_id=topics.pub_id,
+                           topics_name=topics.name, topics=topics, form=form, rc=rc, comment=comment)
 
 
 @groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/delete", methods=['POST', 'GET'])
