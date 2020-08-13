@@ -23,5 +23,5 @@ class CommentsForm(FlaskForm):
 
 
 class ReplyForm(FlaskForm):
-    replys = TextAreaField(validators=[DataRequired()])
-    submit = SubmitField('Comment')
+    message = TextAreaField(validators=[DataRequired()])
+    submit = SubmitField('Reply')
