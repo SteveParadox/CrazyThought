@@ -1,5 +1,6 @@
 {% extends "douxt.html" %}
 {% block content %}
+ <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='modal.css') }}">
 
    <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
@@ -52,7 +53,7 @@ new jBox('Modal', {
   height: 150,
   attach: '#mode',
   title: '<p align="center" style="margin-bottom: 0rem;">Share post!</p>',
-  content: '<form><input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/post/{{ post.id }}"> <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button></form>'
+  content: '<form><input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/post/{{ post.public_id }}"> <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button></form>'
 
 });
 
@@ -164,21 +165,34 @@ position: relative;">
                    </small>
 
 
-                     <h6  class="comment" style="font-weight:380; font-size: 14px;">
+                     <h6  class="comment krax" style="font-weight:380; font-size: 14px;">
                          {{ comment.message }}
                      </h6>
-{% if comment.reply == current_user %}
+                     <style>
+    .fa-bar::before {
 
-               <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_comment', public_id=post.public_id, comment_id=comment.id) }}" method="POST">
+    content: "\f107";
+
+}
+</style>
+
+               <form  action="{{ url_for('posts.delete_comment', public_id=post.public_id, comment_id=comment.id) }}" method="POST">
 <span >
-                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+                   {% if comment.reply == current_user %}
+                    <button type="submit"  value="Delete" title="Delete" aria-label="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+{% endif %}
 </span>
+
+                   <a class="article-content" title="Reply Comment" aria-label="Reply Comment" href="{{ url_for('posts.reply_comment', public_id=post.public_id, comment_id=comment.id) }}"><i style="font-size:20px; width:23px;" class="fa fa-comment"></i></a>{{comment.replys}}
+
                 </form>
 
 
 
 
-{% endif %}
+
+
+
 
 
 

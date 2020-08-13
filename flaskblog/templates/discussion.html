@@ -47,7 +47,7 @@ new jBox('Modal', {
   height: 150,
   attach: '#mode',
   title: '<p align="center" style="margin-bottom: 0rem;">Share post!</p>',
-  content: '<form><input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/topics/conversation/{{ topics.id }}/{{ topics.name }}/{{ groups.id }}"> <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button></form>'
+  content: '<form><input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/topics/conversation/{{ topics.pub_id }}/{{ topics.name }}/{{ groups.id }}"> <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button></form>'
 
 });
 
@@ -164,14 +164,17 @@ position: relative;">
 
 
 
-{% if gcs.disc == current_user %}
+
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('groups.delete_discussion', pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id, gc_id=gcs.id) }}" method="POST">
- <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
-</span>
+ {% if gcs.disc == current_user %}
+                    <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
+{% endif %}
+                     <a class="article-content" href="{{ url_for('groups.reply_discussion', pub_id=topics.pub_id, groups_id=groups.id, topics_name=topics.name,  gc_id=gcs.id) }}"><i style="font-size:20px; width:23px;" class="fa fa-comment"></i></a>{{gcs.replys}}
+
       </form>
 
-{% endif %}
+
 
 
 
@@ -185,6 +188,18 @@ position: relative;">
     <br>
     <h3 align="center" style="opacity:0.3">  Be the first to comment </h3>
     {%endif%}
+    {% for page_num in gc.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if gc.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('groups.discussion',  pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id, page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('groups.discussion', pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id, page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+
 </div>
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

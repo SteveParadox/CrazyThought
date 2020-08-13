@@ -211,15 +211,19 @@ position: relative;">
                      <h6  class="comment" style="font-weight:380; font-size: 14px;">
                          {{ comment.message }}
                      </h6>
-{% if comment.repli == current_user %}
+
 
                <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_videos_comment', publ_id=videos.publ_id, comment_id=comment.id) }}" method="POST">
 <span >
+    {% if comment.repli == current_user %}
                     <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
 </span>
+               {% endif %}
+                    <a class="article-content" href="{{ url_for('posts.reply_video', publ_id=videos.publ_id, media_comment_id=comment.id) }}"><i style="font-size:20px; width:23px;" class="fa fa-comment"></i></a>{{comment.replys}}
+
                 </form>
 
-{% endif %}
+
 
 
 

@@ -161,14 +161,17 @@ position: relative;">
                      <h6  class="comment" style="font-weight:380; font-size: 14px;">
                          {{ comment.message }}
                      </h6>
-{% if comment.reple == current_user %}
+
 
                 <form title="Delete" aria-label="Delete" action="{{ url_for('posts.delete_images_comment', plic_id=images.plic_id, comment_id=comment.id) }}" method="POST">
+ {% if comment.reple == current_user %}
   <button type="submit"  value="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
-</span>
+{% endif %}
+                    <a class="article-content" href="{{ url_for('posts.reply_img', plic_id=images.plic_id, media_comment_id=comment.id) }}"><i style="font-size:20px; width:23px;" class="fa fa-comment"></i></a>{{comment.replys}}
+
                 </form>
 
-{% endif %}
+
 
 
 
