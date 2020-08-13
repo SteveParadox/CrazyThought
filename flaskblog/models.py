@@ -32,6 +32,11 @@ class User(db.Model, UserMixin):
     topics = db.relationship('Topic', backref='creator', lazy=True)
     groups= db.relationship('Groups', backref='group', lazy=True)
     group_comment = db.relationship('Group_comment', backref='disc', lazy=True)
+    reply_comment = db.relationship('ReplyComment', backref='comment', lazy=True)
+    group_reply_comment = db.relationship('GroupReplyComment', backref='g_reply', lazy=True)
+    media_reply_comment = db.relationship('MediaReplyComment', backref='vid_reply', lazy=True)
+    media_reply_comments = db.relationship('MediaReplyComments', backref='img_reply', lazy=True)
+
 
 
     def get_reset_token(self, expires_sec=1800):
@@ -90,8 +95,20 @@ class Group_comment(db.Model):
     name = db.Column(db.String())
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
+    grp_comment = db.relationship('GroupReplyComment', backref='grp_rep', lazy=True)
     groups_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
+    replys = db.Column(db.Integer, default=0)
 
+class GroupReplyComment(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text, nullable=False)
+    upvote = db.Column(db.Integer, default=0)
+    group_comment = db.Column(db.Integer, db.ForeignKey('group_comment.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String())
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    status = db.Column(db.Boolean, default=False)
 
 
 class Post(db.Model):
@@ -159,42 +176,95 @@ class Comment(db.Model):
     post = db.relationship('Post', backref=db.backref('post', lazy=True))
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
+    replys = db.Column(db.Integer, default=0)
     admin = db.relationship('Admin', backref='administration', lazy=True)
+    reply_comment= db.relationship('ReplyComment', backref='comments', lazy=True)
 
 
     def __repr__(self):
         return '<Comment %r>' % self.name
 
 
+class ReplyComment(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text, nullable=False)
+    upvote = db.Column(db.Integer, default=0)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String())
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    status = db.Column(db.Boolean, default=False)
+
+
+    def __repr__(self):
+        return '<ReplyComment %r>' % self.name
+
+
 class Media_Comment(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    img_upvote = db.Column(db.Integer, default=0)
+    vid_upvote = db.Column(db.Integer, default=0)
     message = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     videos_id = db.Column(db.Integer, db.ForeignKey('videos.id'), nullable=False)
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
     name = db.Column(db.String())
+    replys = db.Column(db.Integer, default=0)
+    media_reply_comment = db.relationship('MediaReplyComment', backref='med_rep', lazy=True)
 
     def __repr__(self):
         return '<Media_Comment %r>' % self.name
 
 
+class MediaReplyComment(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text, nullable=False)
+    upvote = db.Column(db.Integer, default=0)
+    media_comment_id = db.Column(db.Integer, db.ForeignKey('media__comment.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String())
+
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    status = db.Column(db.Boolean, default=False)
+
+
+    def __repr__(self):
+        return '<MediaReplyComment %r>' % self.name
+
 class Media_Comments(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    video_upvote = db.Column(db.Integer, default=0)
+    img_upvote = db.Column(db.Integer, default=0)
     message = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     images_id = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=False)
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
     name = db.Column(db.String())
+    replys = db.Column(db.Integer, default=0)
+    media_reply_comments = db.relationship('MediaReplyComments', backref='med_reps', lazy=True)
 
     def __repr__(self):
         return '<Media_Comment %r>' % self.name
 
+
+class MediaReplyComments(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.Text, nullable=False)
+    upvote = db.Column(db.Integer, default=0)
+    media_comments_id = db.Column(db.Integer, db.ForeignKey('media__comments.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String())
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    status = db.Column(db.Boolean, default=False)
+
+
+    def __repr__(self):
+        return '<MediaReplyComments %r>' % self.name
 
 class Business(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -269,6 +339,14 @@ class CommentSchema(ModelSchema):
 
 comment_schema = CommentSchema()
 comments_schema = CommentSchema(many=True)
+
+class ReplyCommentSchema(ModelSchema):
+    class Meta:
+        model = ReplyComment
+
+
+reply_comment_schema = ReplyCommentSchema()
+reply_comments_schema = ReplyCommentSchema(many=True)
 
 
 class AdminSchema(ModelSchema):
