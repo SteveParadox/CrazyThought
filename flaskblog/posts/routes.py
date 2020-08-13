@@ -62,13 +62,13 @@ def post(public_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.filter_by(public_id=public_id).first()
     posts = Post.query.order_by(Post.public_id.desc()).all()
-    comments = Comment.query.filter_by(post_id=post.public_id).order_by(Comment.pub_date.desc()).paginate(page=page,
+    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
                                                                                                           per_page=20)
     rc = ReplyComment.query.order_by(ReplyComment.pub_date.desc()).all()
     form = CommentForm()
     if form.validate_on_submit():
         message = request.form.get('message')
-        comment = Comment(message=message, post_id=post.public_id, reply=current_user)
+        comment = Comment(message=message, post_id=post.id, reply=current_user)
         db.session.add(comment)
         post.comments = post.comments + 1
         db.session.commit()
@@ -111,7 +111,7 @@ def reply_comment(public_id, comment_id):
 @check_confirmed
 def update_post(public_id):
     post = Post.query.filter_by(public_id=public_id).first()
-    comment = Comment.query.filter_by(post_id=Post.id).all()
+    comment = Comment.query.filter_by(post_id=post.id).all()
     posk = Post.query \
         .order_by(Post.date_posted.desc()) \
         .paginate()
