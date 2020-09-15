@@ -97,7 +97,7 @@ def reply_comment(public_id, comment_id):
     rc= ReplyComment.query.filter_by(comment_id=comment.id).order_by(ReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
     form = ReplyForm()
     if form.validate_on_submit():
-        rc = ReplyComment(message=form.message.data, comment=current_user, comment_id=comment.id)
+        rc = ReplyComment(message=form.message.data, comment=current_user, post_id=post.id, comment_id=comment.id)
         db.session.add(rc)
         comment.replys=comment.replys + 1
         db.session.commit()
@@ -111,7 +111,9 @@ def reply_comment(public_id, comment_id):
 @check_confirmed
 def update_post(public_id):
     post = Post.query.filter_by(public_id=public_id).first()
+
     comment = Comment.query.filter_by(post_id=post.id).all()
+    rc = ReplyComment.query.filter_by(post_id=post.id).all()
     posk = Post.query \
         .order_by(Post.date_posted.desc()) \
         .paginate()
@@ -120,8 +122,11 @@ def update_post(public_id):
         .paginate()
     if post.author != current_user:
         abort(403)
+    for i in rc:
+        db.session.delete(i)
     for o in comment:
         db.session.delete(o)
+
     post.comments = post.comments - post.comments
     form = UpdatePostForm()
     if form.validate_on_submit():
@@ -143,9 +148,11 @@ def update_post(public_id):
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     comment = Comment.query.filter_by(post_id=post_id).all()
+    rc = ReplyComment.query.filter_by(post_id=post.id).all()
     if post.author != current_user:
         abort(403)
-
+    for i in rc:
+        db.session.delete(i)
     for o in comment:
         db.session.delete(o)
     db.session.delete(post)
@@ -153,6 +160,7 @@ def delete_post(post_id):
     db.session.commit()
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))
+
 
 
 @posts.route("/post/<string:public_id>/comment/<int:comment_id>/delete", methods=['POST'])
