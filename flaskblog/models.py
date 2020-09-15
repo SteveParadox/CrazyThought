@@ -123,6 +123,7 @@ class Post(db.Model):
     # tag = db.Column(db.Integer,  nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comment = db.relationship('Comment', backref='parser', lazy=True)
+    rc = db.relationship('ReplyComment', backref='repc', lazy=True)
     admin = db.relationship('Admin', backref='admini', lazy=True)
 
     # translate = db.relationship('Translate', backref='translation', lazy=True)
@@ -195,6 +196,7 @@ class ReplyComment(db.Model):
     name = db.Column(db.String())
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
 
     def __repr__(self):
