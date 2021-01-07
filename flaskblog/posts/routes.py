@@ -12,8 +12,7 @@ posts = Blueprint('posts', __name__)
 
 @posts.route("/explore", methods=['GET', 'POST'])
 def explore():
-    side = (Post.query.order_by(Post.comments.desc()).all()[0:100])
-    x = random.shuffle(side)
+    side = (Post.query.order_by(Post.viewed.desc()).all()[0:100])
     return render_template('explore.html', side=side, title='Popular')
 
 
@@ -34,7 +33,6 @@ def trending_videos():
 @posts.route("/tags", methods=['GET', 'POST'])
 def tags():
     posts = Post.query.all()
-
     return render_template('tags.html', posts=posts)
 
 
@@ -61,6 +59,8 @@ def new_post():
 def post(public_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.filter_by(public_id=public_id).first()
+    post.viewed = post.viewed + 1
+    db.session.commit()
     posts = Post.query.order_by(Post.public_id.desc()).all()
     comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
                                                                                                           per_page=20)
@@ -169,6 +169,10 @@ def delete_post(post_id):
 def delete_comment(public_id, comment_id):
     post = Post.query.filter_by(public_id=public_id).first()
     comment = Comment.query.get_or_404(comment_id)
+    cx = ReplyComment.query.filter_by(comment_id=comment_id).all()
+    for i in cx:
+        db.session.delete(i)
+        db.session.commit()
     if comment.reply != current_user:
         abort(403)
     db.session.delete(comment)
