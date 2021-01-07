@@ -1,0 +1,32 @@
+{% extends "douxt.html" %}
+{% block content %}
+
+<h5>
+    Groups i created
+
+</h5>
+{% for post in groups %}
+        <article class="media content-section" >
+                   <div class="media-body">
+            <div class="article-metadata">
+                       <a href="{{ url_for('groups.discussion',pub_id=post.title.pub_id,
+                           topics_name=post.title.name, groups_id=post.id) }}"> <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ post.content }} </p>
+                       </a>
+                           <script>
+      function updateDiv()
+{
+    $( "a" ).load(window.location.href + "a" );
+    }
+  </script>
+            </div>
+               <div>
+
+
+  </div>
+          </div>
+
+        </article>
+    {% endfor %}
+
+
+{% endblock content%}

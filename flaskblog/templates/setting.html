@@ -1,6 +1,17 @@
 {% extends "douxt.html" %}
 {% block content %}
 
+<style>
+    .content-section{
+        background: #ffffff;
+    padding: 10px 10px;
+    border-bottom: 1px solid #fff;
+    margin-bottom: 20px;
+    border: 1px solid #9b8def;
+    border-radius: 24px;
+}
+    }
+</style>
 
 <div id="app" class="section">
 
@@ -12,7 +23,7 @@
 {% if current_user.is_authenticated%}
  <article class="media content-section">
           <a class="nav-item nav-link" href="/logout">
-               <small>Logout</small> <img class="rounded-circle article-img" src="static/images/logout-outline.png">
+               <small>Logout</small> <img alt="" class="rounded-circle article-img" src="static/images/logout-outline.png">
                 </a>
  </article>
 {% else %}

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=6.0,  initial-scale=1, shrink-to-fit=yes">
+
 
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
@@ -13,9 +14,10 @@
 
     <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome-4.7/css/font-awesome.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome-4.7/css/font-awesome.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+
 
 
     {% if title %}
@@ -52,7 +54,7 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
          <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
+            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -67,7 +69,7 @@
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
   <a class="nav-item nav-link" href="{{ url_for('users.account') }}" title="My Account" aria-label="My Account">
-                      <img class="rounded-circle article-img"
+                      <img alt="" class="rounded-circle article-img"
                            src="{{ url_for('static', filename= 'profile_pics/' + current_user.image_file) }}">
                   </a>
 
@@ -93,18 +95,17 @@
 
 
 
-    <main role="main" class="container">
+   <main role="main" class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
 
-                     <div class="alert alert-{{ category }}">
+                <div class="alert alert-{{ category }}">
                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
-
                   {{ message }}
                 </div>
               {% endfor %}
@@ -175,5 +176,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="static/jquery-min.js"></script>
 <script src="static/script.js"></script>
+
+<script src= "{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src= "{{ url_for('static', filename='socketio.js') }}"></script>
 </body>
 </html>

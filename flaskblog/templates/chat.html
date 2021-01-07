@@ -1,0 +1,69 @@
+{% extends "chatx.html" %}
+{% block content %}
+
+
+<form>
+<input style="width: 100%; height: 50px;" class="form-control" type="search" placeholder="Search For Rooms..." id="livebox">
+    </form>
+ <span id="datalist" ></span>
+<br>
+
+
+
+<script src="{{ url_for('static', filename='ajax.js') }}"></script>
+<script >
+    $(document).ready(function(){
+    $("#livebox").keyup(function(e){
+                text= $("#livebox").val();
+
+               $.ajax({
+                method: "post",
+                url: '/topics/search',
+                data: {text: text},
+                success: function(res){
+    console.log(res);
+                var data = "<ul>";
+                $.each(res,function(index,value){
+                if(value.name != -1 ){
+                data += '<span> Search result for: "'+text+'" </span><a class="nav-link" href="topics/conversation/'+value.pub_id+'/'+value.name+'"><li style="padding: 0;" class="nav-link"> <span class="article-title">'+value.name+'  </span>  </li></a>';
+               }
+                });
+                data += "</ul>";
+                $("#datalist").html(data);
+            }
+          });
+          });
+          });
+
+</script>
+{% for rooms in room %}
+<p class="krax"  aria-live="polite"  ><a class="article-title" href="{{ url_for('sock.room', room_id = rooms.unique_id) }}">{{ rooms.nickname }}</a></p>
+{% endfor %}
+
+
+  <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
+<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
+<div class="topic" >
+
+       <ul class="featured__item__pic__hover">
+                                <li><a href="#" id="topic"><i style="font-size: 21px;" class="fa fa-plus "></i></a></li>
+
+                            </ul>
+    </div>
+<script>
+
+
+new jBox('Modal', {
+  width: 500,
+  height: 200,
+  attach: '#topic',
+  title: '<h4 align="center" style="color:black;">Create Room</h4>',
+  content: '<form method="POST" enctype=multipart/form-data action="">{{ form.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" >{% if form.nickname.errors %}{{ form.nickname(class="daxx", placeholder="What's Up?", id="tog", rows="5", max="10") }}                    <div class="invalid-feedback">                        {% for error in form.nickname.errors %}                            <span>{{ error }}</span>                        {% endfor %}                    </div>                {% else %}                    {{ form.nickname(class="daxx",  rows="1",  placeholder="Topic Name", title="Topic Name!", style='resize: none; width:100%;') }}                {% endif %}</div>        </fieldset>        <div class="form-group">            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}        </div>    </form>'
+  });
+
+
+
+</script>
+
+{% endblock content %}

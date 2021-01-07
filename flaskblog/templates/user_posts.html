@@ -3,13 +3,14 @@
 
     <h3 class="nav-xy">Posts by {{ user.username }} ({{ posts.total }})</h3>
 
+<!--
 <nav class="navbar navbar-expand-md navbar-dark  ">
         <div class="container">
              <a class="navbar-brand mr-4" href="{{ url_for('users.user_imgs', username=user.username) }}"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/picture.png') }}">Images</div></a>
    <a class="navbar-brand mr-4" href="{{ url_for('users.user_vids', username=user.username) }}"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/youtube.png') }}">Videos</div></a>
 
                 </div></nav>
-
+-->
     {% for post in posts.items %}
 
         <article class="media content-section">

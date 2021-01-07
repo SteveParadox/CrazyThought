@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html >
+<html lang="en" >
 
 <head>
  <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=6.0,  initial-scale=1, shrink-to-fit=yes">
 
      <!-- Site Metas -->
    {% if title %}
@@ -72,7 +72,7 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
 
-                      <img  onclick="goBack()"  title="Back" aria-label="Back" class="rou" src="{{ url_for('static', filename= 'images/left-arrow.png') }}">
+                      <img alt=""  onclick="goBack()"  title="Back" aria-label="Back" class="rou" src="{{ url_for('static', filename= 'images/left-arrow.png') }}">
 
 <script>
 function goBack() {
@@ -98,7 +98,7 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
     </header>
  <main role="main" class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -140,7 +140,8 @@ left: 20px;"><img class="rounded-circle article-img" src="{{ url_for('static', f
 <script src= "{{ url_for('static', filename='jquery-min.js') }}"></script>
 
 <script src= "{{ url_for('static', filename='script.js') }}"></script>
-
+<script src= "{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src= "{{ url_for('static', filename='socketio.js') }}"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
 <script>

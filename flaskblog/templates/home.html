@@ -33,13 +33,16 @@ if it's not present, don't show loader */
 
 <nav class="navbar navbar-expand-md navbar-dark ">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/blogging.png') }}">Texts</div></a>
+         <!--   <a class="navbar-brand mr-4" href="/home"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/blogging.png') }}">Texts</div></a>
         <a class="navbar-brand mr-4" href="/home/images"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/picture.png') }}">Images</div></a>
             <a class="navbar-brand mr-4" href="/home/videos"><div class="krax"> <img class="rou" src="{{ url_for('static', filename= 'images/youtube.png') }}">Videos</div></a>
+        -->
         </div></nav>
+
+
 {% if current_user.is_authenticated%}
 	{% if current_user.confirmed==True%}
-<div class="content-section" id="tog" style="margin-bottom:40px;">
+<div class="textarea-content" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
         {{ form.hidden_tag() }}
@@ -68,70 +71,21 @@ if it's not present, don't show loader */
 </div>
 
 
-<div class="avatar-upload">
-         <div class="avatar-edit">
-           <img style="width: 44px; height: 44px;cursor:pointer; "  id="myModal" src="{{ url_for('static', filename= 'images/212328-200.png') }}" >
-        </div>
-    </div>
-    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
-    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
-<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
-<script>
-new jBox('Modal', {
-  width: 500,
-  height: 250,
-  attach: '#myModal',
-  title: '<h4 align="center" style="color:purple;">Upload Photo</h4>',
-  content: '<form method=POST enctype=multipart/form-data action="">{{ form2.hidden_tag() }}<fieldset class="form-group"> <div class="avatar-upload">  <div class="avatar-edit">{{ form2.photo(class="") }}{{ form2.photo.label() }}{% if form2.photo.errors %}{% for error in form2.photo.errors %}<span class="text-danger">{{ error }}</span><br>{% endfor %}{% endif %}</div></div></fieldset>{{ form2.submit(class="btn btn-outline-info ") }}</form>'
-
-});
-
-</script>
-
-
-<div class="avatar-upload">
-         <div class="avatar-edit" style="right:4rem;">
-              <img style="width: 44px; height: 44px;cursor:pointer; "  id="mModal" src="{{ url_for('static', filename= 'images/attachment.png') }}" >
-        </div>
-    </div>
-
-    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
-    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
-<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
-<script>
-
-
-new jBox('Modal', {
-  width: 500,
-  height: 250,
-  attach: '#mModal',
-  title: '<h4 align="center" style="color:purple;">Upload Video</h4>',
-  content: '<form method=POST enctype=multipart/form-data action="">{{ form2.hidden_tag() }}<fieldset class="form-group"> <div class="avatar-upload">  <div class="avatar-edit">{{ form3.video(class="") }}{{ form3.video.label() }}{% if form3.video.errors %}{% for error in form3.video.errors %}<span class="text-danger">{{ error }}</span><br>{% endfor %}{% endif %}</div></div></fieldset>{{ form3.submit(class="btn btn-outline-info ") }}</form>'
-
-});
-
-
-</script>
 {% endif %}
 	{% endif %}
-<style>
-    .fa-heart::before {
 
-    content: "\f107";
 
-}
-</style>
     {% for post in posts.items %}
 
         <article class="media content-section" >
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
+            <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
                 <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</span></a>
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
             <h5><a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">{{ post.title }}</a></h5>
-            <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ post.content }}</p>
+            <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ post.content }} </p>
   <script>
       function updateDiv()
 {
@@ -140,33 +94,34 @@ new jBox('Modal', {
   </script>
                <div>
                    {% if post.img_filename %}
-             <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
+             <img alt="" align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
 
 {% endif %}
             </div>
 
 
+
 <span >
-              <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a> <span  class="thumb"><a href="{{ url_for('main.like', id=post.id) }}"> <i style="font-size:23px;" id="das" class="fa fa-thumbs-up"></i></a>{{post.love}} <i style="padding: 0 12px; font-size:23px;" class="fa fa-feed"></i> </span>
 </span>
-              <!--<span class="secd glow-button">
-              <a class="article-title" href="{{ url_for('main.share_post', post_id=post.id) }}" >
-<img class="rounded-circle article-img"  title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style=" cursor: pointer;" />
-               </a>
-              </span>-->
-              {% if post.author == current_user %}
-                      {% else %}
 
 
-
-
-
-{% endif %}
 
           </div>
 
         </article>
+
+
+
     {% endfor %}
+
+<script>
+ $('#das').on('click', function(e) {
+        console.log(window.location.href );
+        });
+    </script>
+
+
      <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
     <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
 <link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
@@ -190,7 +145,7 @@ new jBox('Modal', {
     <div class="topic" >
 
        <ul class="featured__item__pic__hover">
-                                <li><a href="#" id="topic"><i class="fa fa-group"></i></a></li>
+                                <li><a href="#" id="topic"><i style="font-size: 21px;" class="fa fa-group"></i></a></li>
 
                             </ul>
     </div>

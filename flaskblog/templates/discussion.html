@@ -2,7 +2,7 @@
 {% block content %}
 
  <article class="media content-section" >
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + groups.group.image_file) }}">
+            <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + groups.group.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
                 <a class="mr-2" href="{{ url_for('users.user_post', username=groups.group.username) }}"><span><span style="text-transform: capitalize;">{{ groups.group.username[0] }}</span>{{ groups.group.username[1:] }}</span></a>
@@ -11,11 +11,12 @@
 
 <span  style="float: right;">
 
-            <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
+            <img alt="" class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
 </span>
     {%endif%}
-          <img class="rou" id="mode" title="Share" aria-label="Share" src="{{ url_for('static', filename= 'images/share.png') }}"  style="float: right; cursor: pointer; margin-right: 4px;" />
-           </span>
+          <i class="fa fa-share-alt"  id="mode" style="float: right; cursor: pointer; margin-right: 4px;
+    font-size: 16px;
+" ></i>
           
 </small>
    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
@@ -93,7 +94,7 @@ function outFunc() {
 
         </article>
 
-<div class="content-section" style="width: 100%;
+<div class="textarea-content" style="width: 100%;
 
 position: relative;">
    <form method=POST enctype=multipart/form-data action="">
@@ -148,7 +149,7 @@ position: relative;">
                      
                       <h5  class="comment" style="margin-bottom: 0px;">
                           <a class="mr-2" href="{{ url_for('users.user_post', username=gcs.disc.username) }}">
-                           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + gcs.disc.image_file) }}">
+                           <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + gcs.disc.image_file) }}">
                           </a>
                            <b> <span style="font-size: 16px;"><span style="text-transform: capitalize;">
 {{ gcs.disc.username[0] }}</span>{{ gcs.disc.username[1:] }}</span> </b>

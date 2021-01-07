@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=6.0,  initial-scale=1, shrink-to-fit=yes">
 
      <!-- Site Metas -->
    {% if title %}
@@ -19,7 +19,7 @@
     <meta name="author" content="Stephen Ford">
     <!-- Required meta tags -->
     <meta charset="utf-8">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
  <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
        <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
@@ -27,7 +27,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
      <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
 
- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+ <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome-4.7/css/font-awesome.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome-4.7/css/font-awesome.min.css') }}">
 
 
     <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
@@ -126,7 +127,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="static/jquery-min.js"></script>
 <script src="static/script.js"></script>
-
+<script src= "{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src= "{{ url_for('static', filename='socketio.js') }}"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
 <script>

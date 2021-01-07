@@ -2,7 +2,7 @@
 {% block content %}
 {% if current_user.is_authenticated %}
  {% if current_user.confirmed==True %}
-<div class="content-section" id="tog" style="margin-bottom:40px;">
+<div class="textarea-content" id="tog" style="margin-bottom:40px;">
 
    <form method=POST enctype=multipart/form-data action="" >
         {{ form.hidden_tag() }}
