@@ -4,7 +4,7 @@
 
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
 </head>
 <style>
 /* Paste this css to your style sheet file or under head tag */
@@ -27,9 +27,6 @@ if it's not present, don't show loader */
 	<!-- Paste this code after body tag -->
 	<div class="se-pre-con"></div>
 	<!-- Ends -->
-
-
-
 
 <nav class="navbar navbar-expand-md navbar-dark ">
         <div class="container">
@@ -74,18 +71,21 @@ if it's not present, don't show loader */
 {% endif %}
 	{% endif %}
 
-
     {% for post in posts.items %}
 
         <article class="media content-section" >
-            <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
+            <img alt="" class="rounded-circle article-img"
+                 src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</span></a>
+                <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span>
+                    <span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}
+                </span></a>
                 <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
             </div>
-            <h5><a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">{{ post.title }}</a></h5>
-            <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ post.content }} </p>
+            <h5><a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">
+                {{ post.title }}</a></h5>
+            <p class="krax"  autocapitalize="sentences" aria-live="polite" > {{ post.content }} </p>
   <script>
       function updateDiv()
 {
@@ -94,7 +94,8 @@ if it's not present, don't show loader */
   </script>
                <div>
                    {% if post.img_filename %}
-             <img alt="" align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
+             <img alt="" align="center" class="article-content"
+                  src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
 
 {% endif %}
             </div>
@@ -102,16 +103,17 @@ if it's not present, don't show loader */
 
 
 <span >
-    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments"> {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a> <span  class="thumb"><a href="{{ url_for('main.like', id=post.id) }}"> <i style="font-size:23px;" id="das" class="fa fa-thumbs-up"></i></a>{{post.love}} <i style="padding: 0 12px; font-size:23px;" class="fa fa-feed"></i> </span>
+    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}"
+       title="Comments" aria-label="Comments">
+        {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
+    <span  class="thumb"><a href="{{ url_for('main.like', id=post.id) }}">
+        <i style="font-size:23px;" id="das" class="fa fa-thumbs-up"></i></a>{{post.love}}
+        <i style="padding: 0 12px; font-size:23px;" class="fa fa-feed"></i> </span>
 </span>
-
-
 
           </div>
 
         </article>
-
-
 
     {% endfor %}
 
@@ -121,13 +123,11 @@ if it's not present, don't show loader */
         });
     </script>
 
-
      <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
     <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
 <link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
 
 <script>
-
 
 new jBox('Modal', {
   width: 300,
@@ -137,8 +137,6 @@ new jBox('Modal', {
   content: ''
 });
 
-
-
 </script>
 {%if current_user.is_authenticated %}
 	{% if current_user.confirmed==True%}
@@ -146,11 +144,9 @@ new jBox('Modal', {
 
        <ul class="featured__item__pic__hover">
                                 <li><a href="#" id="topic"><i style="font-size: 21px;" class="fa fa-group"></i></a></li>
-
                             </ul>
     </div>
 <script>
-
 
 new jBox('Modal', {
   width: 500,
@@ -160,18 +156,14 @@ new jBox('Modal', {
   content: '<form method=POST enctype=multipart/form-data action="">{{ form4.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" >{% if form4.name.errors %}{{ form4.name(class="daxx", placeholder="What's Up?", id="tog", rows="5", max="10") }}                    <div class="invalid-feedback">                        {% for error in form4.name.errors %}                            <span>{{ error }}</span>                        {% endfor %}                    </div>                {% else %}                    {{ form4.name(class="daxx",  rows="1", placeholder="Topic Name", title="Topic Name!", style='resize: none;') }}                {% endif %}</div>        </fieldset>        <div class="form-group">            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}        </div>    </form>'
   });
 
-
-
 </script>
     {% endif %}
 	 {% endif %}
 
-
-
-   {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.prev_num) }}">Latest</a>{% else %}{% endif %}
-{% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.next_num) }}"> Older </a>{% else %} {% endif %}
+   {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.prev_num) }}">
+        Latest</a>{% else %}{% endif %}
+{% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.next_num) }}">
+        Older </a>{% else %} {% endif %}
 
 
 {% endblock content %}
-
-

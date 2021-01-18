@@ -281,10 +281,15 @@ window.onclick = function(event) {
  <div class="wrapper" style="">
 
 
-  <div class="profile-card js-profile-card" style="    min-height: 300px;">
+  <div class="profile-card js-profile-card" style="    min-height: 300px; height: 300px;">
 <i style="font-size:20px; padding: 3px 40px; color: black;" class="fa fa-th-list"></i>
 <i style="font-size:20px; padding: 3px 50px; color: black;" class="fa fa-envelope-o"></i>
 <i style="font-size:20px; padding: 3px 40px; color: black;" class="fa fa-bookmark-o"></i>
+      {% for post in room %}
+      <br>
+
+      <p style=" padding: 0px 40px; margin-bottom: 0rem;"> {{post.nickname}} - {{post.created}}</p>
+      {% endfor %}
   </div>
                </div>
  <small class="footer">
@@ -385,8 +390,8 @@ window.onclick = function(event) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="static/jquery-min.js"></script>
 <script src="static/script.js"></script>
-<!--<script src="static/main.js"></script>-->
 
+    <script src= "{{ url_for('static', filename='socketio.js') }}"></script>
 <script src="static/vue.js"></script>
 <script src="static/main.js"></script>
 
@@ -399,7 +404,11 @@ window.onclick = function(event) {
 	});
 </script>
 
+<script>
+      var socket = io.connect( 'http://' + document.domain + ':' + location.port)
+    console.log(socket);
 
+</script>
 <script>
 var prevScrollpos = window.pageYOffset;
 window.onscroll = function() {
