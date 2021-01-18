@@ -6,7 +6,7 @@ from flask import render_template, redirect, url_for, flash, request, Blueprint
 from flask_login import login_user, logout_user, login_required, user_loaded_from_cookie
 
 from flaskblog import db, bcrypt, login_manager, jsonify
-from flaskblog.models import Post, Business, Admin, AdminSchema, Images, Videos
+from flaskblog.models import Post, Business, Admin, AdminSchema, Images, Videos, UserSchema
 from flaskblog.users.decorator import check_confirmed
 from flaskblog.users.email import send_email
 from flaskblog.users.forms import *
@@ -73,7 +73,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=False)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=True)
         db.session.add(user)
         db.session.commit()
         token = generate_confirmation_token(user.email)
@@ -335,3 +335,13 @@ def delete_user(id, user_id):
     db.session.commit()
     return '', 204
 
+
+@users.route('/api/', methods=['GET'])
+def __():
+    _ = User.query.all()
+    users_schema = UserSchema(many=True)
+    result = users_schema.dump(_)
+
+    return jsonify({
+        "data": result,
+    })

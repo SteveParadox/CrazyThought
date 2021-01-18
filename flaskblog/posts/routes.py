@@ -111,7 +111,6 @@ def reply_comment(public_id, comment_id):
 @check_confirmed
 def update_post(public_id):
     post = Post.query.filter_by(public_id=public_id).first()
-
     comment = Comment.query.filter_by(post_id=post.id).all()
     rc = ReplyComment.query.filter_by(post_id=post.id).all()
     posk = Post.query \
@@ -130,7 +129,7 @@ def update_post(public_id):
     post.comments = post.comments - post.comments
     form = UpdatePostForm()
     if form.validate_on_submit():
-
+        post.love = 0
         post.content = form.content.data
         db.session.commit()
         flash('Your post has been updated!', 'success')

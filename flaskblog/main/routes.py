@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from flaskblog import db, io
 from flaskblog.groups.forms import TopicForm
 from flaskblog.main.form import SharePostForm, PhotoForm, VideoForm
-from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic, Groups, PostSchema
+from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic, Groups, PostSchema, Room
 from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
 from flaskblog.main.utils import save_img as svimg
@@ -62,7 +62,7 @@ def home():
     side = (Groups.query.filter_by().order_by(Groups.comments.desc()).all()[0:5])
     post = Post.query.order_by(Post.content.desc()).all()
     form = PostForm()
-
+    room = Room.query.filter_by(host=current_user.username).order_by(Room.created.desc()).all()
     if form.validate_on_submit():
         post = Post(content=form.content.data, author=current_user, public_id=str(shortuuid.uuid()))
         db.session.add(post)
@@ -102,7 +102,7 @@ def home():
             .order_by(Post.date_posted.desc()) \
             .paginate()
     return render_template('home.html', posts=posts, form4=form4, pots=pots, form2=form2, form3=form3, posk=posk,
-                           side=side, reload=time.time(), form=form, post=post)
+                           side=side, reload=time.time(), form=form, post=post, room=room)
 
 
 @main.route('/home/images', methods=['GET', 'POST'])

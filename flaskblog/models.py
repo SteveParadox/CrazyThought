@@ -15,7 +15,7 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     __searchable__ = ['username']
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20),  nullable=False)
+    username = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
@@ -30,14 +30,12 @@ class User(db.Model, UserMixin):
     media_comments = db.relationship('Media_Comments', backref='reple', lazy=True)
     media_comment = db.relationship('Media_Comment', backref='repli', lazy=True)
     topics = db.relationship('Topic', backref='creator', lazy=True)
-    groups= db.relationship('Groups', backref='group', lazy=True)
+    groups = db.relationship('Groups', backref='group', lazy=True)
     group_comment = db.relationship('Group_comment', backref='disc', lazy=True)
     reply_comment = db.relationship('ReplyComment', backref='comment', lazy=True)
     group_reply_comment = db.relationship('GroupReplyComment', backref='g_reply', lazy=True)
     media_reply_comment = db.relationship('MediaReplyComment', backref='vid_reply', lazy=True)
     media_reply_comments = db.relationship('MediaReplyComments', backref='img_reply', lazy=True)
-
-
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -55,14 +53,17 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}'), '{self.confirmed}')"
 
+
 class Topic(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String() , nullable=False)
+    name = db.Column(db.String(), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     groups = db.relationship('Groups', backref='title', lazy=True)
     pub_id = db.Column(db.String(50), unique=True)
+    popular = db.Column(db.Integer, default=0)
+
 
 class Groups(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -72,9 +73,10 @@ class Groups(db.Model):
     group_love = db.Column(db.Integer, default=0)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'), nullable=False)
-    #user= db.relationship(User, secondary='link')
+    # user= db.relationship(User, secondary='link')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comment = db.relationship('Group_comment', backref='discuss', lazy=True)
+
 
 """class Link(db.Model):
     user_id = db.Column(db.Integer,
@@ -99,6 +101,7 @@ class Group_comment(db.Model):
     groups_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
     replys = db.Column(db.Integer, default=0)
 
+
 class GroupReplyComment(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -115,7 +118,7 @@ class Post(db.Model):
     __searchable__ = ['content']
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    public_id= db.Column(db.String(50), unique=True)
+    public_id = db.Column(db.String(50), unique=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Integer, default=0)
@@ -125,13 +128,13 @@ class Post(db.Model):
     comment = db.relationship('Comment', backref='parser', lazy=True)
     rc = db.relationship('ReplyComment', backref='repc', lazy=True)
     admin = db.relationship('Admin', backref='admini', lazy=True)
+    viewed = db.Column(db.Integer, default=0)
+    extra = db.Column(db.String())
 
     # translate = db.relationship('Translate', backref='translation', lazy=True)
 
     def __repr__(self):
         return f"Post( '{self.date_posted}'), '{self.content}' "
-
-
 
 
 class Images(db.Model):
@@ -160,7 +163,6 @@ class Videos(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     media_comment = db.relationship('Media_Comment', backref='vid', lazy=True)
 
-
     def __repr__(self):
         return f"Videos( '{self.img_filename}'), '{self.img_data}' "
 
@@ -179,8 +181,7 @@ class Comment(db.Model):
     status = db.Column(db.Boolean, default=False)
     replys = db.Column(db.Integer, default=0)
     admin = db.relationship('Admin', backref='administration', lazy=True)
-    reply_comment= db.relationship('ReplyComment', backref='comments', lazy=True)
-
+    reply_comment = db.relationship('ReplyComment', backref='comments', lazy=True)
 
     def __repr__(self):
         return '<Comment %r>' % self.name
@@ -197,7 +198,6 @@ class ReplyComment(db.Model):
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-
 
     def __repr__(self):
         return '<ReplyComment %r>' % self.name
@@ -232,9 +232,9 @@ class MediaReplyComment(db.Model):
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
 
-
     def __repr__(self):
         return '<MediaReplyComment %r>' % self.name
+
 
 class Media_Comments(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -264,9 +264,9 @@ class MediaReplyComments(db.Model):
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
 
-
     def __repr__(self):
         return '<MediaReplyComments %r>' % self.name
+
 
 class Business(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -315,6 +315,28 @@ class Client(db.Model):
     total_users = db.Column(db.Integer)
 
 
+class Room(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(), nullable=False)
+    unique_id = db.Column(db.String(), unique=True, nullable=False)
+    host = db.Column(db.String(), nullable=False)
+    admin = db.Column(db.Boolean, default=False)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    msg = db.relationship('Messages', backref='msgs', lazy=True)
+
+
+class Messages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String())
+    message = db.Column(db.String())
+    date = db.Column(db.String(20))
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    # created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
+    def __repr__(self):
+        return f"Messages('{self.username}', '{self.message}')"
+
+
 class UserSchema(ModelSchema):
     class Meta:
         fields = ('id', 'username', 'email', 'image_file', 'password', 'posts', 'comments')
@@ -334,6 +356,15 @@ post_schema = PostSchema()
 posts_schema = PostSchema(many=True)
 
 
+class MessagesSchema(ModelSchema):
+    class Meta:
+        model = Messages
+
+
+messages_schema = MessagesSchema()
+messages_schemas = MessagesSchema(many=True)
+
+
 class CommentSchema(ModelSchema):
     class Meta:
         model = Comment
@@ -341,6 +372,7 @@ class CommentSchema(ModelSchema):
 
 comment_schema = CommentSchema()
 comments_schema = CommentSchema(many=True)
+
 
 class ReplyCommentSchema(ModelSchema):
     class Meta:
@@ -360,8 +392,6 @@ admin_schema = AdminSchema()
 admins_schema = AdminSchema(many=True)
 
 
-
-
 class TopicSchema(ModelSchema):
     class Meta:
         model = Topic
@@ -370,7 +400,7 @@ class TopicSchema(ModelSchema):
 topic_schema = TopicSchema()
 topics_schema = TopicSchema(many=True)
 
-
+'''
 class Channel(db.Model):
     __tablename__ = 'channels'
     id = db.Column(db.Integer, primary_key=True)
@@ -387,3 +417,4 @@ class Message(db.Model):
     from_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'))
+'''
