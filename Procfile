@@ -1,1 +1,1 @@
-web: gunicorn --workers=2 'flaskblog:create_app()'
+web: gunicorn --worker-class eventlet -w 1 'flaskblog:create_app()'
