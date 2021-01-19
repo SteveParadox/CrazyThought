@@ -1,17 +1,19 @@
 import time
 from operator import itemgetter
-from flask import Blueprint, url_for, redirect, jsonify
-from flask import render_template, request
-from flask_login import login_required, current_user
+
+import shortuuid
+from flask import (Blueprint, jsonify, redirect, render_template, request,
+                   url_for)
+from flask_login import current_user, login_required
 from flaskblog import db, io
 from flaskblog.groups.forms import TopicForm
-from flaskblog.main.form import SharePostForm, PhotoForm, VideoForm
-from flaskblog.models import Post, User, UserSchema, Business, Images, Videos, Topic, Groups, PostSchema, Room
+from flaskblog.main.form import PhotoForm, SharePostForm, VideoForm
+from flaskblog.main.utils import save_img as svimg
+from flaskblog.models import (Business, Groups, Images, Post, PostSchema, Room,
+                              Topic, User, UserSchema, Videos)
 from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
-from flaskblog.main.utils import save_img as svimg
 from flaskblog.users.decorator import check_confirmed
-import shortuuid
 
 main = Blueprint('main', __name__)
 
@@ -62,7 +64,9 @@ def home():
     side = (Groups.query.filter_by().order_by(Groups.comments.desc()).all()[0:5])
     post = Post.query.order_by(Post.content.desc()).all()
     form = PostForm()
-    room = Room.query.filter_by(host=current_user.username).order_by(Room.created.desc()).all()
+    room= ''
+    if current_user.is_authenticated:
+        room = Room.query.filter_by(host=current_user.username).order_by(Room.created.desc()).all()
     if form.validate_on_submit():
         post = Post(content=form.content.data, author=current_user, public_id=str(shortuuid.uuid()))
         db.session.add(post)
