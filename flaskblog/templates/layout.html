@@ -207,14 +207,14 @@ window.onclick = function(event) {
 
 
 {% if current_user.is_authenticated %}
-<div class='left_style' style="    ">
+<div class='left_style' >
  <div class="wrapper">
 
 
   <div class="profile-card js-profile-card">
 
 
-    <div class="profile-card__img" style="width:70px; height:70px;">
+    <div class="profile-card__img" style="width:70px; height:70px; right: 7%;">
 
 
         <img alt="profile card" src="/static/profile_pics/{{ current_user.image_file }}">
@@ -223,14 +223,14 @@ window.onclick = function(event) {
       <article class="media content-section left_style_font" style="margin-top: 0rem;     ">
         @{{current_user.username}}
     </article>
-    <article class="media content-section cd"  style="">
+    <article class="media content-section cd"  >
         {{current_user.email}}
     </article>
        <a class="nav-item nav-link" href="{{ url_for('users.posts') }}">
 
            <small>
                My Posts
-               <span class="xcv" style=""> {{ pots.total }}</span>
+               <span class="xcv" > {{ pots.total }}</span>
            </small>
        </a>
         <a class="nav-item nav-link " href="/mygroups">
@@ -285,11 +285,7 @@ window.onclick = function(event) {
 <i style="font-size:20px; padding: 3px 40px; color: black;" class="fa fa-th-list"></i>
 <i style="font-size:20px; padding: 3px 50px; color: black;" class="fa fa-envelope-o"></i>
 <i style="font-size:20px; padding: 3px 40px; color: black;" class="fa fa-bookmark-o"></i>
-      {% for post in room %}
-      <br>
-
-      <p style=" padding: 0px 40px; margin-bottom: 0rem;"> {{post.nickname}} - {{post.created}}</p>
-      {% endfor %}
+    
   </div>
                </div>
  <small class="footer">
