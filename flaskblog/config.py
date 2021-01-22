@@ -26,7 +26,7 @@ class Config:
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'crazythoughtverify@gmail.com'
-    MAIL_PASSWORD = 'saintvirus11'
+    MAIL_PASSWORD = 'DRstrange11..'
     MAIL_DEFAULT_SENDER = 'from@example.com'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     BABEL_DEFAULT_LOCALE = 'en'
