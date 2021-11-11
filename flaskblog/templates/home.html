@@ -106,7 +106,12 @@ if it's not present, don't show loader */
     <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}"
        title="Comments" aria-label="Comments">
         {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
-   
+
+    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}"
+       title="Loves" aria-label="loves">
+        {{ post.comments }} <i style="font-size:23px;" class="fa fa-love-o"></i>   </a>
+
+
 
           </div>
 
