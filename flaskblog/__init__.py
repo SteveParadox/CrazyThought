@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
-from flask_socketio import SocketIO
+#from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 from flaskblog.config import Config
 
@@ -22,7 +22,7 @@ login_manager.session_protection = "strong"
 REMEMBER_COOKIE_NAME= 'remember_token'
 REMEMBER_COOKIE_DURATION=datetime.timedelta(days=64, seconds=29156, microseconds=10)
 REMEMBER_COOKIE_REFRESH_EACH_REQUEST=False
-io = SocketIO()
+#io = SocketIO()
 mail = Mail()
 jwt = JWTManager()
 
@@ -33,7 +33,7 @@ def create_app(config_class=Config):
     ma.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
-    io.init_app(app)
+    #io.init_app(app)
     jwt.init_app(app)
 
     from flaskblog.users.routes import users
