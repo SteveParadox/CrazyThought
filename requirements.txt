@@ -20,7 +20,7 @@ Pillow==6.2.1
 psycopg2==2.8.4
 python-debian==0.1.32
 python-engineio==3.10.0
-python-socketio==4.4.0
+python-socketio==5.0.2
 requests==2.22.0
 requests-unixsocket==0.1.5
 SQLAlchemy==1.3.11
