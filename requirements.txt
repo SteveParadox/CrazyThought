@@ -49,5 +49,5 @@ python-dotenv==0.8.2
 six==1.11.0
 textblob==0.15.1
 shortuuid==0.5.0
-eventlet==0.33.1
+eventlet==0.30.2
 cloudinary==1.23.0
