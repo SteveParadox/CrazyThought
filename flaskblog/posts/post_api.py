@@ -179,3 +179,79 @@ def img_post(plic_id):
         }
     })
 
+
+from flask import jsonify, request
+
+from app import db
+from app.models import Images, MediaComment, MediaReplyComment, User, UserSchema, Videos
+from app.posts import posts
+
+
+@posts.route("/post/images/<string:plic_id>/comment/<int:media_comment_id>", methods=['GET', 'POST'])
+@login_required
+@check_confirmed
+def reply_img(plic_id, media_comment_id):
+    page = request.args.get('page', 1, type=int)
+    images = Images.query.filter_by(plic_id=plic_id).first()
+    comment = MediaComment.query.filter_by(id=media_comment_id).first()
+    rc = MediaReplyComment.query.filter_by(media_comment_id=comment.id).order_by(MediaReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    form = ReplyForm()
+    if form.validate_on_submit():
+        rc = MediaReplyComment(message=form.message.data, img_reply=current_user, media_comment_id=comment.id)
+        db.session.add(rc)
+        comment.replys = comment.replys + 1
+        db.session.commit()
+        return jsonify({'message': 'Reply created successfully.'}), 201
+    return jsonify({'comment': comment.to_dict(), 'images': images.to_dict(), 'rc': rc.to_dict()})
+
+
+@posts.route("/post/images/<int:images_id>/delete", methods=['GET', 'POST'])
+@login_required
+@check_confirmed
+def delete_images(images_id):
+    images = Images.query.get_or_404(images_id)
+    comment = MediaComment.query.filter_by(images_id=images.id).all()
+    if images.imgs != current_user:
+        abort(403)
+
+    for o in comment:
+        db.session.delete(o)
+    db.session.delete(images)
+
+    db.session.commit()
+    return jsonify({'message': 'Image deleted successfully.'}), 200
+
+
+@posts.route("/post/images/<string:plic_id>/comment/<int:comment_id>/delete", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def delete_images_comment(plic_id, comment_id):
+    images = Images.query.filter_by(plic_id=plic_id).first()
+    comment = MediaComment.query.get_or_404(comment_id)
+    if comment.reple != current_user:
+        abort(403)
+    db.session.delete(comment)
+    images.comments = images.comments - 1
+    db.session.commit()
+    return jsonify({'message': 'Comment deleted successfully.'}), 200
+
+
+@posts.route("/post/videos/<string:publ_id>", methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def vid_post(publ_id):
+    page = request.args.get('page', 1, type=int)
+    videos = Videos.query.filter_by(publ_id=publ_id).first()
+    form = CommentsForm()
+    comments = MediaComment.query.filter_by(videos_id=videos.id).order_by(MediaComment.pub_date.desc()).paginate(page=page, per_page=20)
+    if form.validate_on_submit():
+        message = request.form.get('message')
+        comment = MediaComment(message=message, videos_id=videos.id, repli=current_user)
+        db.session.add(comment)
+        videos.comments = videos.comments + 1
+        db.session.commit()
+        return jsonify({'message': 'Comment created successfully.'}), 201
+    return jsonify({'videos': videos.to_dict(), 'comments': comments.to_dict()})
+
+
+
