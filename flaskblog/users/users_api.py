@@ -261,3 +261,74 @@ def reset_request():
     send_reset_email(user)
     return jsonify({'message': 'An email has been sent with instructions to reset your password.'}), 200
   
+
+  @users.route('/api/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    users_schema = UserSchema(many=True)
+    result = users_schema.dump(users)
+
+    return jsonify({
+        "data": result,
+    })
+
+@users.route('/api/users/<int:id>', methods=['GET'])
+def get_user(id):
+    user = User.query.get_or_404(id)
+    user_schema = UserSchema()
+    result = user_schema.dump(user)
+
+    return jsonify({
+        "data": result,
+    })
+
+@users.route('/api/posts/<int:id>', methods=['GET'])
+def get_post(id):
+    post = Post.query.get_or_404(id)
+    return jsonify({
+        "id": post.id,
+        "content": post.content,
+        "date_posted": post.date_posted,
+        "author_id": post.author.id,
+        "author_username": post.author.username
+    })
+
+@users.route("/api/reset_password/<token>", methods=['POST'])
+def reset_token(token):
+    user = User.verify_reset_token(token)
+    if user is None:
+        return jsonify({"message": "That is an invalid or expired token"}), 400
+    data = request.get_json()
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    user.password = hashed_password
+    db.session.commit()
+    return jsonify({"message": "Your password has been updated! You are now able to log in"}), 200
+
+@users.route('/api/report_problem', methods=['POST'])
+@login_required
+def report_problem():
+    data = request.get_json()
+    report = Admin(report_a_problem=data['report_problem'], adm=current_user)
+    db.session.add(report)
+    db.session.commit()
+    return jsonify({"message": "Problem reported successfully"}), 200
+
+@users.route('/api/delete_user/<int:id>/<int:user_id>', methods=['DELETE'])
+def delete_user(id, user_id):
+    user = User.query.get_or_404(id)
+    post = Post.query.get_or_404(user_id)
+
+    db.session.delete(user)
+    db.session.delete(post)
+    db.session.commit()
+    return jsonify({}), 204
+
+@users.route('/api/resend_confirmation', methods=['GET'])
+@login_required
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    confirm_url = url_for('users.confirm_email', token=token, _external=True)
+    html = render_template('confirm_url.html', confirm_url=confirm_url)
+    subject = "Please confirm your email"
+    send_email(current_user.email, subject, html)
+    return jsonify({"message": "A new confirmation email has been sent."}), 200
