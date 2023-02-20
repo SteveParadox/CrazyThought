@@ -81,3 +81,12 @@ def share_post(post_id):
     db.session.add(poss)
     db.session.commit()
     return jsonify({'message': 'Post shared successfully'}), 201
+
+@main.route('/searche', methods=['POST'])
+def search():
+    data = request.form.get('text')
+    results = User.query.filter_by(username=str(data[0]).upper() + data[1:]).all()
+    user_schema = UserSchema(many=True)
+    res = user_schema.dump(results)
+    return jsonify(res)
+
