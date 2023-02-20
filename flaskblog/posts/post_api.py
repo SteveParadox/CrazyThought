@@ -109,3 +109,73 @@ def delete_post(post_id):
     db.session.commit()
     return jsonify({'message': 'Post deleted successfully'}), 200
 
+@posts.route("/post/<string:public_id>/comment/<int:comment_id>/delete", methods=['POST'])
+@login_required
+def delete_comment(public_id, comment_id):
+    post = Post.query.filter_by(public_id=public_id).first()
+    comment = Comment.query.get_or_404(comment_id)
+    cx = ReplyComment.query.filter_by(comment_id=comment_id).all()
+    for i in cx:
+        db.session.delete(i)
+        db.session.commit()
+    if comment.reply != current_user:
+        abort(403)
+    db.session.delete(comment)
+    post.comments = post.comments - 1
+    db.session.commit()
+    return jsonify({'message': 'Comment deleted successfully'})
+
+@posts.route("/following", methods=['GET', 'POST'])
+@login_required
+def following():
+    follow = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
+    return jsonify(UserSchema(many=True).dump(follow))
+
+@posts.route("/following/images", methods=['GET', 'POST'])
+@login_required
+def image_following():
+    posts = Media_Comments.query.filter_by(reple=current_user).order_by(Media_Comments.pub_date.desc()).all()
+    return jsonify({'posts': [post.to_dict() for post in posts]})
+
+@posts.route("/following/videos", methods=['GET', 'POST'])
+@login_required
+def video_following():
+    posts = Media_Comment.query.filter_by(repli=current_user).order_by(Media_Comment.pub_date.desc()).all()
+    return jsonify({'posts': [post.to_dict() for post in posts]})
+
+@posts.route('/report/<int:post_id>')
+def report(post_id):
+    post = Post.query.get_or_404(post_id)
+    return jsonify({'post': post.to_dict()})
+
+@posts.route("/post/images/<string:plic_id>", methods=['POST', 'GET'])
+@login_required
+def img_post(plic_id):
+    page = request.args.get('page', 1, type=int)
+    images = Images.query.filter_by(plic_id=plic_id).first()
+    form = CommentsForm()
+    comments = Media_Comments.query.filter_by(images_id=images.id).order_by(Media_Comments.pub_date.desc()).paginate(
+        page=page,
+        per_page=20)
+    if form.validate_on_submit():
+        message = request.form.get('message')
+        comment = Media_Comments(message=message, images_id=images.id, reple=current_user)
+        db.session.add(comment)
+        images.comments = images.comments + 1
+        db.session.commit()
+        return jsonify({'message': 'Comment added successfully'})
+    return jsonify({
+        'images': images.to_dict(),
+        'form': form.to_dict(),
+        'comments': {
+            'items': [comment.to_dict() for comment in comments.items],
+            'has_prev': comments.has_prev,
+            'has_next': comments.has_next,
+            'prev_num': comments.prev_num,
+            'next_num': comments.next_num,
+            'page': comments.page,
+            'per_page': comments.per_page,
+            'total': comments.total
+        }
+    })
+
