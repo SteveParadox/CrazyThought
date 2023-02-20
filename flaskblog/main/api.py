@@ -90,3 +90,14 @@ def search():
     res = user_schema.dump(results)
     return jsonify(res)
 
+from flask import jsonify
+
+@main.route('/like/<int:id>', methods=['POST'])
+def like(id):
+    post = Post.query.filter_by(id=id).first()
+    if post:
+        post.love += 1
+        db.session.commit()
+        return jsonify({'message': 'Post liked!', 'post_id': post.id, 'love_count': post.love})
+    else:
+        return jsonify({'message': 'Post not found.'}), 404
