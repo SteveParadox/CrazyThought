@@ -255,3 +255,63 @@ def vid_post(publ_id):
 
 
 
+@posts.route("/post/videos/<int:videos_id>/delete", methods=['GET', 'POST'])
+@login_required
+@check_confirmed
+def delete_videos(videos_id):
+    videos = Videos.query.get_or_404(videos_id)
+    comment = Media_Comment.query.filter_by(videos_id=videos.id).all()
+    if videos.vids != current_user:
+        abort(403)
+
+    for o in comment:
+        db.session.delete(o)
+    db.session.delete(videos)
+
+    db.session.commit()
+    response = {
+        'message': 'Your post has been deleted!',
+        'status': 'success'
+    }
+    return jsonify(response)
+
+
+@posts.route("/post/videos/<string:publ_id>/comment/<int:comment_id>/delete", methods=['GET', 'POST'])
+@login_required
+@check_confirmed
+def delete_videos_comment(publ_id, comment_id):
+    videos = Videos.query.filter_by(publ_id=publ_id).first()
+    comment = Media_Comment.query.get_or_404(comment_id)
+    if comment.repli != current_user:
+        abort(403)
+    db.session.delete(comment)
+    videos.comments = videos.comments - 1
+    db.session.commit()
+    response = {
+        'message': 'Your comment has been deleted!',
+        'status': 'success'
+    }
+    return jsonify(response)
+
+
+@posts.route("/post/video/<string:publ_id>/comment/<int:media_comment_id>", methods=['GET','POST'])
+@login_required
+@check_confirmed
+def reply_video(publ_id, media_comment_id):
+    page = request.args.get('page', 1, type=int)
+    videos = Videos.query.filter_by(publ_id=publ_id).first()
+    comment = Media_Comment.query.filter_by(id=media_comment_id).first()
+    rc= MediaReplyComment.query.filter_by(media_comment_id=comment.id).order_by(MediaReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    form = ReplyForm()
+    if form.validate_on_submit():
+        rc = MediaReplyComment(message=form.message.data, vid_reply=current_user, media_comment_id=comment.id)
+        db.session.add(rc)
+        comment.replys=comment.replys + 1
+        db.session.commit()
+        response = {
+            'message': 'Your reply has been added!',
+            'status': 'success'
+        }
+        return jsonify(response)
+    return jsonify(comment.serialize())
+
