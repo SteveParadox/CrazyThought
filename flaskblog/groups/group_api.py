@@ -109,3 +109,68 @@ def discussion(pub_id, topics_name, groups_id):
 
     return jsonify({"groups_id": groups.id, "post": [p.serialize for p in post], "groups": groups.serialize, "pub_id": topics.pub_id,
                            "topics_name": topics.name, "topics": topics.serialize, "form": form.serialize, "gc": [c.serialize for c in gc.items]})
+
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>",
+              methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def reply_discussion(pub_id, topics_name, groups_id, gc_id):
+    page = request.args.get('page', 1, type=int)
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
+    groups = Groups.query.get_or_404(groups_id)
+    comment = Group_comment.query.filter_by(id=gc_id).first()
+    rc = GroupReplyComment.query.filter_by(group_comment=comment.id).order_by(
+        GroupReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    form = CommentForm()
+    if form.validate_on_submit():
+        rc = GroupReplyComment(message=form.message.data, g_reply=current_user, group_comment=comment.id)
+        db.session.add(rc)
+        comment.replys = comment.replys + 1
+        db.session.commit()
+        return jsonify({'success': True}), 200
+    return jsonify({'success': False}), 400
+
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/delete",
+              methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def delete_group(pub_id, topics_name, groups_id):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
+    groups = Groups.query.get_or_404(groups_id)
+    gc = Group_comment.query.filter_by(groups_id=groups.id).all()
+    for x in gc:
+        comment = Group_comment.query.filter_by(id=x.id).all()
+        for z in comment:
+            rc = GroupReplyComment.query.filter_by(group_comment=z.id).all()
+            for i in rc:
+                db.session.delete(i)
+                db.session.commit()
+    if groups.group != current_user:
+        abort(403)
+
+    for o in gc:
+        db.session.delete(o)
+    db.session.delete(groups)
+    db.session.commit()
+    return jsonify({'success': True}), 200
+
+@groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>/delete",
+              methods=['POST', 'GET'])
+@login_required
+@check_confirmed
+def delete_discussion(pub_id, topics_name, groups_id, gc_id):
+    topics = Topic.query.filter_by(pub_id=pub_id).first()
+    groups = Groups.query.get_or_404(groups_id)
+    gc = Group_comment.query.get_or_404(gc_id)
+    comment = Group_comment.query.filter_by(id=gc.id).all()
+    for z in comment:
+        rc = GroupReplyComment.query.filter_by(group_comment=z.id).all()
+        for i in rc:
+            db.session.delete(i)
+            db.session.commit()
+    if gc.disc != current_user:
+        abort(403)
+    db.session.delete(gc)
+    groups.comments = groups.comments - 1
+    db.session.commit()
+    return jsonify({'success': True}), 200
