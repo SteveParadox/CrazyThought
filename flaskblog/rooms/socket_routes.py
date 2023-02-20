@@ -49,7 +49,9 @@ def _():
 @sock.route('/group/<string:room_id>')
 def room(room_id):
     active_ = Room.query.filter_by(unique_id=room_id).first()
-    message_history = Messages.query.filter_by(msgs=active_).all()
+    message_history = db.session.query(Messages.username, Messages.message, Messages.date)\
+                    .join(Room, Room.id == Messages.room_id)\
+                    .filter(Room.unique_id == room_id).all()
     return render_template('rooms.html', room_id=room_id, message_history=message_history, active_=active_)
 
 
@@ -61,8 +63,10 @@ def on_connect():
 
 @io.on('online')
 def online(data):
-    print(current_user.username)
-    io.emit('status_change', {'username': current_user.username, 'status': 'online'}, broadcast=True)
+    username = data.get('username')
+    if username:
+        io.emit('status_change', {'username': username, 'status': 'online'}, broadcast=True)
+
 
 
 # joining room
@@ -70,17 +74,11 @@ def online(data):
 def on_new_user(data):
     room = data['room_id']
     print(room)
-    active_ = Room.query.filter_by(unique_id=room).first()
+    active_room = Room.query.filter_by(unique_id=room).first()
 
-    '''for i in message_history:
-        io.emit('history',
-                {
-                    'username': i.username,
-                    'message': i.message,
-                    'time': i.date
-                }
-                , room=active_.unique_id)'''
-    join_room(active_.unique_id)
+    join_room(active_room.unique_id)
+    io.emit("New_user_joined", {"message": f"{data['name']} has joined the room"}, room=active_room.unique_id, broadcast=True)
+
 
 
 @io.on('joined')
@@ -92,29 +90,28 @@ def joined_room(data):
             room=active.unique_id, broadcast=True)
 
 
+
+
 # send message to joined room
 @io.on("group_message")
 def on_new_message(message):
-    room = message['room_id']
+    room_id = message['room_id']
     print(str(message))
-    active = Room.query.filter_by(unique_id=room).first()
-    mssg = Messages(msgs=active)
-    mssg.username = message["name"]
-    mssg.date = datetime.datetime.now().strftime("%a %b %d %H:%M:%S ")
-    mssg.message = message['message']
-    db.session.add(mssg)
-    db.session.commit()
+    active_room = Room.query.filter_by(unique_id=room_id).first()
+    if active_room:
+        new_message = Messages(room_id=active_room.id, username=message["name"], date=datetime.now(), message=message['message'])
+        db.session.add(new_message)
+        db.session.commit()
 
-    if active:
-        io.emit('New_group_Message', {'message': f'New message from {message["name"]}'}, room=active.unique_id,
-                broadcast=True)
-        io.emit("New", {
+        emit('New', {
             "sender": message['name'],
-            "time": datetime.datetime.now().strftime("%a %b %d %H:%M:%S "),
+            "time": datetime.now().strftime("%a %b %d %H:%M:%S "),
             "data": message['message'],
-        }, room=active.unique_id, broadcast=True)
+        }, room=active_room.unique_id, broadcast=True)
     else:
-        io.emit('New_group_Message', {'message': f'Room not found'})
+        emit('New_group_Message', {'message': f'Room not found'})
+
+
 
 
 # leave room
@@ -126,7 +123,8 @@ def on_leave_room(data):
     leave_room(active.unique_id)
     if name == active.host:
         close_room(active.unique_id)
-        db.session.delete(active.unique_id)
+        db.session.delete(active)
+        db.session.commit()
         return redirect(url_for("api.home"))
     io.emit("Left_user", {"message": f"{name} has left the room"}, room=active.unique_id, broadcast=True)
 
