@@ -209,5 +209,55 @@ def user_post(username):
     res['ptss'] = ptss.to_dict() if ptss else None
     return jsonify(res)
 
+@users.route('/users/images/<string:username>')
+@login_required
+@check_confirmed
+def user_imgs(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Images.query.filter_by(imgs=user) \
+        .order_by(Images.date_posted.desc()) \
+        .paginate(page=page, per_page=20)
+    pots = Images.query.filter_by(imgs=current_user) \
+        .order_by(Images.date_posted.desc()) \
+        .paginate()
+    posk = Images.query \
+        .order_by(Images.date_posted.desc()) \
+        .paginate()
 
+    return jsonify({'posts': [post.to_dict() for post in posts.items],
+                    'pots': [pot.to_dict() for pot in pots.items],
+                    'user': user.to_dict(),
+                    'posk': [pos.to_dict() for pos in posk.items]})
+
+@users.route('/users/videos/<string:username>')
+@login_required
+@check_confirmed
+def user_vids(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Videos.query.filter_by(vids=user) \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate(page=page, per_page=20)
+    pots = Videos.query.filter_by(vids=current_user) \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate()
+    posk = Videos.query \
+        .order_by(Videos.date_posted.desc()) \
+        .paginate()
+
+    return jsonify({'posts': [post.to_dict() for post in posts.items],
+                    'pots': [pot.to_dict() for pot in pots.items],
+                    'user': user.to_dict(),
+                    'posk': [pos.to_dict() for pos in posk.items]})
+
+@users.route("/reset_password", methods=['POST'])
+def reset_request():
+    data = request.get_json()
+    email = data.get('email')
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    send_reset_email(user)
+    return jsonify({'message': 'An email has been sent with instructions to reset your password.'}), 200
   
