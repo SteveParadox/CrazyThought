@@ -1,24 +1,33 @@
 import os
-#import json
 
+CACHE_CONFIG = {
+    'CACHE_TYPE': 'redis',
+    'CACHE_REDIS_URL': 'redis://default:RIb4Sy6hNvnuRxSR8us3S99paPOCAU21@redis-12331.c309.us-east-2-1.ec2.cloud.redislabs.com:12331',
+    'CACHE_DEFAULT_TIMEOUT': 3000,  
+    'CACHE_REDIS_SOCKET_TIMEOUT': 30,
+}
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-TOP_LEVEL_DIR = os.path.abspath(os.curdir)
-WHOOSH_BASE = os.path.join(basedir, 'search.db')
-MAX_SEARCH_RESULTS = 50
+CELERY_CONFIG = {
+        "broker_url":CACHE_CONFIG['CACHE_REDIS_URL'],
+        "result_backend":CACHE_CONFIG['CACHE_REDIS_URL']
+    }
 
-'''with open('/etc/config.json') as config_file:
-    config = json.load(config_file)
-'''
+CSP = {
+    'default-src': ["'self'"],
+    'script-src': ["'self'"],
+    'style-src': ["'self'"],
+    'img-src': ["'self'", 'data:'],
+    # Add other CSP directives as needed
+}
+
 class Config:
     SECRET_KEY = '795849f0d2328258710ae9c71cb4b5ea'
-    ENV = 'prod'
+    ENV = 'dev'
 
     if ENV == 'dev':
-        SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     else:
-
-        SQLALCHEMY_DATABASE_URI = 'postgres://xtxivwdedrdqiq:dca0e349351bad9191732318455e178bd99eec6326c351c09a4d70b475833b32@ec2-174-129-32-240.compute-1.amazonaws.com:5432/dagkfphn1hgj9d'
+        SQLALCHEMY_DATABASE_URI = 'postgresql://crazythought:QZrbDltSwmk0FgOlPTFl@crazythoughtdb.cikwkjt4xyvu.us-east-1.rds.amazonaws.com:5432/crazythoughtdb'
 
     SECURITY_PASSWORD_SALT = 'my_precious_two'
     MAIL_SERVER = 'smtp.googlemail.com'
@@ -28,9 +37,14 @@ class Config:
     MAIL_USERNAME = 'crazythoughtverify@gmail.com'
     MAIL_PASSWORD = 'DRstrange11..'
     MAIL_DEFAULT_SENDER = 'from@example.com'
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    BABEL_DEFAULT_LOCALE = 'en'
-    WHOOSH_BASE = 'whoosh'
+    SQLALCHEMY_POOL_SIZE = 100
+    SQLALCHEMY_POOL_TIMEOUT = 3000
+    SQLALCHEMY_POOL_RECYCLE = 3600 
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+ 
+    #CACHE_TYPE = 'simple'
+
+
 
 
 

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from marshmallow_sqlalchemy import ModelSchema
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 from flaskblog import db, login_manager, app
 
@@ -15,11 +15,11 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     __searchable__ = ['username']
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(20), nullable=False, index=True)
+    email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed = db.Column(db.Boolean, nullable=False, default=True)
     posts = db.relationship('Post', backref='author', lazy=True)
     business = db.relationship('Business', backref='therapy', lazy=True)
     patient = db.relationship('Patient', backref='pati', lazy=True)
@@ -118,9 +118,9 @@ class Post(db.Model):
     __searchable__ = ['content']
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    content = db.Column(db.Text, nullable=False)
+    public_id = db.Column(db.String(50), unique=True, index=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+    content = db.Column(db.Text, nullable=False, index=True)
     comments = db.Column(db.Integer, default=0)
     love = db.Column(db.Integer, default=0)
     # tag = db.Column(db.Integer,  nullable=False)
@@ -141,7 +141,7 @@ class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     plic_id = db.Column(db.String(50), unique=True)
     img_love = db.Column(db.Integer, default=0)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
     photo_filename = db.Column(db.String())
     photo_data = db.Column(db.LargeBinary)
     comments = db.Column(db.Integer, default=0)
@@ -170,12 +170,12 @@ class Videos(db.Model):
 class Comment(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.Text, nullable=False)
-    reply_message = db.Column(db.Text)
+    message = db.Column(db.Text, nullable=False, index=True)
+    reply_message = db.Column(db.Text, index=True)
     upvote = db.Column(db.Integer, default=0)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    name = db.Column(db.String())
+    name = db.Column(db.String(), index=True)
     post = db.relationship('Post', backref=db.backref('post', lazy=True))
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
@@ -337,9 +337,8 @@ class Messages(db.Model):
         return f"Messages('{self.username}', '{self.message}')"
 
 
-class UserSchema(ModelSchema):
+class UserSchema(SQLAlchemyAutoSchema):
     class Meta:
-        fields = ('id', 'username', 'email', 'image_file', 'password', 'posts', 'comments')
         model = User
 
 
@@ -347,7 +346,7 @@ user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
 
-class PostSchema(ModelSchema):
+class PostSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Post
 
@@ -356,7 +355,7 @@ post_schema = PostSchema()
 posts_schema = PostSchema(many=True)
 
 
-class MessagesSchema(ModelSchema):
+class MessagesSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Messages
 
@@ -365,7 +364,7 @@ messages_schema = MessagesSchema()
 messages_schemas = MessagesSchema(many=True)
 
 
-class CommentSchema(ModelSchema):
+class CommentSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Comment
 
@@ -374,7 +373,7 @@ comment_schema = CommentSchema()
 comments_schema = CommentSchema(many=True)
 
 
-class ReplyCommentSchema(ModelSchema):
+class ReplyCommentSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = ReplyComment
 
@@ -383,7 +382,7 @@ reply_comment_schema = ReplyCommentSchema()
 reply_comments_schema = ReplyCommentSchema(many=True)
 
 
-class AdminSchema(ModelSchema):
+class AdminSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Admin
 
@@ -392,7 +391,7 @@ admin_schema = AdminSchema()
 admins_schema = AdminSchema(many=True)
 
 
-class TopicSchema(ModelSchema):
+class TopicSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Topic
 
