@@ -4,6 +4,11 @@ from wtforms import StringField, SubmitField, TextAreaField, FileField
 from wtforms.validators import DataRequired
 
 
+class TopicForm(FlaskForm):
+    name = TextAreaField(validators=[DataRequired()])
+    submit = SubmitField('Create')
+
+
 class Searchform(FlaskForm):
     livebox = StringField(DataRequired())
     submit = SubmitField('Search')

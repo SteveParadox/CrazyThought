@@ -1,36 +1,49 @@
 import random
 from flask import render_template, redirect, url_for, flash, request, abort, Blueprint
 from flask_login import current_user, login_required
-from flaskblog import db, jsonify
+from flaskblog import db, jsonify, cache
 from flaskblog.models import *
 from flaskblog.posts.forms import PostForm, UpdatePostForm, CommentForm, ReplyForm, CommentsForm
 from flaskblog.posts.utils import save_img
 from flaskblog.users.decorator import check_confirmed
+from sqlalchemy.orm import selectinload
 
 posts = Blueprint('posts', __name__)
 
+@posts.route("/redis", methods=['GET', 'POST'])
+def tri():
+    tring = trial()
+    print(tring)
+    return "redis cloud"
+
 
 @posts.route("/explore", methods=['GET', 'POST'])
+@cache.cached() 
 def explore():
-    side = (Post.query.order_by(Post.viewed.desc()).all()[0:100])
+    side = (Post.query.options(selectinload(Post.author))\
+        .order_by(Post.viewed.desc()).all()[0:100])
     return render_template('explore.html', side=side, title='Popular')
 
-
 @posts.route("/explore/images", methods=['GET', 'POST'])
+@cache.cached() 
 def trending():
-    side = (Images.query.order_by(Images.comments.desc()).all()[0:100])
+    side = (Images.query.options(selectinload(Images.imgs))\
+        .order_by(Images.comments.desc()).all()[0:100])
     x = random.shuffle(side)
     return render_template('trending.html', side=side, title='Popular')
 
-
 @posts.route("/explore/videos", methods=['GET', 'POST'])
+@cache.cached() 
 def trending_videos():
-    side = (Videos.query.order_by(Videos.comments.desc()).all()[0:100])
+    side = (Videos.query.options(selectinload(Videos.vids))\
+    .order_by(Videos.comments.desc()).all()[0:100])
     x = random.shuffle(side)
-    return render_template('trending_videos.html', side=side, title='Popular')
+    return render_template('trending_videos.html',
+     side=side, title='Popular')
 
 
 @posts.route("/tags", methods=['GET', 'POST'])
+@cache.cached()
 def tags():
     posts = Post.query.all()
     return render_template('tags.html', posts=posts)
@@ -58,12 +71,13 @@ def new_post():
 @check_confirmed
 def post(public_id):
     page = request.args.get('page', 1, type=int)
-    post = Post.query.filter_by(public_id=public_id).first()
+    post = Post.query.filter_by(public_id=public_id)\
+    .options(selectinload(Post.author), selectinload(Post.comment)).first()
     post.viewed = post.viewed + 1
     db.session.commit()
     posts = Post.query.order_by(Post.public_id.desc()).all()
-    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.pub_date.desc()).paginate(page=page,
-                                                                                                          per_page=20)
+    comments = Comment.query.filter_by(post_id=post.id)\
+    .order_by(Comment.pub_date.desc()).paginate(page=page, per_page=20)
     rc = ReplyComment.query.order_by(ReplyComment.pub_date.desc()).all()
     form = CommentForm()
     if form.validate_on_submit():
@@ -74,7 +88,8 @@ def post(public_id):
         db.session.commit()
         return redirect(url_for('posts.post', public_id=post.public_id))
 
-    return render_template('post.html', post=post, rc=rc, public_id=post.public_id, posts=posts, comments=comments,
+    return render_template('post.html', post=post, rc=rc,
+     public_id=post.public_id, posts=posts, comments=comments,
                            form=form, title='Posts')
 
 
@@ -86,7 +101,8 @@ def sear():
     return jsonify(res)
 
 
-@posts.route("/post/<string:public_id>/comment/<int:comment_id>", methods=['GET','POST'])
+@posts.route("/post/<string:public_id>/comment/<int:comment_id>",
+ methods=['GET','POST'])
 @login_required
 @check_confirmed
 def reply_comment(public_id, comment_id):
@@ -94,15 +110,19 @@ def reply_comment(public_id, comment_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.filter_by(public_id=public_id).first()
     comment = Comment.query.filter_by(id=comment_id).first()
-    rc= ReplyComment.query.filter_by(comment_id=comment.id).order_by(ReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    rc= ReplyComment.query.filter_by(comment_id=comment.id)\
+    .order_by(ReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
     form = ReplyForm()
     if form.validate_on_submit():
-        rc = ReplyComment(message=form.message.data, comment=current_user, post_id=post.id, comment_id=comment.id)
+        rc = ReplyComment(message=form.message.data,
+         comment=current_user, post_id=post.id, comment_id=comment.id)
         db.session.add(rc)
         comment.replys=comment.replys + 1
         db.session.commit()
-        return redirect(url_for('posts.reply_comment', public_id=post.public_id, comment_id=comment.id))
-    return render_template('reply.html', comment=comment, post=post, form=form, rc=rc)
+        return redirect(url_for('posts.reply_comment',
+         public_id=post.public_id, comment_id=comment.id))
+    return render_template('reply.html', comment=comment,
+     post=post, form=form, rc=rc)
 
 
 
@@ -162,7 +182,8 @@ def delete_post(post_id):
 
 
 
-@posts.route("/post/<string:public_id>/comment/<int:comment_id>/delete", methods=['POST'])
+@posts.route("/post/<string:public_id>/comment/<int:comment_id>/delete",
+ methods=['POST'])
 @login_required
 @check_confirmed
 def delete_comment(public_id, comment_id):
@@ -184,27 +205,36 @@ def delete_comment(public_id, comment_id):
 @posts.route("/following", methods=['GET', 'POST'])
 @login_required
 @check_confirmed
+@cache.cached() 
 def following():
-    follow = Comment.query.filter_by(reply=current_user).order_by(Comment.pub_date.desc()).all()
+    follow = Comment.query.filter_by(reply=current_user)\
+    .options(selectinload(Comment.post)).order_by(Comment.pub_date.desc()).all()
     return render_template('following.html',follow=follow, title='My Activities')
 
 
 @posts.route("/following/images", methods=['GET', 'POST'])
 @login_required
 @check_confirmed
+@cache.cached() 
 def image_following():
-    posts = Media_Comments.query.filter_by(reple=current_user).order_by(Media_Comments.pub_date.desc()).all()
+    posts = Media_Comments.query.filter_by(reple=current_user)\
+    .order_by(Media_Comments.pub_date.desc()).all()
 
-    return render_template('image_following.html', posts=posts, title='My Activities')
+    return render_template('image_following.html',
+     posts=posts, title='My Activities')
 
 
 @posts.route("/following/videos", methods=['GET', 'POST'])
 @login_required
 @check_confirmed
-def video_following():
-    posts = Media_Comment.query.filter_by(repli=current_user).order_by(Media_Comment.pub_date.desc()).all()
+@cache.cached() 
 
-    return render_template('video_following.html', posts=posts, title='My Activities')
+def video_following():
+    posts = Media_Comment.query.filter_by(repli=current_user)\
+    .order_by(Media_Comment.pub_date.desc()).all()
+
+    return render_template('video_following.html', 
+    posts=posts, title='My Activities')
 
 
 @posts.route('/report/<int:post_id>')
@@ -220,19 +250,23 @@ def img_post(plic_id):
     page = request.args.get('page', 1, type=int)
     images = Images.query.filter_by(plic_id=plic_id).first()
     form = CommentsForm()
-    comments = Media_Comments.query.filter_by(images_id=images.id).order_by(Media_Comments.pub_date.desc()).paginate(
+    comments = Media_Comments.query.filter_by(images_id=images.id)\
+    .order_by(Media_Comments.pub_date.desc()).paginate(
         page=page,
         per_page=20)
     if form.validate_on_submit():
         message = request.form.get('message')
-        comment = Media_Comments(message=message, images_id=images.id, reple=current_user)
+        comment = Media_Comments(message=message, 
+        images_id=images.id, reple=current_user)
         db.session.add(comment)
         images.comments = images.comments + 1
         db.session.commit()
         return redirect(request.url)
-    return render_template('image_post.html', images=images, form=form, comments=comments)
+    return render_template('image_post.html', images=images,
+     form=form, comments=comments)
 
-@posts.route("/post/images/<string:plic_id>/comment/<int:media_comment_id>", methods=['GET','POST'])
+@posts.route("/post/images/<string:plic_id>/comment/<int:media_comment_id>",
+ methods=['GET','POST'])
 @login_required
 @check_confirmed
 def reply_img(plic_id, media_comment_id):
@@ -240,15 +274,19 @@ def reply_img(plic_id, media_comment_id):
     page = request.args.get('page', 1, type=int)
     images = Images.query.filter_by(plic_id=plic_id).first()
     comment = Media_Comments.query.filter_by(id=media_comment_id).first()
-    rc= MediaReplyComments.query.filter_by(media_comments_id=comment.id).order_by(MediaReplyComments.pub_date.desc()).paginate(page=page, per_page=20)
+    rc= MediaReplyComments.query.filter_by(media_comments_id=comment.id)\
+    .order_by(MediaReplyComments.pub_date.desc()).paginate(page=page, per_page=20)
     form = ReplyForm()
     if form.validate_on_submit():
-        rc = MediaReplyComments(message=form.message.data, img_reply=current_user, media_comments_id=comment.id)
+        rc = MediaReplyComments(message=form.message.data, 
+        img_reply=current_user, media_comments_id=comment.id)
         db.session.add(rc)
         comment.replys=comment.replys + 1
         db.session.commit()
-        return redirect(url_for('posts.reply_img', plic_id=images.plic_id, media_comment_id=comment.id))
-    return render_template('img_reply.html', comment=comment, images=images, form=form, rc=rc)
+        return redirect(url_for('posts.reply_img', 
+        plic_id=images.plic_id, media_comment_id=comment.id))
+    return render_template('img_reply.html', 
+    comment=comment, images=images, form=form, rc=rc)
 
 
 
@@ -271,7 +309,8 @@ def delete_images(images_id):
     return redirect(url_for('main.home'))
 
 
-@posts.route("/post/images/<string:plic_id>/comment/<int:comment_id>/delete", methods=['POST', 'GET'])
+@posts.route("/post/images/<string:plic_id>/comment/<int:comment_id>/delete",
+ methods=['POST', 'GET'])
 @login_required
 @check_confirmed
 def delete_images_comment(plic_id, comment_id):
@@ -292,7 +331,8 @@ def vid_post(publ_id):
     page = request.args.get('page', 1, type=int)
     videos = Videos.query.filter_by(publ_id=publ_id).first()
     form = CommentsForm()
-    comments = Media_Comment.query.filter_by(videos_id=videos.id).order_by(Media_Comment.pub_date.desc()).paginate(
+    comments = Media_Comment.query.filter_by(videos_id=videos.id)\
+        .order_by(Media_Comment.pub_date.desc()).paginate(
         page=page,
         per_page=20)
     if form.validate_on_submit():
@@ -323,7 +363,8 @@ def delete_videos(videos_id):
     return redirect(url_for('main.home'))
 
 
-@posts.route("/post/videos/<string:publ_id>/comment/<int:comment_id>/delete", methods=['GET', 'POST'])
+@posts.route("/post/videos/<string:publ_id>/comment/<int:comment_id>/delete",
+ methods=['GET', 'POST'])
 @login_required
 @check_confirmed
 def delete_videos_comment(publ_id, comment_id):
@@ -336,7 +377,8 @@ def delete_videos_comment(publ_id, comment_id):
     db.session.commit()
     return redirect(url_for('posts.vid_post', publ_id=videos.publ_id))
 
-@posts.route("/post/video/<string:publ_id>/comment/<int:media_comment_id>", methods=['GET','POST'])
+@posts.route("/post/video/<string:publ_id>/comment/<int:media_comment_id>",
+ methods=['GET','POST'])
 @login_required
 @check_confirmed
 def reply_video(publ_id, media_comment_id):
@@ -344,12 +386,16 @@ def reply_video(publ_id, media_comment_id):
     page = request.args.get('page', 1, type=int)
     videos = Videos.query.filter_by(publ_id=publ_id).first()
     comment = Media_Comment.query.filter_by(id=media_comment_id).first()
-    rc= MediaReplyComment.query.filter_by(media_comment_id=comment.id).order_by(MediaReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    rc= MediaReplyComment.query.filter_by(media_comment_id=comment.id)\
+    .order_by(MediaReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
     form = ReplyForm()
     if form.validate_on_submit():
-        rc = MediaReplyComment(message=form.message.data, vid_reply=current_user, media_comment_id=comment.id)
+        rc = MediaReplyComment(message=form.message.data,
+         vid_reply=current_user, media_comment_id=comment.id)
         db.session.add(rc)
         comment.replys=comment.replys + 1
         db.session.commit()
-        return redirect(url_for('posts.reply_video', publ_id=videos.publ_id, media_comment_id=comment.id))
-    return render_template('vid_reply.html', comment=comment, videos=videos, form=form, rc=rc)
+        return redirect(url_for('posts.reply_video', 
+        publ_id=videos.publ_id, media_comment_id=comment.id))
+    return render_template('vid_reply.html', comment=comment,
+     videos=videos, form=form, rc=rc)
