@@ -1,0 +1,33 @@
+version: '3'
+services:
+  # Flask App Service
+  flask_app:
+    build: .
+    ports:
+      - "5000:5000" 
+    depends_on:
+      - redis
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=run.py 
+    volumes:
+      - .:/flaskblog  
+
+  # Celery Worker Service
+  celery_worker:
+    build: .
+    command: celery -A run.celery worker --pool=solo --loglevel=info
+    depends_on:
+      - redis
+    volumes:
+      - .:/flaskblog
+
+  # Redis Service
+  redis:
+    image: redis:latest  
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  redis_data:  

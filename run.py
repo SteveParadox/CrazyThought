@@ -1,6 +1,8 @@
-from flaskblog import create_app, io, db
+from flaskblog import create_app, db, io
+from flaskblog.tasks import data_task
 
-app = create_app()
+
+app, celery = create_app()
 app.app_context().push()
 
 ENV = 'dev'
@@ -13,6 +15,12 @@ else:
 
 
 if __name__ == '__main__':
-    app.run( debug=True, port=5000)
-    #db.drop_all(app=create_app())
-    #db.create_all(app=create_app())
+    #data_task.delay()
+    io.run(app, port=5000, debug=True)
+    #with app.app_context():
+        #db.drop_all()
+        #db.create_all()
+        
+        
+
+ 
