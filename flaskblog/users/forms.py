@@ -12,7 +12,7 @@ class RegistrationForm(FlaskForm):
                            validators=[DataRequired(message="Username required"),
                                        Length(min=4, max=15, message="Username must be between 4 and 15 characters")])
     email = StringField('Email',
-                        validators=[DataRequired('Email is required'), Email('Invalid Email')])
+                       validators=[DataRequired('Email is required')])
 
     password = PasswordField('Password',
                              validators=[DataRequired(message="Password required"),
@@ -34,7 +34,7 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+                       validators=[DataRequired()])
     password = PasswordField('Password',
                              validators=[DataRequired()])
     remember = BooleanField('Remember Me')
@@ -45,7 +45,7 @@ class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+                        validators=[DataRequired()])
     picture = FileField('', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 
@@ -58,7 +58,7 @@ class UpdateAccountForm(FlaskForm):
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+                        validators=[DataRequired()])
     submit = SubmitField('Request Password Reset')
 
     def validate_email(self, email):

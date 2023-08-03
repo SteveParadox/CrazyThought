@@ -1,35 +1,41 @@
 {% extends "douxt.html" %}
 {% block content %}
 
-{% if  posts.total  > 1 %}
-<h3 class="nav-xy">{{ posts.total }} posts by You</h3>
+{% if posts.total > 1 %}
+    <h3 class="nav-xy">{{ posts.total }} posts by You</h3>
 {% else %}
-<h3 class="nav-xy"> {{ posts.total }} post by You</h3>
+    <h3 class="nav-xy">{{ posts.total }} post by You</h3>
 {% endif %}
 
-
-{%if posts.items%}
+{% if posts.items %}
     {% for post in posts.items %}
         <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
-          <div class="media-body">
-            <div class="article-metadata">
-                <a class="" ><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</a>
-                <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class=""><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</a>
+                    <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}</small>
+                </div>
+                <p class="krax">{{ post.content }}</p>
+                <span>
+                    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}">
+                        {{ post.comments }} <i style="font-size: 23px;" class="fa fa-comment-o"></i>
+                    </a>
+                </span>
             </div>
-            <p class="krax">{{ post.content }}</p>
-<span >
-              <a class="article-title" href="{{ url_for('posts.post',public_id=post.public_id) }}"> {{ post.comments }} <i style="font-size: 23px;" class="fa fa-comment-o"></i></a>
-</span>
-          </div>
         </article>
     {% endfor %}
-{%else%}
-<br>
-<br>
-<h1 align="center" style="opacity:0.6">  No recent post by you </h1>
-{%endif%}
-    {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.prev_num) }}">Latest</a>{% else %}{% endif %}
-{% if posts.has_next %}<a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.next_num) }}"> Older </a>{% else %} {% endif %}
+{% else %}
+    <br>
+    <br>
+    <h1 align="center" style="opacity:0.6">No recent posts by you</h1>
+{% endif %}
+
+{% if posts.has_prev %}
+    <a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.prev_num) }}">Latest</a>
+{% endif %}
+{% if posts.has_next %}
+    <a class="btn btn-outline-info" href="{{ url_for('users.posts', page=posts.next_num) }}">Older</a>
+{% endif %}
 
 {% endblock content %}

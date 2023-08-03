@@ -5,16 +5,14 @@ from wtforms.validators import DataRequired
 
 
 class TopicForm(FlaskForm):
-    name = TextAreaField(validators=[DataRequired()])
+    name = StringField(validators=[DataRequired()])
     submit = SubmitField('Create')
-
 
 
 class GroupPostForm(FlaskForm):
     content = TextAreaField(validators=[DataRequired()])
     #photo = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Post')
-
 
 
 class SearchPostForm(FlaskForm):

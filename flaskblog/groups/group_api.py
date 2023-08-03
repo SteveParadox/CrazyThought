@@ -78,7 +78,8 @@ def conversation(pub_id, topics_name):
         "topics": topic.name
     })
 
-  @groups.route("/topics/conversation/my_conversation/<string:pub_id>/<string:topics_name>", methods=['POST', 'GET'])
+
+@groups.route("/topics/conversation/my_conversation/<string:pub_id>/<string:topics_name>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
 def my_conversation(pub_id, topics_name):

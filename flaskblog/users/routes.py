@@ -1,11 +1,13 @@
 import re
+import asyncio
 from operator import itemgetter
-
-import requests
 from flask import render_template, redirect, url_for, flash, request, Blueprint
 from flask_login import login_user, logout_user, login_required, user_loaded_from_cookie
-
-from flaskblog import db, bcrypt, login_manager, jsonify
+from requests_oauthlib import OAuth2Session
+import google.oauth2.credentials
+from google.auth.transport import requests
+from google.oauth2 import id_token
+from flaskblog import db, bcrypt, login_manager, jsonify, cache
 from flaskblog.models import Post, Business, Admin, AdminSchema, Images, Videos, UserSchema
 from flaskblog.users.decorator import check_confirmed
 from flaskblog.users.email import send_email
@@ -13,16 +15,17 @@ from flaskblog.users.forms import *
 from flaskblog.users.token import generate_confirmation_token, confirm_token
 from flaskblog.users.util import save_picture, send_reset_email
 
-email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-name_regex = re.compile(r'^[a-zA-Z]+$')
-password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")
+EMAIL_REGEX_PATTERN = r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$'
+NAME_REGEX_PATTERN = r'^[a-zA-Z]+$'
+PASSWORD_REGEX_PATTERN = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])"
+
+email_regex = re.compile(EMAIL_REGEX_PATTERN)
+name_regex = re.compile(NAME_REGEX_PATTERN)
+password_regex = re.compile(PASSWORD_REGEX_PATTERN)
 
 users = Blueprint('users', __name__)
 
 login_manager.session_protection = None
-
-
-# ^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])
 
 
 @users.route('/confirm/<token>')
@@ -73,7 +76,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=False)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmed=True)
         db.session.add(user)
         db.session.commit()
         token = generate_confirmation_token(user.email)
@@ -90,7 +93,6 @@ def register():
         return redirect(url_for("users.unconfirmed"))
 
     return render_template('register.html', title='Register', form=form)
-
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -109,6 +111,62 @@ def login():
             flash('Login failed. please check email and password', 'danger')
     return render_template('login.html', title="Login", form=form)
 
+@users.route('/google/login')
+def google_login():
+    # Replace YOUR_CLIENT_ID with your actual OAuth client ID
+    google_provider_cfg = requests.get("https://accounts.google.com/.well-known/openid-configuration").json()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+
+    # Create a state token to prevent request forgery.
+    # Store it in the session for later validation.
+    session["state"] = "some_random_state"
+
+    # Generate the URL to request access from the user's Google account.
+    redirect_uri = url_for("google_callback", _external=True)
+    request_uri = client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=redirect_uri,
+        scope=["openid", "email", "profile"],
+        state=session["state"]
+    )
+    return redirect(request_uri)
+
+@users.route("/google/callback")
+def google_callback():
+    # Validate the state token to prevent request forgery.
+    if request.args.get("state") != session["state"]:
+        return "Invalid state parameter", 401
+
+    # Get the authorization code from the response.
+    code = request.args.get("code")
+
+    # Exchange the authorization code for an access token and ID token.
+    token_endpoint = google_provider_cfg["token_endpoint"]
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(token_url, headers=headers, data=body, auth=("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET"))
+
+    # Parse the token response and get the ID token.
+    client.parse_request_body_response(json.dumps(token_response.json()))
+    idinfo = id_token.verify_oauth2_token(
+        token_response["id_token"],
+        requests.Request(),
+        "YOUR_CLIENT_ID"  # Replace with your actual OAuth client ID
+    )
+
+    # Create or retrieve the user from the database based on the Google email.
+    user = User()
+    user.id = idinfo["email"]
+
+    # Log in the user using Flask-Login's login_user function.
+    login_user(user)
+
+    return redirect(url_for("dashboard"))  # Redirect to your dashboard or another route after successful login.
+
 
 @users.route('/logout')
 @login_required
@@ -120,6 +178,7 @@ def logout():
 @users.route('/posts')
 @login_required
 @check_confirmed
+@cache.cached() 
 def posts():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.filter_by(author=current_user) \
@@ -131,6 +190,7 @@ def posts():
 @users.route('/posts/images')
 @login_required
 @check_confirmed
+@cache.cached() 
 def image_posts():
     page = request.args.get('page', 1, type=int)
     posts = Images.query.filter_by(imgs=current_user) \
@@ -142,6 +202,7 @@ def image_posts():
 @users.route('/posts/videos')
 @login_required
 @check_confirmed
+@cache.cached() 
 def videos_posts():
     page = request.args.get('page', 1, type=int)
     posts = Videos.query.filter_by(vids=current_user) \
@@ -293,6 +354,7 @@ def reset_token(token):
 
 
 @users.route('/setting', methods=['GET', 'POST'])
+@cache.cached()
 def setting():
     form= ReportProblemForm()
     

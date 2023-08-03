@@ -7,6 +7,8 @@ from flaskblog.posts.forms import PostForm, UpdatePostForm, CommentForm, ReplyFo
 from flaskblog.posts.utils import save_img
 from flaskblog.users.decorator import check_confirmed
 from sqlalchemy.orm import selectinload
+from flaskblog.tasks import delete_post_task
+
 
 posts = Blueprint('posts', __name__)
 
@@ -49,24 +51,7 @@ def tags():
     return render_template('tags.html', posts=posts)
 
 
-@posts.route("/post/new", methods=['GET', 'POST'])
-@login_required
-def new_post():
-    form = PostForm()
-    if form.validate_on_submit():
-        file = request.files['photo']
-        pic_file = save_img(form.photo.data)
-        post = Post(content=form.content.data, author=current_user, img_data=file.read(),
-                    img_filename=pic_file)
-        db.session.add(post)
-        db.session.commit()
-
-        return redirect(url_for('main.home'))
-    return render_template('create_post.html', title='New Post',
-                           form=form, legend='New Post')
-
-
-@posts.route("/post/<string:public_id>", methods=['POST', 'GET'])
+"""@posts.route("/post/<string:public_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
 def post(public_id):
@@ -90,15 +75,37 @@ def post(public_id):
 
     return render_template('post.html', post=post, rc=rc,
      public_id=post.public_id, posts=posts, comments=comments,
-                           form=form, title='Posts')
+                           form=form, title='Posts')"""
 
+@posts.route('/post/<string:public_id>', methods=['GET', 'POST'])
+def post(public_id):
+    post = Post.query.filter_by(public_id=public_id)\
+    .options(selectinload(Post.author), selectinload(Post.comment)).first()
+    post.viewed = post.viewed + 1
+    db.session.commit()
+    comment_form = CommentForm()
+    reply_form = ReplyForm()
 
-@posts.route('/rc')
-def sear():
-    results = ReplyComment.query.all()
-    user_schema = ReplyCommentSchema(many=True)
-    res = user_schema.dump(results)
-    return jsonify(res)
+    if comment_form.validate_on_submit():
+        comment = Comment(message=comment_form.message.data, user_id=current_user.id, post_id=post.id)
+        db.session.add(comment)
+        post.comments = post.comments + 1
+
+        db.session.commit()
+        flash('Comment added successfully.', 'success')
+        return redirect(url_for('posts.post', public_id=post.public_id))
+
+    if reply_form.validate_on_submit():
+        parent_comment = Comment.query.get_or_404(reply_form.parent_id.data)
+        reply = Comment(content=reply_form.content.data, user_id=current_user.id, post_id=post.id, parent=parent_comment)
+        db.session.add(reply)
+        db.session.commit()
+        flash('Reply added successfully.', 'success')
+        return redirect(url_for('posts.post', public_id=post.public_id))
+
+    comments = Comment.query.filter_by( post_id=post.id).all()
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form, reply_form=reply_form)
+
 
 
 @posts.route("/post/<string:public_id>/comment/<int:comment_id>",
@@ -161,7 +168,7 @@ def update_post(public_id):
                            form=form, legend='Update Post', posk=posk, pots=pots)
 
 
-@posts.route("/post/<int:post_id>/delete", methods=['POST'])
+@posts.route("/post/<int:post_id>/delete", methods=['GET','POST'])
 @login_required
 @check_confirmed
 def delete_post(post_id):
@@ -175,7 +182,7 @@ def delete_post(post_id):
     for o in comment:
         db.session.delete(o)
     db.session.delete(post)
-
+    delete_post_task.delay(public_id=post.public_id)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))

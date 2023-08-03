@@ -1,5 +1,4 @@
 from flaskblog import create_app, db, io
-from flaskblog.tasks import data_task
 
 
 app, celery = create_app()
@@ -15,8 +14,7 @@ else:
 
 
 if __name__ == '__main__':
-    #data_task.delay()
-    io.run(app, port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
     #with app.app_context():
         #db.drop_all()
         #db.create_all()

@@ -10,12 +10,13 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
-from flaskblog.config import Config, CACHE_CONFIG, CSP
+from flaskblog.config import Config, CACHE_CONFIG, CSP, format_love
 from flask_marshmallow import Marshmallow
 from flask_caching import Cache
 import redis
 import flask_monitoringdashboard as dashboard
 from flaskblog.celery_config import celery_init_app
+import websockets
 
 from py2neo import Graph
 from py2neo.errors import ServiceUnavailable
@@ -47,8 +48,8 @@ login_manager.session_protection = "strong"
 REMEMBER_COOKIE_NAME= 'remember_token'
 REMEMBER_COOKIE_DURATION=datetime.timedelta(days=64, seconds=29156, microseconds=10)
 REMEMBER_COOKIE_REFRESH_EACH_REQUEST=False
-#io = SocketIO(async_mode='eventlet')
-io = SocketIO()
+io = SocketIO(app, async_mode='threading', transport=websockets)
+#io = SocketIO()
 mail = Mail()
 jwt = JWTManager()
 compress = Compress()
@@ -64,7 +65,7 @@ def create_app(config_class=Config):
     io.init_app(app)
     jwt.init_app(app)
     cache.init_app(app)
-    dashboard.bind(app)
+    #dashboard.bind(app)
     compress.init_app(app)
     talisman.init_app(app) 
     celery=celery_init_app(app)
@@ -75,6 +76,8 @@ def create_app(config_class=Config):
         timezone='UTC',
         enable_utc=True,
     )
+    app.jinja_env.filters['format_love'] = format_love
+
 
     
     from flaskblog.users.routes import users

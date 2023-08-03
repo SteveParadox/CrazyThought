@@ -16,7 +16,7 @@ from flaskblog.posts.utils import save_img
 from flaskblog.users.decorator import check_confirmed
 import string
 from py2neo import Graph, Node, Relationship
-from flaskblog.tasks import data_task, create_post_task
+from flaskblog.tasks import data_task, create_post_task, like_post_task
 
 main = Blueprint('main', __name__)
 
@@ -212,7 +212,8 @@ def like_post():
     if post:
         post.love += 1
         db.session.commit()
-        create_post_task.delay(user_id=current_user.id)
+
+        like_post_task.delay(user_id=current_user.id, public_id=post_id)
 
         return jsonify({'message': 'Post liked successfully.', 'likes': post.love})
     else:

@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+import asyncio
 from flask_login import current_user, login_required
 from flaskblog import db
 from flaskblog.groups.forms import TopicForm
@@ -9,9 +10,9 @@ from flaskblog.posts.forms import PostForm
 from flaskblog.posts.utils import save_img
 from flaskblog.users.decorator import check_confirmed
 
-main = Blueprint('main', __name__)
+api = Blueprint('api', __name__)
 
-@main.route('/api/home', methods=['GET'])
+@api.route('/api/home', methods=['GET'])
 def home():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=50).items
@@ -21,14 +22,14 @@ def home():
 
     return jsonify(res)
 
-@main.route('/api/posts')
+@api.route('/api/posts')
 def posts():
     posts = Post.query.order_by(Post.date_posted.desc()).all()
     post_schema = PostSchema(many=True)
     res = post_schema.dump(posts)
     return jsonify(res)
 
-@main.route('/api/post', methods=['POST'])
+@api.route('/api/post', methods=['POST'])
 @login_required
 @check_confirmed
 def create_post():
@@ -39,7 +40,7 @@ def create_post():
     db.session.commit()
     return jsonify({'message': 'Post created!'}), 201
 
-@main.route('/api/images', methods=['POST'])
+@api.route('/api/images', methods=['POST'])
 @login_required
 def upload_image():
     photo_file = save_img(request.json.get('photo'))
@@ -49,7 +50,7 @@ def upload_image():
     db.session.commit()
     return jsonify({'message': 'Image uploaded!'}), 201
 
-@main.route('/api/videos', methods=['POST'])
+@api.route('/api/videos', methods=['POST'])
 @login_required
 def upload_video():
     pic_file = svimg(request.json.get('video'))
@@ -59,7 +60,7 @@ def upload_video():
     db.session.commit()
     return jsonify({'message': 'Video uploaded!'}), 201
 
-@main.route('/api/topics', methods=['POST'])
+@api.route('/api/topics', methods=['POST'])
 @login_required
 def create_topic():
     name = request.json.get('name')
@@ -69,7 +70,7 @@ def create_topic():
     db.session.commit()
     return jsonify({'message': 'Topic created!'}), 201
 
-@main_bp.route("/api/post/share/<int:post_id>", methods=['POST'])
+@api.route("/api/post/share/<int:post_id>", methods=['POST'])
 @login_required
 @check_confirmed
 def share_post(post_id):
@@ -82,7 +83,7 @@ def share_post(post_id):
     db.session.commit()
     return jsonify({'message': 'Post shared successfully'}), 201
 
-@main.route('/searche', methods=['POST'])
+@api.route('/searche', methods=['POST'])
 def search():
     data = request.form.get('text')
     results = User.query.filter_by(username=str(data[0]).upper() + data[1:]).all()
@@ -92,7 +93,7 @@ def search():
 
 from flask import jsonify
 
-@main.route('/like/<int:id>', methods=['POST'])
+@api.route('/like/<int:id>', methods=['POST'])
 def like(id):
     post = Post.query.filter_by(id=id).first()
     if post:

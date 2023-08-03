@@ -30,17 +30,10 @@ def chat():
 
 @sock.route('/msx')
 def _():
-    messages = Messages.query.all()
-    messages_schema = MessagesSchema(many=True)
+    messages = Room.query.all()
+    messages_schema = RoomSchema(many=True)
     res = messages_schema.dump(messages)
     return jsonify(res)
-
-@sock.route('/rooms')
-@cache.cached()
-def my_rooms():
-    my_room = Room.query.filter_by().all()
-
-    return render_template('rooms.html', my_room=my_room)
 
 
 @sock.route('/group/<string:room_id>')
@@ -81,15 +74,16 @@ def joined_room(data):
 def on_new_message(message):
     room_id = message['room_id']
     active_room = Room.query.filter_by(unique_id=room_id).first()
+    print(message)
     if active_room:
         new_message = Messages(room_id=active_room.id, username=message["name"], date=datetime.now(), message=message['message'])
         db.session.add(new_message)
         db.session.commit()
-        emit('New', {
+        io.emit('New', {
             "sender": message['name'],
             "time": datetime.now().strftime("%a %b %d %H:%M:%S "),
             "data": message['message'],
-        }, room=active_room.unique_id, broadcast=True)
+        }, room=request.sid, broadcast=True)
     else:
         emit('New_group_Message', {'message': 'Room not found'})
 

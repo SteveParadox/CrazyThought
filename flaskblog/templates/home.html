@@ -37,87 +37,85 @@ if it's not present, don't show loader */
         </div></nav>
 
 
-{% if current_user.is_authenticated%}
-	{% if current_user.confirmed==True%}
-<div class="textarea-content" id="tog" style="margin-bottom:40px;">
-
-   <form method=POST enctype=multipart/form-data action="" >
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group"  >
-
-
-            <div class="form-group" aria-live="polite" >
-
-                {% if form.content.errors %}
-                    {{ form.content(class="daxx", placeholder="What's Up?", id="tog", rows="5") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.content.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
+        {% if current_user.is_authenticated %}
+        {% if current_user.confirmed == True %}
+            <div class="textarea-content" id="tog" style="margin-bottom: 40px;">
+                <form method="POST" enctype="multipart/form-data" action="">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="form-group" aria-live="polite">
+                            {% if form.content.errors %}
+                                {{ form.content(class="daxx", placeholder="What's Up?", id="tog", rows="5") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.content.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.content(class="daxx", id="togg", rows="3", max="10", placeholder="What's On Your Mind?", title="Post Something!", style='resize: none;') }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
                     </div>
-                {% else %}
-                    {{ form.content(class="daxx", id="togg", rows="3",max="10", placeholder="What's On Your Mind?", title="Post Something!", style='resize: none;') }}
-                {% endif %}
-</div>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+    
 
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
-        </div>
-    </form>
-</div>
-
-
-{% endif %}
-	{% endif %}
-
-    {% for post in posts.items %}
-
-        <article class="media content-section" >
-            <img alt="" class="rounded-circle article-img"
-                 src="{{ url_for('static', filename= 'profile_pics/' + post.author.image_file) }}">
-          <div class="media-body">
+    {% for post in posts %}
+    <article class="media content-section">
+        <!-- Author Profile Image -->
+        <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.image_file) }}">
+        <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span>
-                    <span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}
-                </span></a>
-                <small class="text-muted"><i>{{ post.date_posted.strftime('%d/%b/%Y ') }}</i></small>
+                <!-- Author Username and Post Date -->
+                    <span><span style="text-transform: capitalize;">{{ post.user_name[0] }}</span>{{ post.user_name[1:] }}</span>
+                </a>
+                <small class="text-muted"><i>{{ post.date_posted }}</i></small>
             </div>
-            <h5><a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">
-                {{ post.title }}</a></h5>
-            <p class="krax"  autocapitalize="sentences" aria-live="polite" > {{ post.content }} </p>
-  <script>
-      function updateDiv()
-{
-    $( "a" ).load(window.location.href + "a" );
-    }
-  </script>
-               <div>
-                   {% if post.img_filename %}
-             <img alt="" align="center" class="article-content"
-                  src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
-
-{% endif %}
+            <!-- Post Title and Content -->
+            <h5>
+                <a class="article-title" href="{{ url_for('posts.post', public_id = post.public_id) }}">
+                    {{ post.title }}
+                </a>
+            </h5>
+            <p class="krax" autocapitalize="sentences" aria-live="polite">{{ post.content }}</p>
+            <div>
+                {% if post.img_filename %}
+                    <!-- Post Image -->
+                    <img alt="" align="center" class="article-content" src="{{ url_for('static', filename='post_pics/' + post.img_filename) }}">
+                {% endif %}
             </div>
+            <!-- Post Comments and Love -->
+            <span>
+                <a class="article-title " href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments">
+                    {{ post.comments | format_love  }} <i style="font-size:23px; width: 50px;" class="fa fa-comment-o btn btn-outline-info"></i>
+                </a>         
+                <span id="likes-{{ post.public_id }}">{{ post.love | format_love }}</span>
+                <button class="btn btn-outline-info" style="height: 37px;" onclick="likePost('{{ post.public_id }}')" data-public-id="{{ post.public_id }}" ><i style="font-size:23px;" class="fa fa-heart-o"></i></button>
+              
+                <button class="share-button btn btn-outline-info " data-public-id="{{ post.public_id }}"><i style="height: 18px; " class="fa fa-share"></i></button>
 
-
-
-<span >
-    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}"
-       title="Comments" aria-label="Comments">
-        {{ post.comments }} <i style="font-size:23px;" class="fa fa-comment-o"></i>   </a>
-
-    <a class="article-title" href="{{ url_for('posts.post', public_id=post.public_id) }}"
-       title="Loves" aria-label="loves">
-        {{ post.love }} <i style="font-size:23px;" class="fa fa-heart-o"></i>   </a>
-
-
-
-          </div>
-
-        </article>
-
+               <strike>
+                    <img class="rou" style="float:right; cursor:pointer;" src="{{ url_for('static', filename='images/more(3).png') }}">
+                </strike>
+            </span>
+        </div>
+        
+    </article>
     {% endfor %}
+    
+
+<!-- Inline Script (Moved to the bottom) -->
+<script>
+    function updateDiv() {
+        $("a").load(window.location.href + "a");
+    }
+</script>
+
 
 <script>
  $('#das').on('click', function(e) {
@@ -125,42 +123,87 @@ if it's not present, don't show loader */
         });
     </script>
 
-     <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
-    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+<script src="{{ url_for('static', filename='jbox.js') }}"></script>
 <link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
 
 <script>
-
-new jBox('Modal', {
-  width: 300,
-  height: 250,
-  attach: 'strike',
-  title: '<p align="center" style="margin-bottom: 0rem;">Report this post!</p>',
-  content: ''
-});
-
+    new jBox('Modal', {
+        width: 300,
+        height: 250,
+        attach: 'strike',
+        title: "<a href=''><p style='color:red;'>Report post as inappropriate</p></a>",
+        content: ''
+    });
 </script>
-{%if current_user.is_authenticated %}
-	{% if current_user.confirmed==True%}
-    <div class="topic" >
-
-       <ul class="featured__item__pic__hover">
-                                <li><a href="#" id="topic"><i style="font-size: 21px;" class="fa fa-group"></i></a></li>
-                            </ul>
-    </div>
 <script>
+    const jBoxModal = new jBox('Modal', {
+      width: 300,
+      height: 250,
+      title: '<p align="center" style="margin-bottom: 0rem;">Share Post</p>',
+      content: '',
+      closeButton: true,
+      blockScroll: false,
+      onCloseComplete: function () {
+      }
+    });
+  
+    function openSharePopup(publicId) {
+      const userId = '{{ current_user.id }}'; 
+      const postUrl = '{{ url_for("posts.post", public_id="") }}' + publicId;
+    const popupContent = `<a href="${postUrl}">Copy Post</a>`;
+  
+      jBoxModal.setContent(popupContent);
+      jBoxModal.attach('.share-button'); 
+      jBoxModal.open();
+    }
+  
+    const shareButtons = document.querySelectorAll('.share-button');
+    shareButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        const publicId = this.dataset.publicId;
+        openSharePopup(publicId);
+      });
+    });
+  </script>
+  
+  
+  <!-- Include jQuery library -->
+  <script src="{{ url_for('static', filename='ajax.js') }}"></script>
 
-new jBox('Modal', {
-  width: 500,
-  height: 200,
-  attach: '#topic',
-  title: '<h4 align="center" style="color:black;">Create Conversation</h4>',
-  content: '<form method=POST enctype=multipart/form-data action="">{{ form4.hidden_tag() }}<fieldset class="form-group"> <div class="form-group" aria-live="polite" >{% if form4.name.errors %}{{ form4.name(class="daxx", placeholder="What's Up?", id="tog", rows="5", max="10") }}                    <div class="invalid-feedback">                        {% for error in form4.name.errors %}                            <span>{{ error }}</span>                        {% endfor %}                    </div>                {% else %}                    {{ form4.name(class="daxx",  rows="1", placeholder="Topic Name", title="Topic Name!", style='resize: none;') }}                {% endif %}</div>        </fieldset>        <div class="form-group">            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}        </div>    </form>'
+<script>
+function likePost(postId) {
+    
+    console.log(postId);
+  $.ajax({
+    url: '/like_post',
+    type: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': "", 
+    },
+    data: JSON.stringify({'post_id': postId}),
+    success: function(response) {
+      if (response.message) {
+        const likesElement = document.getElementById('likes-' + postId);
+        if (likesElement) {
+          likesElement.textContent = response.likes;
+        }
+      } else if (response.error) {
+        console.error(response.error);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error(error);
+    }
   });
-
+}
 </script>
-    {% endif %}
-	 {% endif %}
+
+  
+  
+  
+  
 
    {% if posts.has_prev %}<a class="btn btn-outline-info" href="{{ url_for('main.home', page=posts.prev_num) }}">
         Latest</a>{% else %}{% endif %}

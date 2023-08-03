@@ -1,0 +1,171 @@
+{% extends "grpName.html" %}
+{% block content %}
+    
+       <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+    }
+
+    h1 {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        margin: 0;
+    }
+
+    #message-history {
+        padding: 20px;
+        overflow-y: scroll;
+        max-height: 400px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+
+    #message-history p {
+        margin: 0;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    #message-history p:last-child {
+        border-bottom: none;
+    }
+
+    #message-input {
+        width: 70%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    #message-input::placeholder {
+        color: #ccc;
+    }
+
+    #message-input:focus {
+        outline: none;
+        border-color: #4CAF50;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        margin: 5px;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    #message-input,
+    button {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    button:last-child {
+        background-color: #f44336;
+    }
+
+    button:last-child:hover {
+        background-color: #e53935;
+    }
+
+    /* New styles for added features */
+    .user-message {
+        background-color: #4CAF50;
+        color: #fff;
+        border-radius: 10px;
+    }
+
+    .bot-message {
+        background-color: #2196F3;
+        color: #fff;
+        border-radius: 10px;
+    }
+
+    #message-input:focus {
+        border-color: #2196F3;
+    }
+</style>
+</head>
+<body>
+    <h1>Chat Room: {{ active_room.nickname }}</h1>
+    <div id="message-history">
+    </div>
+    <input type="text" id="message-input" placeholder="Type your message">
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="leaveRoom()">Leave Room</button>
+
+    <script>
+        const socket = io.connect( 'http://' + document.domain + ':' + location.port)
+        socket.on('connect', () => {
+            console.log("Socket is connected to the server.");
+            });
+        const currentUser = { name: "{{ current_user.username }}" };        
+
+        // Request message history from the server when the page loads
+        socket.emit("get_message_history", { room_id: "{{ room_id }}" });
+
+
+        function displayMessage(sender, time, data) {
+            const messageHistory = document.getElementById("message-history");
+            const messageElement = document.createElement("p");
+            messageElement.textContent = `${sender} (${time}): ${data}`;
+            messageHistory.appendChild(messageElement);        
+        
+        }
+        
+        socket.emit("get_message_history", { room_id: "{{ room_id }}" });
+
+        socket.on("message_history", data => {
+            data.forEach(message => {
+                displayMessage(message['username'], message['message'], message['date']);
+            });
+        });
+
+        // Receive new messages from the server
+        socket.on("New", data => {
+           displayMessage(data.sender, data.time, data.data);
+            console.log(data);
+        });
+
+        // Receive server messages (e.g., user left the room)
+        socket.on("Left_user", data => {
+            displayMessage("Server", "", data.message);
+        });
+
+        function sendMessage() {
+            const message = document.getElementById("message-input").value;
+            const name = currentUser.name;
+            if (name && message) {
+                socket.emit("group_message", { room_id: "{{ room_id }}", name, message });
+                document.getElementById("message-input").value = "";
+                console.log(message);
+            }
+        }
+
+        function leaveRoom() {
+            const name = currentUser.name;
+            if (name) {
+                socket.emit("leave_room", { room_id: "{{ room_id }}", name });
+                window.location.href = "/chat"; // Redirect to the chat page after leaving the room
+            }
+        }
+    </script>
+    
+</body>
+
+{% endblock content %}

@@ -1,225 +1,146 @@
 {% extends "douxt.html" %}
 {% block content %}
- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='modal.css') }}">
 
-   <article class="media content-section">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='modal.css') }}">
+<article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
     <div class="media-body">
-      <div class="article-metadata">
-          <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}"><span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}</a>
-       <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}
-
-           {% if post.author == current_user %}
-                      {% else %}
-<span  style="float: right;">
-
-            <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename= 'images/more.png') }}"  style="float: right; cursor: pointer;" />
-</span>
-    {%endif%}
-           <span  style="float: right;">
-               <i class="fa fa-share-alt"  id="mode" style="float: right; cursor: pointer; margin-right: 4px;
-    font-size: 16px;
-" ></i>
-           </span>
-   <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
-    <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
-<link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
-
-
-
-<script>
-
-
-new jBox('Modal', {
-  width: 300,
-  height: 250,
-  attach: '#myModal',
-  title: '<p align="center" style="margin-bottom: 0rem;">Report this post!</p>',
-  content: '<a class="nav-item nav-link" style="color:#aa0909;" href="{{ url_for('posts.report',  post_id=post.id) }}">Report post</a><a class="nav-item nav-link" href="">Cancel</a>'
-
-
-});
-
-
-
-</script>
-
-
-       </small>
-
-<script>
-
-
-new jBox('Modal', {
-  width: 500,
-  height: 150,
-  attach: '#mode',
-  title: '<p align="center" style="margin-bottom: 0rem;">Share post!</p>',
-  content: '<form><input type="search" id="myInput" class="btn btn-outline-info" value="http://127.0.0.1:5000/post/{{ post.public_id }}"> <button onclick="myFunction()" onmouseout="outFunc()" type="button" value="copy" class="btn btn-outline-info">copy link</button></form>'
-
-});
-
-
-
-</script>
-          <script>
-function myFunction() {
-  var copyText = document.getElementById("myInput");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999);
-  document.execCommand("copy");
-
-  var tooltip = document.getElementById("myTooltip");
-  tooltip.innerHTML = "Copied: " + copyText.value;
-}
-
-function outFunc() {
-  var tooltip = document.getElementById("myTooltip");
-  tooltip.innerHTML = "Copy to clipboard";
-}
-</script>
-
-        {% if post.author == current_user %}
-          <div>
-                <a  href="{{ url_for('posts.update_post', public_id=post.public_id) }}"><i style="font-size:23px;" class="fa fa-edit"></i></a>
-            <a href="#" class="article-title"  data-toggle="modal" data-target="#deleteModal"><i style="font-size:23px;" class="fa fa-trash-o"></i></a>
-
-          </div>
-          {% endif %}
-      </div>
-
-      <p class="krax">{{ post.content }}</p>
-         {% if post.img_filename %}
-             <img align="center" class="article-content" src="{{  url_for('static', filename= 'post_pics/' + post.img_filename) }}">
-            </div>
-{% endif %}
-
-
-          {% if current_user.is_authenticated %}
-
-
-
-    </article>
-
-<div class="textarea-content" style="width: 100%;
-
-position: relative;">
-   <form method=POST enctype=multipart/form-data action="">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group" >
-
-
-            <div class="form-group" aria-live="polite" >
-
-                {% if form.message.errors %}
-                    {{ form.message(class="daxx", placeholder="What's Up?", rows="5") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.message.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.message(class="daxx", rows="3", placeholder="Comment....", title="Comment!", style='resize:none;') }}
+        <div class="article-metadata">
+            <a class="mr-2" href="{{ url_for('users.user_post', username=post.author.username) }}">
+                <span style="text-transform: capitalize;">{{ post.author.username[0] }}</span>{{ post.author.username[1:] }}
+            </a>
+            <small class="text-muted">{{ post.date_posted.strftime('%d/%b/%Y ') }}
+                {% if post.author != current_user %}
+                    <span style="float: right;">
+                        <img class="rou" id="myModal" title="More" aria-label="More" src="{{ url_for('static', filename='images/more.png') }}" style="float: right; cursor: pointer;" />
+                    </span>
                 {% endif %}
+                <span style="float: right;">
+                    <i class="fa fa-share-alt" id="mode" style="float: right; cursor: pointer; margin-right: 4px; font-size: 16px;"></i>
+                </span>
+            </small>
+         
 
+        <p class="krax">{{ post.content }}</p>
+        {% if post.img_filename %}
+            <img align="center" class="article-content" src="{{  url_for('static', filename='post_pics/' + post.img_filename) }}">
+        {% endif %}
 
-</div>
-              </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
-            <span  class="thumb"><i style="font-size: 28px; padding: 0px 31px;" id="das" class="fa fa-thumbs-up"></i>{{post.love}}</span>
+        
 
-        </div>
-
-    </form>
-</div>
-<article>
+    </div>
+</article>
 
 <div>
+    <div class="midder">
+        <h5>
+            {{ post.comments }}{% if post.comments > 1 %}
+                Comments
+            {% else %}
+                Comment
+            {% endif %}
+        </h5>
+    </div>
 
-          <div class="midder">
-              <h5>{{ post.comments }}{%if post.comments > 1%}
-                  Comments
-                   {%else%}
-                  Comment
-                  {%endif%}
-              </h5>
-          </div>
+    {% for comment in comments %}
+    <div class="comment-list">
+        <div class="desc">
+            <h5 class="comment" style="margin-bottom: 0px;">
+                <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
+                    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
+                </a>
+                <b>
+                    <span style="font-size: 16px;">
+                        <span style="text-transform: capitalize;">{{ comment.reply.username[0] }}</span>{{ comment.reply.username[1:] }}
+                    </span>
+                </b>
+            </h5>
+            <small class="date" style="font-weight: 450;">
+                {{ comment.pub_date.strftime('%d/%b/%Y ') }}
+            </small>
+            <h6 class="comment krax" style="font-weight:380; font-size: 14px;">
+                {{ comment.message }}
+            </h6>
+            <style>
+                .fa-bar::before {
+                    content: "\f107";
+                }
+            </style>
+            <form action="{{ url_for('posts.delete_comment', public_id=post.public_id, comment_id=comment.id) }}" method="POST">
+                <span>
+                    {% if comment.reply == current_user %}
+                        <button type="submit" value="Delete" title="Delete" aria-label="Delete" style="display: contents; cursor: pointer;">
+                            <i style="font-size:20px;" class="fa fa-trash-o"></i>
+                        </button>
+                    {% endif %}
+                </span>
+                <a class="article-content" title="Reply Comment" aria-label="Reply Comment" href="{{ url_for('posts.reply_comment', public_id=post.public_id, comment_id=comment.id) }}">
+                    <i style="font-size:20px; width:23px;" class="fa fa-comment"></i>
+                </a>{{comment.replys}}
+            </form>
+        </div>
+        <div class="replies">
+            {% for reply in comment.replies %}
+                <div class="desc">
+                    <h5 class="comment" style="margin-bottom: 0px;">
+                        <a class="mr-2" href="{{ url_for('users.user_post', username=reply.user.username) }}">
+                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + reply.user.image_file) }}">
+                        </a>
+                        <b>
+                            <span style="font-size: 16px;">
+                                <span style="text-transform: capitalize;">{{ reply.user.username[0] }}</span>{{ reply.user.username[1:] }}
+                            </span>
+                        </b>
+                    </h5>
+                    <small class="date" style="font-weight: 450;">
+                        {{ reply.pub_date.strftime('%d/%b/%Y ') }}
+                    </small>
+                    <h6 class="comment krax" style="font-weight:380; font-size: 14px;">
+                        {{ reply.content }}
+                    </h6>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
 
+<div class="comment-form">
+    <h4>Add a Comment</h4>
+    <form method="POST" action="{{ url_for('posts.post', public_id=post.public_id) }}">
+        {{ comment_form.csrf_token }}
+        {{ comment_form.message.label }} 
+        {{ comment_form.message }}
+        {{ comment_form.submit }}
+    </form>
+</div>
 
+<div class="reply-form" style="display:none;">
+    <h4>Reply to Comment</h4>
+    <form method="POST" action="{{ url_for('posts.post', public_id=post.public_id) }}">
+        {{ reply_form.csrf_token }}
+        {{ reply_form.content.label }} {{ reply_form.content }}
+        {{ reply_form.parent_id }}
+        {{ reply_form.submit }}
+    </form>
+</div>
 
-    {%if comments.items%}
-              {% for comment in comments.items %}
+<script>
+    // JavaScript to handle reply form visibility and populate the hidden field
+    const replyLinks = document.querySelectorAll('.reply-link');
+    const replyForm = document.querySelector('.reply-form');
 
+    replyLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const commentId = this.dataset.commentId;
+            replyForm.style.display = 'block';
+            document.querySelector('.reply-form input[name="parent_id"]').value = commentId;
+        });
+    });
+</script>
 
+</div>
 
-              <div class="comment-list">
-
-                  <div class="desc">
-
-
-                      <h5  class="comment" style="margin-bottom: 0px;">
-                          <a class="mr-2" href="{{ url_for('users.user_post', username=comment.reply.username) }}">
-                           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.reply.image_file) }}">
-                          </a>
-                          <b> <span style="font-size: 16px;"><span style="text-transform: capitalize;">{{ comment.reply.username[0] }}</span>{{ comment.reply.username[1:] }}
-</span> </b>
-                     </h5>
-                      <small  class="date" style="font-weight: 450;">
-                          {{ comment.pub_date.strftime('%d/%b/%Y ') }}
-                   </small>
-
-
-                     <h6  class="comment krax" style="font-weight:380; font-size: 14px;">
-                         {{ comment.message }}
-                     </h6>
-                     <style>
-    .fa-bar::before {
-
-    content: "\f107";
-
-}
-</style>
-
-               <form  action="{{ url_for('posts.delete_comment', public_id=post.public_id, comment_id=comment.id) }}" method="POST">
-<span >
-                   {% if comment.reply == current_user %}
-                    <button type="submit"  value="Delete" title="Delete" aria-label="Delete" style="display: contents; cursor: pointer;"><i style="font-size:20px;" class="fa fa-trash-o"></i></button>
-{% endif %}
-</span>
-
-                   <a class="article-content" title="Reply Comment" aria-label="Reply Comment" href="{{ url_for('posts.reply_comment', public_id=post.public_id, comment_id=comment.id) }}"><i style="font-size:20px; width:23px;" class="fa fa-comment"></i></a>{{comment.replys}}
-
-                </form>
-           </div>
-              </div>
-              {% endfor %}
-    {%else%}
-    <br>
-    <br>
-    <h3 align="center" style="opacity:0.3">  Be the first to comment </h3>
-    {%endif%}
-
-        <br>
-        <br>
-         {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-      {% if page_num %}
-        {% if posts.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('posts.post', public_id=post.public_id, page=page_num) }}">{{ page_num }}</a>
-        {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.post', public_id=post.public_id, page=page_num) }}">{{ page_num }}</a>
-        {% endif %}
-      {% else %}
-        ...
-      {% endif %}
-    {% endfor %}
-
-
-
-        {% endif %}
-
-      </div>
-    </article>
  <!-- Modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

@@ -82,7 +82,7 @@ function goBack() {
 </script>
             <a class="navbar-brand mr-4" href="/home"><div class="nav-xx" style="position: relative;
 
-left: 20px;"><img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">{{active_.nickname}}</div></a>
+left: 20px;"><img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}"></div></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 
           </button>
@@ -139,10 +139,7 @@ left: 20px;"><img alt="" class="rounded-circle article-img" src="{{ url_for('sta
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src= "{{ url_for('static', filename='jquery-min.js') }}"></script>
-
 <script src= "{{ url_for('static', filename='script.js') }}"></script>
-<script src= "{{ url_for('static', filename='jquery.min.js') }}"></script>
-    <script src= "{{ url_for('static', filename='socketio.js') }}"></script>
 <script>
 	//paste this code under head tag or in a seperate js file.
 	// Wait for window load

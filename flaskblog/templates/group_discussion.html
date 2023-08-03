@@ -1,41 +1,24 @@
 {% extends "groupx.html" %}
 {% block content %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + comment.disc.image_file) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{{ url_for('users.user_post', username=comment.disc.username) }}">
+                <span><span style="text-transform: capitalize;">{{ comment.disc.username[0] }}</span>{{ comment.disc.username[1:] }}</span>
+            </a>
+            <small class="text-muted"><i>{{ comment.pub_date.strftime('%d/%b/%Y ') }}</i><span  style="float: right;"></span></small>
+        </div>
+        <p class="krax"  autocapitalize="sentences" aria-live="polite">{{ comment.message }}</p>
+        <div></div>
+    </div>
+</article>
 
- <article class="media content-section" >
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + comment.disc.image_file) }}">
-          <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=comment.disc.username) }}"><span><span style="text-transform: capitalize;">{{ comment.disc.username[0] }}</span>{{ comment.disc.username[1:] }}</span></a>
-                <small class="text-muted"><i>{{ comment.pub_date.strftime('%d/%b/%Y ') }}</i><span  style="float: right;">
-                </span>
-                </small>
-            </div>
-
-                       <p class="krax"  autocapitalize="sentences" aria-live="polite"  > {{ comment.message }} </p>
-  <script>
-      function updateDiv()
-{
-    $( "a" ).load(window.location.href + "a" );
-    }
-  </script>
-               <div>
-
-
-  </div>
-          </div>
-
-        </article>
-
-<div class="textarea-content" style="width: 100%;
-
-position: relative;">
-   <form method=POST enctype=multipart/form-data action="">
+<div class="textarea-content" style="width: 100%; position: relative;">
+    <form method=POST enctype=multipart/form-data action="">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group" >
-
-
-            <div class="form-group" aria-live="polite" >
-
+        <fieldset class="form-group">
+            <div class="form-group" aria-live="polite">
                 {% if form.message.errors %}
                     {{ form.message(class="daxx", placeholder="What's Up?", rows="5") }}
                     <div class="invalid-feedback">
@@ -46,10 +29,8 @@ position: relative;">
                 {% else %}
                     {{ form.message(class="daxx", rows="1", placeholder="Reply....", title="Comment!", style='resize:none;') }}
                 {% endif %}
-
-
-</div>
-              </fieldset>
+            </div>
+        </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
         </div>
@@ -57,57 +38,43 @@ position: relative;">
 </div>
 
 <div>
+    <div class="midder">
+        <h5>
+            {{ comment.replys }}
+            {% if comment.replys > 1 %}
+                Comments
+            {% else %}
+                Comment
+            {% endif %}
+        </h5>
+    </div>
 
-          <div class="midder">
-              <h5>{{ comment.replys }}{%if comment.replys > 1%}
-                  Comments
-                   {%else%}
-                  Comment
-                  {%endif%}
-              </h5>
-          </div>
-
-
-
-    {%if rc.items%}
-              {% for gcs in rc.items %}
-
-
-
-              <div class="comment-list">
-
-                  <div class="desc">
-
-                     
-                      <h5  class="comment" style="margin-bottom: 0px;">
-                          <a class="mr-2" href="{{ url_for('users.user_post', username=gcs.g_reply.username) }}">
-                           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + gcs.g_reply.image_file) }}">
-                          </a>
-                           <b> <span style="font-size: 16px;"><span style="text-transform: capitalize;">
-{{ gcs.g_reply.username[0] }}</span>{{ gcs.g_reply.username[1:] }}</span> </b>
-                     </h5>
-                      <small  class="date" style="font-weight: 450;">
-                          {{ gcs.pub_date.strftime('%d/%b/%Y ') }}
-                   </small>
-
-
-                      <h6  class="comment" style="font-weight:380; font-size: 14px;">
-                         {{ gcs.message }}
-                     </h6>
-
-
-           </div>
-              </div>
-
-
-              {% endfor %}
-    {%else%}
-    <br>
-    <br>
-    <h3 align="center" style="opacity:0.3">  Be the first to comment </h3>
-    {%endif%}
+    {% if rc.items %}
+        {% for gcs in rc.items %}
+            <div class="comment-list">
+                <div class="desc">
+                    <h5 class="comment" style="margin-bottom: 0px;">
+                        <a class="mr-2" href="{{ url_for('users.user_post', username=gcs.g_reply.username) }}">
+                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + gcs.g_reply.image_file) }}">
+                        </a>
+                        <b>
+                            <span style="font-size: 16px;"><span style="text-transform: capitalize;">{{ gcs.g_reply.username[0] }}</span>{{ gcs.g_reply.username[1:] }}</span>
+                        </b>
+                    </h5>
+                    <small class="date" style="font-weight: 450;">
+                        {{ gcs.pub_date.strftime('%d/%b/%Y ') }}
+                    </small>
+                    <h6 class="comment" style="font-weight:380; font-size: 14px;">
+                        {{ gcs.message }}
+                    </h6>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <br>
+        <br>
+        <h3 align="center" style="opacity:0.3">Be the first to comment</h3>
+    {% endif %}
 </div>
-
-
 
 {%endblock content%}

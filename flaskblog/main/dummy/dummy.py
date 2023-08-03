@@ -3,6 +3,7 @@ from flask import *
 from flaskblog.models import *
 import random
 import shortuuid
+import string
 
 dummy = Blueprint('dummy', __name__)
 

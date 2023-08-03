@@ -45,6 +45,13 @@ class Config:
     #CACHE_TYPE = 'simple'
 
 
+def format_love(value):
+    if value >= 1000000:
+        return f"{value / 1000000:.1f}M"
+    elif value >= 1000:
+        return f"{value / 1000:.1f}K"
+    else:
+        return str(value)
 
 
 

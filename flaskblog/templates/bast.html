@@ -44,118 +44,87 @@
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="{{ url_for('static', filename='favicon/ms-icon-144x144.png') }}">
 <meta name="theme-color" content="#ffffff">
-
-
-
-
 </head>
 <br>
 <br>
 <body>
-    <header class="site-header">
+  <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-            <a class="navbar-brand mr-4" href="/home"><div class="nav-xx"><img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts</div></a>
-        <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          -->
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-
-
-            </div>
-
-
-            <div class="navbar-nav">
-                {% if current_user.is_authenticated %}
-
-
-     <a class="nav-item nav-link" href="{{ url_for('main.home') }}" title="Home" aria-label="Home">
-                      <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
-                     </a>
-
-
-                  <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
-                       <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-
-                  </a>
-
-
-                <a class="nav-item nav-link" href="{{ url_for('users.posts') }}" title="My Posts" aria-label="My Posts">
-
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
-
-                </a>
-
-
-                {% else %}
-                    <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
-                    <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
-                {% endif %}
-            </div>
+          <div class="container">
+              <a class="navbar-brand mr-4" href="/home">
+                  <div class="nav-xx">
+                      <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/logox.jpg') }}">Crazy Thoughts
+                  </div>
+              </a>
+              <!--
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              -->
+              <div class="collapse navbar-collapse" id="navbarToggle">
+                  <div class="navbar-nav mr-auto">
+                      <!-- Add any additional navigation items for the left side here -->
+                  </div>
+                  <div class="navbar-nav">
+                      {% if current_user.is_authenticated %}
+                      <a class="nav-item nav-link" href="{{ url_for('main.home') }}" title="Home" aria-label="Home">
+                          <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
+                      </a>
+                      <a class="nav-item nav-link" href="{{ url_for('posts.explore') }}" title="Popular Posts" aria-label="Popular Posts">
+                          <img alt="" class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
+                      </a>
+                      <a class="nav-item nav-link" href="{{ url_for('users.posts') }}" title="My Posts" aria-label="My Posts">
+                          <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
+                      </a>
+                      {% else %}
+                      <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                      <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
+                      {% endif %}
+                  </div>
+              </div>
           </div>
-        </div>
       </nav>
-    </header>
-
-
-
-<br>
-    <main role="main" class="container">
+  </header>
+  <br>
+  <main role="main" class="container">
       <div class="row">
-        <div class="col-md-12">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
+          <div class="col-md-12">
+              {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
               {% for category, message in messages %}
-
-                     <div class="alert alert-{{ category }}">
-                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+              <div class="alert alert-{{ category }}">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
                   {{ message }}
-                </div>
+              </div>
               {% endfor %}
-            {% endif %}
-          {% endwith %}
-          {% block content %}{% endblock %}
-        </div>
-
-
-
+              {% endif %}
+              {% endwith %}
+              {% block content %}{% endblock %}
+          </div>
       </div>
-    </main>
-
-    {% block script %}
-
-              {% endblock %}
-     <br>
-    <br>
-    <br>
-
-    <footer class="foot" >
- <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom" id="navbar">
-{% if current_user.is_authenticated %}
-
-     <a  href="{{ url_for('main.home') }}">
-                      <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
-                     </a>
-
-
-                  <a href="{{ url_for('posts.explore') }}">
-                       <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
-                  </a>
-
-
-
-                <a  href="{{ url_for('users.posts') }}">
-
-                <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
-                </a>
-
-     {% endif %}
- </nav>
-    </footer>
+  </main>
+  {% block script %}
+  {% endblock %}
+  <br>
+  <br>
+  <br>
+  <footer class="foot">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-bottom" id="navbar">
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('main.home') }}">
+              <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/house.png') }}">
+          </a>
+          <a href="{{ url_for('posts.explore') }}">
+              <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/trending.png') }}">
+          </a>
+          <a href="{{ url_for('users.posts') }}">
+              <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'images/post.png') }}">
+          </a>
+          {% endif %}
+      </nav>
+  </footer>
 
 
     <!-- Optional JavaScript -->
@@ -166,8 +135,7 @@
 <script src= "{{ url_for('static', filename='jquery-min.js') }}"></script>
 
 <script src= "{{ url_for('static', filename='script.js') }}"></script>
-<script src= "{{ url_for('static', filename='jquery.min.js') }}"></script>
-    <script src= "{{ url_for('static', filename='socketio.js') }}"></script>
+
 <script>
 var prevScrollpos = window.pageYOffset;
 window.onscroll = function() {

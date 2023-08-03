@@ -1,32 +1,31 @@
 {% extends "douxt.html" %}
 {% block content %}
 
-
 <div class="nav-xy">
-    <p align="center" ><b>Popular Posts</b></p>
-</div>
- {% for sidex in side %}
-
-
-
- <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + sidex.imgs.image_file) }}">
-<div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_post', username=sidex.imgs.username) }}"><span style="text-transform: capitalize;">{{ sidex.imgs.username[0] }}</span>{{ sidex.imgs.username[1:] }}</a>
-                <small class="text-muted"><i>{{ sidex.date_posted.strftime('%d/%b/%Y ') }}</i></small>
-            </div>
-
-       <div  style="overflow: hidden; width:100%;">
- <img class="imgs"  style="" src="{{ url_for('static', filename= 'post_pics/' + sidex.photo_filename) }}">
-
-              </div>
-    <span >
-     <a class="article-title" href="{{ url_for('posts.img_post', plic_id=sidex.plic_id) }}"> {{ sidex.comments }} <i style="font-size: 23px;" class="fa fa-comment-o"></i></a>
-    </span>
+    <p align="center"><b>Popular Posts</b></p>
 </div>
 
+{% for sidex in side %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename= 'profile_pics/' + sidex.imgs.image_file) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{{ url_for('users.user_post', username=sidex.imgs.username) }}">
+                <span style="text-transform: capitalize;">{{ sidex.imgs.username[0] }}</span>{{ sidex.imgs.username[1:] }}
+            </a>
+            <small class="text-muted"><i>{{ sidex.date_posted.strftime('%d/%b/%Y ') }}</i></small>
+        </div>
+        <div style="overflow: hidden; width:100%;">
+            <img class="imgs" src="{{ url_for('static', filename= 'post_pics/' + sidex.photo_filename) }}">
+        </div>
+        <span>
+            <a class="article-title" href="{{ url_for('posts.img_post', plic_id=sidex.plic_id) }}">
+                {{ sidex.comments }} <i style="font-size: 23px;" class="fa fa-comment-o"></i>
+            </a>
+        </span>
+    </div>
+</article>
+{% endfor %}
 
- </article>
      {% endfor %}
 {% endblock content %}
