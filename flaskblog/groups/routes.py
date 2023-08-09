@@ -83,14 +83,13 @@ def conversation(pub_id, topics_name):
         """
     result = graph.run(cypher_query)
 
-    posts = []
+    group_post = []
     for record in result:
-        posts.append({
+        group_post.append({
                 'group_id': record['group_id'],
                 'group_content': record['group_content'],
                 'group_comments': record['group_comments'],
                 'group_date_created': record['group_date_posted'].isoformat()[:10],
-                'group_popular': record['group_popular'],
                 'topic_id': record['topic_id'],
                 'topic_name': record['topic_name'],
                 'topic_date_created': record['topic_date_created'].isoformat()[:10],
@@ -110,7 +109,7 @@ def conversation(pub_id, topics_name):
 
         return redirect(url_for('groups.conversation', pub_id=topics.pub_id, topics_name=topics.name))
 
-    return render_template('convo.html', pub_id=topics.pub_id, posts=posts, form=form, topics=topics,
+    return render_template('convo.html', pub_id=topics.pub_id, group_post=group_post, form=form, topics=topics,
                            topics_name=topics.name)
 
 

@@ -93,8 +93,11 @@ def topic_creation_task(self, creator_id):
 @shared_task(bind=True, base=AbortableTask)
 def group_creation_task(self, creator_id, topic_id):
     creator = User.query.get(creator_id)
-    topic = Topic.query.get(topic_id)
-    group = Groups.query.filter_by(user_id=creator_id).order_by(Topic.date_created.desc()).first()
+    
+    topic = Topic.query.filter_by(id=topic_id).first()
+    
+    group = Groups.query.filter_by(user_id=creator_id).join(Topic).order_by(Topic.date_created.desc()).first()
+    print(group.content)
 
     if creator and topic:
         user_node = Node('User', user_id=creator.id, user_name=creator.username, img_file=creator.image_file)
