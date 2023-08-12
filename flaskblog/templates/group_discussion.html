@@ -14,28 +14,6 @@
     </div>
 </article>
 
-<div class="textarea-content" style="width: 100%; position: relative;">
-    <form method=POST enctype=multipart/form-data action="">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <div class="form-group" aria-live="polite">
-                {% if form.message.errors %}
-                    {{ form.message(class="daxx", placeholder="What's Up?", rows="5") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.message.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.message(class="daxx", rows="1", placeholder="Reply....", title="Comment!", style='resize:none;') }}
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
-        </div>
-    </form>
-</div>
 
 <div>
     <div class="midder">

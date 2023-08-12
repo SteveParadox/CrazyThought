@@ -31,7 +31,7 @@
 <form method="POST" action="{{ url_for('posts.post', public_id=post.public_id) }}">
     {{ form.hidden_tag() }}
     <div class="form-group">
-        {{ form.message(class="form-control") }}
+        {{ form.message(class="daxx", rows="3", placeholder="Comment....", title="Comment!", style='resize:none;') }}
         {{ form.message.errors|join(', ') }}
     </div>
     <div class="form-group">

@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, url_for, jsonify
 from flask_login import current_user, login_required
 from werkzeug.utils import redirect
 from flaskblog import db, request, abort, flash, cache, graph
-from flaskblog.groups.forms import GroupPostForm, SearchPostForm, CommentForm, TopicForm
+from flaskblog.groups.forms import GroupPostForm, SearchPostForm, GroupCommentForm, TopicForm, GroupReplyForm
 from flaskblog.models import Groups, Topic, TopicSchema, Group_comment, GroupReplyComment
 from flaskblog.users.decorator import check_confirmed
 import datetime
@@ -41,7 +41,7 @@ def topics():
         topic = Topic(name=form4.name.data, creator=current_user, pub_id=str(shortuuid.uuid()))
         db.session.add(topic)
         db.session.commit()
-        topic_creation_task.delay(creator=current_user.id)
+        topic_creation_task.delay(creator_id=current_user.id)
         return redirect(url_for('groups.topics'))
 
     return render_template('topics.html', topic=topic, form=form, form4=form4)
@@ -78,7 +78,7 @@ def conversation(pub_id, topics_name):
         RETURN group.id AS group_id, group.content AS group_content,
                group.comments AS group_comments, group.date_posted AS group_date_posted,
                topic.id AS topic_id, topic.name AS topic_name, topic.pub_id AS topic_pub_id,
-               topic.date_created AS topic_date_created, topic.popular AS topic_popular,
+               topic.date_created AS topic_date_created, topic.popular AS topic_popular, 
                user.user_id AS user_id, user.user_name AS user_name, user.img_file AS user_image_file
         """
     result = graph.run(cypher_query)
@@ -97,6 +97,7 @@ def conversation(pub_id, topics_name):
                 'user_id': record['user_id'],
                 'user_name': record['user_name'],
                 'user_image_file': record['user_image_file'],
+                'pub_id': record['topic_pub_id']
             })
 
 
@@ -134,19 +135,22 @@ def discussion(pub_id, topics_name, groups_id):
     topics = Topic.query.filter_by(pub_id=pub_id).first()
     groups = Groups.query.get_or_404(groups_id)
     post = Groups.query.all()
-    form = CommentForm()
+    form = GroupCommentForm()
+    reply_form = GroupReplyForm()
     if form.validate_on_submit():
         comment = Group_comment(message=form.message.data, groups_id=groups.id, disc=current_user)
         db.session.add(comment)
         groups.comments = groups.comments + 1
         db.session.commit()
         return redirect(request.url)
-    gc = Group_comment.query.filter_by(groups_id=groups.id).order_by(Group_comment.pub_date.desc()).paginate(page=page,
+    gc = Group_comment.query.filter_by(groups_id=groups.id, depth=0).order_by(Group_comment.pub_date.desc()).paginate(page=page,
                                                                                                              per_page=20)
 
+    rc = GroupReplyComment.query.order_by(
+        GroupReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
     return render_template('discussion.html', groups_id=groups.id, post=post,
                            groups=groups, pub_id=topics.pub_id,
-                           topics_name=topics.name, topics=topics, form=form, gc=gc)
+                           topics_name=topics.name, topics=topics, form=form, gc=gc, reply_form=reply_form, rc=rc)
 
 
 @groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/comment/<int:gc_id>",
@@ -154,17 +158,15 @@ def discussion(pub_id, topics_name, groups_id):
 @login_required
 @check_confirmed
 def reply_discussion(pub_id, topics_name, groups_id, gc_id):
-    # data= request.form.get('text')
-
     page = request.args.get('page', 1, type=int)
     topics = Topic.query.filter_by(pub_id=pub_id).first()
     groups = Groups.query.get_or_404(groups_id)
     comment = Group_comment.query.filter_by(id=gc_id).first()
     rc = GroupReplyComment.query.filter_by(group_comment=comment.id).order_by(
         GroupReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
-    form = CommentForm()
-    if form.validate_on_submit():
-        rc = GroupReplyComment(message=form.message.data, g_reply=current_user, group_comment=comment.id)
+    reply_form = GroupReplyForm()
+    if reply_form.validate_on_submit():
+        rc = GroupReplyComment(message=reply_form.content.data, g_reply=current_user, group_comment=comment.id)
         db.session.add(rc)
         comment.replys = comment.replys + 1
         db.session.commit()
@@ -172,7 +174,7 @@ def reply_discussion(pub_id, topics_name, groups_id, gc_id):
                                 topics_name=topics.name))
     return render_template('group_discussion.html', groups_id=groups.id,
                            groups=groups, pub_id=topics.pub_id,
-                           topics_name=topics.name, topics=topics, form=form, rc=rc, comment=comment)
+                           topics_name=topics.name, topics=topics, reply_form=reply_form, rc=rc, comment=comment)
 
 
 @groups.route("/topics/conversation/<string:pub_id>/<string:topics_name>/<int:groups_id>/delete",

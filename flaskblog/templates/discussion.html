@@ -23,22 +23,6 @@
     <script src= "{{ url_for('static', filename='jbox.js') }}"></script>
 <link href="{{ url_for('static', filename='jbox.all.min.css') }}" rel="stylesheet">
 
-<script>
-
-
-new jBox('Modal', {
-  width: 300,
-  height: 250,
-  attach: '#myModal',
-  title: '<p align="center" style="margin-bottom: 0rem;">Report this post!</p>',
-  content: '<a class="nav-item nav-link" style="color:#aa0909;" href="{{ url_for('posts.report',  post_id=groups.id) }}">Report post</a><a class="nav-item nav-link" href="">Cancel</a>'
-
-
-});
-
-
-
-</script>
 
 <script>
 
@@ -97,31 +81,16 @@ function outFunc() {
 <div class="textarea-content" style="width: 100%;
 
 position: relative;">
-   <form method=POST enctype=multipart/form-data action="">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group" >
-
-
-            <div class="form-group" aria-live="polite" >
-
-                {% if form.message.errors %}
-                    {{ form.message(class="daxx", placeholder="What's Up?", rows="5") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.message.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.message(class="daxx", rows="3", placeholder="Comment....", title="Comment!", style='resize:none;') }}
-                {% endif %}
-
-
-</div>
-              </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info", onclick="submit") }}
-        </div>
-    </form>
+<form method="POST" action="{{ url_for('groups.discussion', pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id) }}">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+      {{ form.message(class="daxx", rows="3", placeholder="Comment....", title="Comment!", style='resize:none;') }}
+      {{ form.message.errors|join(', ') }}
+  </div>
+  <div class="form-group">
+      {{ form.submit(class="btn btn-primary") }}
+  </div>
+</form>
 </div>
 
 <div>
@@ -181,7 +150,37 @@ position: relative;">
 
            </div>
               </div>
-
+              <form method="POST" action="{{ url_for('groups.reply_discussion', pub_id=topics.pub_id, topics_name=topics.name, groups_id=groups.id, gc_id=gcs.id) }}">
+                {{ reply_form.hidden_tag() }}  
+                <input type="hidden" name="parent_id" value="{{ gcs.id }}">
+                <div class="form-group">
+                    {{ reply_form.content(class="form-control") }}
+                    {{ reply_form.content.errors|join(', ') }}
+                </div>
+                <div class="form-group">
+                    {{ reply_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            {% for gcs in gc.grp_comment %}
+            <div class="comment-list">
+                <div class="desc">
+                    <h5 class="comment" style="margin-bottom: 0px;">
+                        <a class="mr-2" href="{{ url_for('users.user_post', username=gcs.g_reply.username) }}">
+                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + gcs.g_reply.image_file) }}">
+                        </a>
+                        <b>
+                            <span style="font-size: 16px;"><span style="text-transform: capitalize;">{{ gcs.g_reply.username[0] }}</span>{{ gcs.g_reply.username[1:] }}</span>
+                        </b>
+                    </h5>
+                    <small class="date" style="font-weight: 450;">
+                        {{ gcs.pub_date.strftime('%d/%b/%Y ') }}
+                    </small>
+                    <h6 class="comment" style="font-weight:380; font-size: 14px;">
+                        {{ gcs.message }}
+                    </h6>
+                </div>
+            </div>
+        {% endfor %}
 
               {% endfor %}
     {%else%}

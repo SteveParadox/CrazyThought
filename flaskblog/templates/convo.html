@@ -37,7 +37,7 @@
                 <p class="krax" autocapitalize="sentences" aria-live="polite">{{ post.group_content }}</p>
                 <div>
                     <span>
-                        <a class="article-title" href="{{ url_for('groups.discussion', pub_id=post.topic_id, topics_name=post.topic_name, groups_id=post.group_id) }}" title="Comments" aria-label="Comments">
+                        <a class="article-title" href="{{ url_for('groups.discussion', pub_id=post.pub_id, topics_name=post.topic_name, groups_id=post.group_id) }}" title="Comments" aria-label="Comments">
                             {{ post.group_comments }} <i style="font-size: 23px;" class="fa fa-comments-o"></i>
                         </a>
                     </span>

@@ -78,16 +78,6 @@ class Groups(db.Model):
     comment = db.relationship('Group_comment', backref='discuss', lazy=True)
 
 
-"""class Link(db.Model):
-    user_id = db.Column(db.Integer,
-                       db.ForeignKey('user.id'),
-                       primary_key = True)
-
-    groups_id = db.Column(db.Integer,
-                          db.ForeignKey('groups.id'),
-                          primary_key = True)"""
-
-
 class Group_comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
@@ -97,6 +87,7 @@ class Group_comment(db.Model):
     name = db.Column(db.String())
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
+    depth = db.Column(db.Integer, default=0)
     grp_comment = db.relationship('GroupReplyComment', backref='grp_rep', lazy=True)
     groups_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
     replys = db.Column(db.Integer, default=0)
