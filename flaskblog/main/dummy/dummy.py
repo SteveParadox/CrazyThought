@@ -4,6 +4,7 @@ from flaskblog.models import *
 import random
 import shortuuid
 import string
+from flaskblog.tasks import data_task
 
 dummy = Blueprint('dummy', __name__)
 
@@ -31,6 +32,7 @@ def dumm():
 
         db.session.add(post)
     db.session.commit()
+    data_task.delay()
     return redirect(url_for('main.home'))
 
 def generate_random_string(length):

@@ -191,7 +191,7 @@ def delete_comment(public_id, comment_id):
 @cache.cached() 
 def following():
     follow = Comment.query.filter_by(reply=current_user)\
-    .options(selectinload(Comment.post)).order_by(Comment.pub_date.desc()).all()
+    .order_by(Comment.pub_date.desc()).all()
     return render_template('following.html',follow=follow, title='My Activities')
 
 

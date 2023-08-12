@@ -1,11 +1,11 @@
 import re
 import asyncio
+import logging
 from operator import itemgetter
-from flask import render_template, redirect, url_for, flash, request, Blueprint
+from flask import render_template, redirect, url_for, flash, request, Blueprint, session
 from flask_login import login_user, logout_user, login_required, user_loaded_from_cookie
 from requests_oauthlib import OAuth2Session
 import google.oauth2.credentials
-from google.auth.transport import requests
 from google.oauth2 import id_token
 from flaskblog import db, bcrypt, login_manager, jsonify, cache
 from flaskblog.models import Post, Business, Admin, AdminSchema, Images, Videos, UserSchema
@@ -14,6 +14,9 @@ from flaskblog.users.email import send_email
 from flaskblog.users.forms import *
 from flaskblog.users.token import generate_confirmation_token, confirm_token
 from flaskblog.users.util import save_picture, send_reset_email
+from flaskblog.config import CLIENT_ID, CLIENT_SECRET, flow
+from urllib.parse import quote
+
 
 EMAIL_REGEX_PATTERN = r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$'
 NAME_REGEX_PATTERN = r'^[a-zA-Z]+$'
@@ -24,9 +27,10 @@ name_regex = re.compile(NAME_REGEX_PATTERN)
 password_regex = re.compile(PASSWORD_REGEX_PATTERN)
 
 users = Blueprint('users', __name__)
-
+logging.basicConfig(level=logging.DEBUG) 
+logger = logging.getLogger(__name__) 
 login_manager.session_protection = None
-
+state_ = None
 
 @users.route('/confirm/<token>')
 @login_required
@@ -113,59 +117,49 @@ def login():
 
 @users.route('/google/login')
 def google_login():
-    # Replace YOUR_CLIENT_ID with your actual OAuth client ID
-    google_provider_cfg = requests.get("https://accounts.google.com/.well-known/openid-configuration").json()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    authorization_url, state = flow.authorization_url()
+    encoded_state = quote(state)
+    global state_
+    session["state"] = encoded_state
+    state_ = encoded_state
+    #logger.debug(f"Authorization URL: {authorization_url}")
+    #logger.debug(f"State parameter: {encoded_state}")
+    return redirect(authorization_url)
 
-    # Create a state token to prevent request forgery.
-    # Store it in the session for later validation.
-    session["state"] = "some_random_state"
-
-    # Generate the URL to request access from the user's Google account.
-    redirect_uri = url_for("google_callback", _external=True)
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=redirect_uri,
-        scope=["openid", "email", "profile"],
-        state=session["state"]
-    )
-    return redirect(request_uri)
 
 @users.route("/google/callback")
 def google_callback():
-    # Validate the state token to prevent request forgery.
-    if request.args.get("state") != session["state"]:
+    #state = session.pop("state", None)
+    state = state_
+    #logger.debug(f"Callback state parameter: {state}")
+    
+    if state is None or state != request.args.get("state"):
+        #logger.debug("Invalid state parameter")
         return "Invalid state parameter", 401
 
-    # Get the authorization code from the response.
-    code = request.args.get("code")
-
-    # Exchange the authorization code for an access token and ID token.
-    token_endpoint = google_provider_cfg["token_endpoint"]
-    token_url, headers, body = client.prepare_token_request(
-        token_endpoint,
+    flow.redirect_uri = url_for("users.google_callback", _external=True)
+    flow.fetch_token(
         authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code
-    )
-    token_response = requests.post(token_url, headers=headers, data=body, auth=("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET"))
-
-    # Parse the token response and get the ID token.
-    client.parse_request_body_response(json.dumps(token_response.json()))
-    idinfo = id_token.verify_oauth2_token(
-        token_response["id_token"],
-        requests.Request(),
-        "YOUR_CLIENT_ID"  # Replace with your actual OAuth client ID
+        client_secret=CLIENT_SECRET
     )
 
-    # Create or retrieve the user from the database based on the Google email.
-    user = User()
-    user.id = idinfo["email"]
+    userinfo = flow.credentials.id_token
 
-    # Log in the user using Flask-Login's login_user function.
+    user_email = userinfo.get("email")
+    user_name = userinfo.get("name")
+
+    user = User.query.filter_by(email=user_email).first()
+
+    if user:
+        user.username = user_name
+    else:
+        user = User(email=user_email, username=user_name)
+        db.session.add(user)
+
+    db.session.commit()
     login_user(user)
 
-    return redirect(url_for("dashboard"))  # Redirect to your dashboard or another route after successful login.
+    return redirect(url_for("main.home"))
 
 
 @users.route('/logout')

@@ -1,4 +1,6 @@
 import os
+from google_auth_oauthlib.flow import Flow
+
 
 CACHE_CONFIG = {
     'CACHE_TYPE': 'redis',
@@ -17,8 +19,17 @@ CSP = {
     'script-src': ["'self'"],
     'style-src': ["'self'"],
     'img-src': ["'self'", 'data:'],
-    # Add other CSP directives as needed
 }
+
+CLIENT_SECRET="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"
+CLIENT_ID = "686365316167-9r4fermoon4l0c3q1n4vj8o5mh1l6mi0.apps.googleusercontent.com"
+
+abs_client_secrets_path = os.path.abspath(r"C:\Users\USER\Desktop\CrazyThought\flaskblog\client_secrets.json")
+flow = Flow.from_client_secrets_file(
+    abs_client_secrets_path,  
+    scopes=["openid", "email", "profile"],
+    redirect_uri='http://localhost:5000/google/callback'  
+)
 
 class Config:
     SECRET_KEY = '795849f0d2328258710ae9c71cb4b5ea'
@@ -41,6 +52,7 @@ class Config:
     SQLALCHEMY_POOL_TIMEOUT = 3000
     SQLALCHEMY_POOL_RECYCLE = 3600 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SESSION_TYPE = 'filesystem'
  
     #CACHE_TYPE = 'simple'
 

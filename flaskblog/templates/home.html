@@ -21,6 +21,7 @@ if it's not present, don't show loader */
 	z-index: 99;
 	background: url(static/images/Preloader_2.gif) center no-repeat #fff;
 }
+
 </style>
 
 <body>
@@ -91,10 +92,10 @@ if it's not present, don't show loader */
             </div>
             <!-- Post Comments and Love -->
             <span>
-                <a class="article-title " href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments">
+                <a class="article-title social" href="{{ url_for('posts.post', public_id=post.public_id) }}" title="Comments" aria-label="Comments">
                     {{ post.comments | format_love  }} <i style="font-size:23px; width: 50px;" class="fa fa-comment-o btn btn-outline-info"></i>
                 </a>         
-                <span id="likes-{{ post.public_id }}">{{ post.love | format_love }}</span>
+                <span class="social" id="likes-{{ post.public_id }}">{{ post.love | format_love }}</span>
                 <button class="btn btn-outline-info" style="height: 37px;" onclick="likePost('{{ post.public_id }}')" data-public-id="{{ post.public_id }}" ><i style="font-size:23px;" class="fa fa-heart-o"></i></button>
               
                 <button class="share-button btn btn-outline-info " data-public-id="{{ post.public_id }}"><i style="height: 18px; " class="fa fa-share"></i></button>
