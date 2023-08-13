@@ -2,6 +2,7 @@
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='modal.css') }}">
+
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
     <div class="media-body">
@@ -19,17 +20,24 @@
                     <i class="fa fa-share-alt" id="mode" style="float: right; cursor: pointer; margin-right: 4px; font-size: 16px;"></i>
                 </span>
             </small>
-         
-
+        </div>
         <p class="krax">{{ post.content }}</p>
         {% if post.img_filename %}
-            <img align="center" class="article-content" src="{{  url_for('static', filename='post_pics/' + post.img_filename) }}">
+            <img align="center" class="article-content" src="{{ url_for('static', filename='post_pics/' + post.img_filename) }}">
         {% endif %}
-
-        
-
     </div>
 </article>
+
+<form method="POST" action="{{ url_for('posts.post', public_id=post.public_id) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.message(class="form-control") }}
+        {{ form.message.errors|join(', ') }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
 
 <div>
     <div class="midder">
@@ -74,21 +82,31 @@
                         </button>
                     {% endif %}
                 </span>
-                <a class="article-content" title="Reply Comment" aria-label="Reply Comment" href="{{ url_for('posts.reply_comment', public_id=post.public_id, comment_id=comment.id) }}">
-                    <i style="font-size:20px; width:23px;" class="fa fa-comment"></i>
-                </a>{{comment.replys}}
+                
             </form>
         </div>
+        <form method="POST" action="{{ url_for('posts.reply_comment', public_id=post.public_id, comment_id=comment.id) }}">
+            {{ reply_form.hidden_tag() }}  {# Assuming reply_form is the instance of the ReplyForm class #}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            <div class="form-group">
+                {{ reply_form.content(class="form-control") }}
+                {{ reply_form.content.errors|join(', ') }}
+            </div>
+            <div class="form-group">
+                {{ reply_form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        
         <div class="replies">
-            {% for reply in comment.replies %}
+            {% for reply in comment.reply_comment %}
                 <div class="desc">
                     <h5 class="comment" style="margin-bottom: 0px;">
-                        <a class="mr-2" href="{{ url_for('users.user_post', username=reply.user.username) }}">
-                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + reply.user.image_file) }}">
+                        <a class="mr-2" href="{{ url_for('users.user_post', username=reply.comment.username) }}">
+                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + reply.comment.image_file) }}">
                         </a>
                         <b>
                             <span style="font-size: 16px;">
-                                <span style="text-transform: capitalize;">{{ reply.user.username[0] }}</span>{{ reply.user.username[1:] }}
+                                <span style="text-transform: capitalize;">{{ reply.comment.username[0] }}</span>{{ reply.comment.username[1:] }}
                             </span>
                         </b>
                     </h5>
@@ -96,32 +114,13 @@
                         {{ reply.pub_date.strftime('%d/%b/%Y ') }}
                     </small>
                     <h6 class="comment krax" style="font-weight:380; font-size: 14px;">
-                        {{ reply.content }}
+                        {{ reply.message }}
                     </h6>
                 </div>
             {% endfor %}
         </div>
     </div>
-{% endfor %}
-
-<div class="comment-form">
-    <h4>Add a Comment</h4>
-    <form method="POST" action="{{ url_for('posts.post', public_id=post.public_id) }}">
-        {{ comment_form.csrf_token }}
-        {{ comment_form.message.label }} 
-        {{ comment_form.message }}
-        {{ comment_form.submit }}
-    </form>
-</div>
-
-<div class="reply-form" style="display:none;">
-    <h4>Reply to Comment</h4>
-    <form method="POST" action="{{ url_for('posts.post', public_id=post.public_id) }}">
-        {{ reply_form.csrf_token }}
-        {{ reply_form.content.label }} {{ reply_form.content }}
-        {{ reply_form.parent_id }}
-        {{ reply_form.submit }}
-    </form>
+    {% endfor %}
 </div>
 
 <script>

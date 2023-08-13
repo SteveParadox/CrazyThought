@@ -96,8 +96,7 @@ def group_creation_task(self, creator_id, topic_id):
     
     topic = Topic.query.filter_by(id=topic_id).first()
     
-    group = Groups.query.filter_by(user_id=creator_id).join(Topic).order_by(Topic.date_created.desc()).first()
-    print(group.content)
+    group = Groups.query.filter_by(topic_id=topic_id).order_by(Groups.date_posted.desc()).first()
 
     if creator and topic:
         user_node = Node('User', user_id=creator.id, user_name=creator.username, img_file=creator.image_file)

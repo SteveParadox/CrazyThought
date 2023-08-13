@@ -14,7 +14,7 @@ def celery_init_app(app: Flask) -> Celery:
     celery_app.config_from_object(CELERY_CONFIG)
     celery_app.set_default()
     app.extensions["celery"] = celery_app
-    #celery_app.conf.worker_disable_tracebacks  = True
+    celery_app.conf.worker_disable_tracebacks  = True
     return celery_app
 
 

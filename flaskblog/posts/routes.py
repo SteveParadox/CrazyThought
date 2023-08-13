@@ -51,86 +51,62 @@ def tags():
     return render_template('tags.html', posts=posts)
 
 
-"""@posts.route("/post/<string:public_id>", methods=['POST', 'GET'])
+@posts.route("/post/<string:public_id>", methods=['POST', 'GET'])
 @login_required
 @check_confirmed
 def post(public_id):
     page = request.args.get('page', 1, type=int)
     post = Post.query.filter_by(public_id=public_id)\
-    .options(selectinload(Post.author), selectinload(Post.comment)).first()
+        .options(selectinload(Post.author), selectinload(Post.comment)).first()
     post.viewed = post.viewed + 1
     db.session.commit()
     posts = Post.query.order_by(Post.public_id.desc()).all()
-    comments = Comment.query.filter_by(post_id=post.id)\
-    .order_by(Comment.pub_date.desc()).paginate(page=page, per_page=20)
+    comments = Comment.query.filter_by(post_id=post.id, depth=0)\
+        .order_by(Comment.pub_date.desc())\
+        .paginate(page=page, per_page=20)
     rc = ReplyComment.query.order_by(ReplyComment.pub_date.desc()).all()
     form = CommentForm()
+        
     if form.validate_on_submit():
-        message = request.form.get('message')
-        comment = Comment(message=message, post_id=post.id, reply=current_user)
+        message = form.message.data
+        depth = form.depth.data 
+        
+        comment = Comment(message=message, post_id=post.id, user_id=current_user.id, depth=depth)
         db.session.add(comment)
         post.comments = post.comments + 1
         db.session.commit()
         return redirect(url_for('posts.post', public_id=post.public_id))
-
-    return render_template('post.html', post=post, rc=rc,
-     public_id=post.public_id, posts=posts, comments=comments,
-                           form=form, title='Posts')"""
-
-@posts.route('/post/<string:public_id>', methods=['GET', 'POST'])
-def post(public_id):
-    post = Post.query.filter_by(public_id=public_id)\
-    .options(selectinload(Post.author), selectinload(Post.comment)).first()
-    post.viewed = post.viewed + 1
-    db.session.commit()
-    comment_form = CommentForm()
     reply_form = ReplyForm()
 
-    if comment_form.validate_on_submit():
-        comment = Comment(message=comment_form.message.data, user_id=current_user.id, post_id=post.id)
-        db.session.add(comment)
-        post.comments = post.comments + 1
-
-        db.session.commit()
-        flash('Comment added successfully.', 'success')
-        return redirect(url_for('posts.post', public_id=post.public_id))
-
-    if reply_form.validate_on_submit():
-        parent_comment = Comment.query.get_or_404(reply_form.parent_id.data)
-        reply = Comment(content=reply_form.content.data, user_id=current_user.id, post_id=post.id, parent=parent_comment)
-        db.session.add(reply)
-        db.session.commit()
-        flash('Reply added successfully.', 'success')
-        return redirect(url_for('posts.post', public_id=post.public_id))
-
-    comments = Comment.query.filter_by( post_id=post.id).all()
-    return render_template('post.html', post=post, comments=comments, comment_form=comment_form, reply_form=reply_form)
-
+    return render_template('post.html', post=post, rc=rc,
+                           public_id=post.public_id, posts=posts,
+                           comments=comments, form=form, reply_form=reply_form, title='Posts')
 
 
 @posts.route("/post/<string:public_id>/comment/<int:comment_id>",
- methods=['GET','POST'])
+             methods=['GET', 'POST'])
 @login_required
 @check_confirmed
 def reply_comment(public_id, comment_id):
-    #data= request.form.get('text')
     page = request.args.get('page', 1, type=int)
     post = Post.query.filter_by(public_id=public_id).first()
-    comment = Comment.query.filter_by(id=comment_id).first()
-    rc= ReplyComment.query.filter_by(comment_id=comment.id)\
-    .order_by(ReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
-    form = ReplyForm()
-    if form.validate_on_submit():
-        rc = ReplyComment(message=form.message.data,
-         comment=current_user, post_id=post.id, comment_id=comment.id)
-        db.session.add(rc)
-        comment.replys=comment.replys + 1
+    parent_comment = Comment.query.filter_by(id=comment_id).first()
+    rc = ReplyComment.query.filter_by(comment_id=parent_comment.id)\
+        .order_by(ReplyComment.pub_date.desc()).paginate(page=page, per_page=20)
+    reply_form = ReplyForm()
+    
+    if reply_form.validate_on_submit():
+        reply_message = reply_form.content.data  # Use form data directly
+        reply = ReplyComment(message=reply_message, comment=current_user,
+                             post_id=post.id, comment_id=parent_comment.id)
+        db.session.add(reply)
+        parent_comment.replys = parent_comment.replys + 1
         db.session.commit()
         return redirect(url_for('posts.reply_comment',
-         public_id=post.public_id, comment_id=comment.id))
-    return render_template('reply.html', comment=comment,
-     post=post, form=form, rc=rc)
-
+                                public_id=post.public_id, comment_id=parent_comment.id))
+    
+    return render_template('reply.html', parent_comment=parent_comment,
+                           post=post, reply_form=reply_form, rc=rc)
 
 
 @posts.route("/post/<string:public_id>/update", methods=['GET', 'POST'])

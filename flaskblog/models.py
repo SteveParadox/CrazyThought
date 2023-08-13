@@ -171,17 +171,17 @@ class Comment(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False, index=True)
-    reply_message = db.Column(db.Text, index=True)
     upvote = db.Column(db.Integer, default=0)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(), index=True)
-    post = db.relationship('Post', backref=db.backref('post', lazy=True))
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     status = db.Column(db.Boolean, default=False)
+    depth = db.Column(db.Integer, default=0)
     replys = db.Column(db.Integer, default=0)
     admin = db.relationship('Admin', backref='administration', lazy=True)
-    reply_comment = db.relationship('ReplyComment', backref='comments', lazy=True)
+    reply_comment = db.relationship('ReplyComment', backref='parent_comment',
+                                    foreign_keys='ReplyComment.comment_id')
 
     def __repr__(self):
         return '<Comment %r>' % self.name

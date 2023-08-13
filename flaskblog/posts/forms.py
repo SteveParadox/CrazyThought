@@ -14,12 +14,15 @@ class UpdatePostForm(FlaskForm):
     submit = SubmitField('Update Post')
 
 class CommentForm(FlaskForm):
-    message = StringField('Comment', validators=[DataRequired(), Length(max=500)])
+    message = TextAreaField('Comment', validators=[DataRequired(), Length(max=500)])
+    depth = HiddenField(default=0)  
+    submit = SubmitField('Comment')
 
 class ReplyForm(FlaskForm):
     content = StringField('Reply', validators=[DataRequired(), Length(max=500)])
-    parent_id = HiddenField()
-
+    parent_id = HiddenField()  
+    submit = SubmitField('Reply')
+    
 class CommentsForm(FlaskForm):
     message = TextAreaField(validators=[DataRequired()])
     submit = SubmitField('Comment')
