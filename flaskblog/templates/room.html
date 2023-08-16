@@ -4,111 +4,223 @@
        <script src= "{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f8f8;
-    }
+  
 
-    h1 {
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        padding: 10px;
-        margin: 0;
+    
+    .warmglow {
+      position: relative;
+      width: 70%;
+      margin: 20px auto;
+      max-width: 1000px;
+      min-width: 400px;
+      --font1: source-sans-pro, sans-serif;
+      --font2: all-round-gothic, sans-serif;
+      --font3: dico-mono-script, mono;
+      --font4: dico-mono, mono;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas: 
+        "top top top"
+        "within within within"
+        "from from from";
+      background:#f0f0f0;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px solid #fff;
     }
-
-    #message-history {
-        padding: 20px;
-        overflow-y: scroll;
-        max-height: 400px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        border-radius: 5px;
+    
+    .wg-to {
+      grid-area: top;
+      position: relative;
+      padding: 40px 50px;
+      border-bottom: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }
-
-    #message-history p {
-        margin: 0;
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
+    
+    .wg-to-name {
+      font-family: var(--font3);
+      color: #000;
+      font-size: 20px;
+      text-align: left;
+      line-height: 100%;
     }
-
-    #message-history p:last-child {
-        border-bottom: none;
+    
+    .wg-to-name i {
+      font-size: 12px;
+      font-family: var(--font2);
+      text-transform: uppercase;
+      margin-top: 5px;
+      font-style: normal;
+      letter-spacing: 1px;
     }
-
-    #message-input {
-        width: 70%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+    
+    .wg-within {
+      background-color: #eee;
+  background-image: linear-gradient(90deg, #c5edde 0%, #c5e1ed 100%);
+      grid-area: within;
+      margin: 30px;
+      border-radius: 10px;
+      border: 1px solid #fff;
+      box-sizing: border-box;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
     }
-
-    #message-input::placeholder {
-        color: #ccc;
+    
+    .wg-to-pic {
+      height: 60px;
+      width: 60px;
+      margin: 10px 0;
+      box-sizing: border-box;
+      border-radius: 100%;
+      border: 10px solid #fff;
+      margin-right: 20px;
     }
-
-    #message-input:focus {
-        outline: none;
-        border-color: #4CAF50;
+    
+    .wg-from {
+      grid-area: from;
+      position: relative;
+      padding: 40px 50px;
+      border-top: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: right;
+      font-family: var(--font3);
+      color: #000;
+      font-size: 20px;
+      line-height: 100%;
     }
-
-    button {
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        margin: 5px;
-        border-radius: 5px;
-        transition: background-color 0.2s;
+    
+    .wg-from i {
+      font-size: 12px;
+      font-family: var(--font2);
+      text-transform: uppercase;
+      margin-top: 5px;
+      font-style: normal;
+      letter-spacing: 1px;
     }
-
-    button:hover {
-        background-color: #45a049;
+    
+    .wg-from-pic {
+      height: 60px;
+      width: 60px;
+      border: 10px solid #fff;
+      box-sizing: border-box;
+      border-radius: 100%;
+      object-fit: cover;
+      margin: 10px 0;
+      margin-left: 20px;
     }
-
-    #message-input,
-    button {
-        display: inline-block;
-        vertical-align: middle;
+    
+    .wg-within enter, .wg-within exit {
+      position: relative;
+      font-family: var(--font4);
+      text-transform: uppercase;
+      display: block;
+      letter-spacing: 1px;
+      font-size: 12px;
+      margin: 5px 0;
+      color: #333;
     }
-
-    button:last-child {
-        background-color: #f44336;
+    
+    .wg-within enter b, .wg-within exit b {
+      font-family: var(--font3);
+      text-transform: lowercase;
     }
-
-    button:last-child:hover {
-        background-color: #e53935;
+    
+    .wg-within enter i {
+      position: relative;
+      top: 2px;
     }
-
-    /* New styles for added features */
-    .user-message {
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 10px;
+    
+    .wg-within received, .wg-within sent {
+      display: block;
+      margin: 10px 0;
+      font-size: 14px;
+      position: relative;
+      font-family: var(--font1);
     }
-
-    .bot-message {
-        background-color: #2196F3;
-        color: #fff;
-        border-radius: 10px;
+    
+    .wg-within main {
+      background: #fff;
+      display: block;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 5px;
     }
-
-    #message-input:focus {
-        border-color: #2196F3;
+    
+    .wg-within received {
+      margin-left: 40px;
     }
-</style>
+    
+    .wg-within sent {
+      margin-right: 40px;
+    }
+    
+    .wg-within received img {
+      box-sizing: border-box;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #fff;
+      border-radius: 100%;
+      position: absolute;
+      left: -40px;
+      top: 0px;
+      object-fit: cover;
+    }
+    
+    .wg-within sent img {
+      box-sizing: border-box;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #fff;
+      border-radius: 100%;
+      position: absolute;
+      right: -40px;
+      top: 0px;
+      object-fit: cover;
+    }
+    
+    .wg-within received b, .wg-within sent b {
+      font-family: var(--font3);
+      text-transform: lowercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .wg-within sent {
+      align-self: flex-end;
+    }
+    
+    .wg-within sent b {
+      text-align: right;
+      margin-right: 5px;
+    }
+    
+  </style>
 </head>
 <body>
+    <div class="wg-within">
+        <enter>
     <h1>Chat Room: {{ active_room.nickname }}</h1>
+    
+    <received>
+    <main>
     <div id="message-history">
+      <!-- Chat messages will be displayed here -->
+    </div></main></received>
+   
+    </enter>
     </div>
+    <div class="wg-from">
     <input type="text" id="message-input" placeholder="Type your message">
+    </div>
     <button onclick="sendMessage()">Send</button>
     <button onclick="leaveRoom()">Leave Room</button>
-
     <script>
         const socket = io.connect( 'http://' + document.domain + ':' + location.port)
         socket.on('connect', () => {

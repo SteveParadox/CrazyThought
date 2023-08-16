@@ -18,17 +18,23 @@ import flask_monitoringdashboard as dashboard
 from flaskblog.celery_config import celery_init_app
 import websockets
 from flask_session import Session
+from flask_sslify import SSLify
+from dotenv import load_dotenv
+
 
 from py2neo import Graph
 from py2neo.errors import ServiceUnavailable
 
 import json
 
+load_dotenv()
+
 os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
 
 # neo4j
 graph = Graph('neo4j+ssc://ec62436d.databases.neo4j.io:7687',
- auth=('neo4j', 'VDfDjirn7pFB64intj1yPLzdZowzg2HLeI-NdeHqhO4'))
+    auth=('neo4j', os.environ.get('NEO4J_PASSWORD')))
+
 try:
     graph.run("RETURN 1")
     print(True)
@@ -37,6 +43,7 @@ except ServiceUnavailable:
 
 
 app = Flask(__name__)
+
 
 app.config.from_object(Config)
 db = SQLAlchemy()
@@ -58,6 +65,7 @@ cache = Cache(config=CACHE_CONFIG)
 talisman = Talisman(content_security_policy=CSP)
 session = Session()
 
+
 def create_app(config_class=Config):
     db.init_app(app)
     bcrypt.init_app(app)
@@ -72,6 +80,7 @@ def create_app(config_class=Config):
     talisman.init_app(app) 
     celery=celery_init_app(app)
     session.init_app(app)
+    SSLify(app)
     celery.conf.update(
         task_serializer='json',
         result_serializer='json',

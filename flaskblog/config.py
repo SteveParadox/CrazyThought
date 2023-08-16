@@ -1,12 +1,14 @@
 import os
 from google_auth_oauthlib.flow import Flow
+from dotenv import load_dotenv
 
+load_dotenv()
 
 CACHE_CONFIG = {
-    'CACHE_TYPE': 'redis',
-    'CACHE_REDIS_URL': 'redis://default:RIb4Sy6hNvnuRxSR8us3S99paPOCAU21@redis-12331.c309.us-east-2-1.ec2.cloud.redislabs.com:12331',
-    'CACHE_DEFAULT_TIMEOUT': 3000,  
-    'CACHE_REDIS_SOCKET_TIMEOUT': 30,
+    'CACHE_TYPE': os.environ.get('CACHE_TYPE'),
+    'CACHE_REDIS_URL':  os.environ.get('CACHE_REDIS_URL'),
+    'CACHE_DEFAULT_TIMEOUT':  os.environ.get('CACHE_DEFAULT_TIMEOUT'),  
+    'CACHE_REDIS_SOCKET_TIMEOUT':  os.environ.get('CACHE_REDIS_SOCKET_TIMEOUT'),
 }
 
 CELERY_CONFIG = {
@@ -21,8 +23,8 @@ CSP = {
     'img-src': ["'self'", 'data:'],
 }
 
-CLIENT_SECRET="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"
-CLIENT_ID = "686365316167-9r4fermoon4l0c3q1n4vj8o5mh1l6mi0.apps.googleusercontent.com"
+CLIENT_SECRET= os.environ.get('CLIENT_SECRET')
+CLIENT_ID = os.environ.get('CLIENT_ID')
 
 abs_client_secrets_path = os.path.abspath(r"C:\Users\USER\Desktop\CrazyThought\flaskblog\client_secrets.json")
 flow = Flow.from_client_secrets_file(
@@ -32,29 +34,29 @@ flow = Flow.from_client_secrets_file(
 )
 
 class Config:
-    SECRET_KEY = '795849f0d2328258710ae9c71cb4b5ea'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     ENV = 'dev'
 
     if ENV == 'dev':
         SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     else:
-        SQLALCHEMY_DATABASE_URI = 'postgresql://crazythought:QZrbDltSwmk0FgOlPTFl@crazythoughtdb.cikwkjt4xyvu.us-east-1.rds.amazonaws.com:5432/crazythoughtdb'
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
-    SECURITY_PASSWORD_SALT = 'my_precious_two'
-    MAIL_SERVER = 'smtp.googlemail.com'
+    SECURITY_PASSWORD_SALT =  os.environ.get('SECURITY_PASSWORD_SALT')
+    MAIL_SERVER =  os.environ.get('MAIL_SERVER')
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'crazythoughtverify@gmail.com'
-    MAIL_PASSWORD = 'DRstrange11..'
+    MAIL_USERNAME =  os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD =  os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = 'from@example.com'
     SQLALCHEMY_POOL_SIZE = 100
     SQLALCHEMY_POOL_TIMEOUT = 3000
     SQLALCHEMY_POOL_RECYCLE = 3600 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'filesystem'
- 
-    #CACHE_TYPE = 'simple'
+    SSL_KEY = r'C:\Users\USER\Desktop\CrazyThought\certs\private_key.pem'
+    SSL_CERT = r'C:\Users\USER\Desktop\CrazyThought\certs\certificate.pem'
 
 
 def format_love(value):
