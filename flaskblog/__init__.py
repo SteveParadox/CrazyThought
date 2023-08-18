@@ -14,6 +14,8 @@ from flaskblog.config import Config, CACHE_CONFIG, CSP, format_love
 from flask_marshmallow import Marshmallow
 from flask_caching import Cache
 import redis
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 import flask_monitoringdashboard as dashboard
 from flaskblog.celery_config import celery_init_app
 import websockets
@@ -40,6 +42,15 @@ try:
     print(True)
 except ServiceUnavailable:
     print(False)
+
+sentry_sdk.init(
+    dsn="https://e88b83cc342e53d0a941d023c78f9db8@o4505729268449280.ingest.sentry.io/4505729296236544",
+    integrations=[
+        FlaskIntegration(),
+    ],
+
+    traces_sample_rate=1.0
+)
 
 
 app = Flask(__name__)

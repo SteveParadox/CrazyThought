@@ -1,0 +1,29 @@
+name: Deploy Flask App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan 18.170.138.199 >> ~/.ssh/known_hosts
+
+      - name: Deploy to Amazon Linux
+        run: |
+          ssh ec2-user@18.170.138.199 'bash -s' << EOF
+            cd $GITHUB_WORKSPACE/flaskblog
+            pip install -r requirements.txt
+            gunicorn -b 0.0.0.0:8000 run:app
+          EOF
