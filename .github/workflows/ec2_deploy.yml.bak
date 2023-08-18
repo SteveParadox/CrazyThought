@@ -3,7 +3,7 @@ name: Deploy Flask App
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
