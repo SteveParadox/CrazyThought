@@ -20,11 +20,13 @@ jobs:
       - name: Build Docker Image
         run: |
           IMAGE_TAG=$(date +%s)
-          docker build . --file Dockerfile --tag crazythought:$IMAGE_TAG
+          IMAGE_NAME=crazythought
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          docker build . --file Dockerfile --tag $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
 
       - name: Push Docker Image
         run: |
           IMAGE_TAG=$(date +%s)
-          docker tag crazythought:$IMAGE_TAG ${{ secrets.DOCKER_USERNAME }}/crazythought:$IMAGE_TAG
-          docker push ${{ secrets.DOCKER_USERNAME }}/crazythought:$IMAGE_TAG
-
+          IMAGE_NAME=crazythought
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
