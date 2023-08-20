@@ -39,3 +39,4 @@ sentry-sdk
 google-auth-oauthlib
 requests-oauthlib 
 google
+python-dotenv==1.0.0
