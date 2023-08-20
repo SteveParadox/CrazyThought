@@ -19,7 +19,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          IMAGE_TAG=$(date +%s)
+          IMAGE_TAG=1692524249
           IMAGE_NAME=crazythought
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           docker build . --file Dockerfile --tag $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
