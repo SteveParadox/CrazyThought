@@ -23,7 +23,8 @@ jobs:
       - name: Deploy to Amazon Linux
         run: |
           ssh ec2-user@18.170.138.199 'bash -s' << EOF
-            cd $GITHUB_WORKSPACE/flaskblog
+            # cd $GITHUB_WORKSPACE/flaskblog
+            cd /home/runner/work/CrazyThought/flaskblog
             pip install -r requirements.txt
             gunicorn -b 0.0.0.0:5000 run:app
           EOF
