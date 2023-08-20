@@ -27,3 +27,4 @@ jobs:
           IMAGE_TAG=$(date +%s)
           docker tag crazythought:$IMAGE_TAG ${{ secrets.DOCKER_USERNAME }}/crazythought:$IMAGE_TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/crazythought:$IMAGE_TAG
+
