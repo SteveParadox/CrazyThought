@@ -16,7 +16,8 @@ jobs:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t stephenford/crazythoughtV1:latest .
-          docker push stephenford/crazythoughtV1:latest
+          docker build -t stephenford/crazythoughtV2:latest .
+          docker push stephenford/crazythoughtV2:latest
