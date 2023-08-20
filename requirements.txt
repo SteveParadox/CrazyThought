@@ -37,7 +37,5 @@ flask-sslify
 flask-session
 sentry-sdk
 google-auth-oauthlib
-dotenv
 requests-oauthlib 
 google
-
