@@ -19,5 +19,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t stephenford/crazythoughtV2:latest .
-          docker push stephenford/crazythoughtV2:latest
+          docker build -t stephenford/crazythoughtV1:latest .
+          docker push stephenford/crazythoughtV1:latest
