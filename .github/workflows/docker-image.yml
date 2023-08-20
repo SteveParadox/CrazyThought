@@ -18,9 +18,12 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker Image
-        run: docker build . --file Dockerfile --tag crazythought:$(date +%s)
+        run: |
+          IMAGE_TAG=$(date +%s)
+          docker build . --file Dockerfile --tag crazythought:$IMAGE_TAG
 
       - name: Push Docker Image
         run: |
-          docker tag crazythought:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/crazythought:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/crazythought:latest
+          IMAGE_TAG=$(date +%s)
+          docker tag crazythought:$IMAGE_TAG ${{ secrets.DOCKER_USERNAME }}/crazythought:$IMAGE_TAG
+          docker push ${{ secrets.DOCKER_USERNAME }}/crazythought:$IMAGE_TAG
