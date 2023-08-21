@@ -26,7 +26,7 @@ CSP = {
 CLIENT_SECRET= os.environ.get('CLIENT_SECRET')
 CLIENT_ID = os.environ.get('CLIENT_ID')
 
-abs_client_secrets_path = "client_secrets.json"
+abs_client_secrets_path = os.path.abspath("client_secrets.json")
 flow = Flow.from_client_secrets_file(
     abs_client_secrets_path,  
     scopes=["openid", "email", "profile"],
