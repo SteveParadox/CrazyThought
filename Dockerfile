@@ -4,10 +4,13 @@ WORKDIR /flaskblog
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install celery
 
 COPY . .
 
 EXPOSE 5000
 
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "run:app"]
+RUN apt-get update && apt-get install -y supervisor
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["/usr/bin/supervisord"]
