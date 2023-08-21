@@ -26,7 +26,7 @@ CSP = {
 CLIENT_SECRET= os.environ.get('CLIENT_SECRET')
 CLIENT_ID = os.environ.get('CLIENT_ID')
 
-abs_client_secrets_path = os.path.abspath(r"C:\Users\USER\Desktop\CrazyThought\flaskblog\client_secrets.json")
+abs_client_secrets_path = "client_secrets.json"
 flow = Flow.from_client_secrets_file(
     abs_client_secrets_path,  
     scopes=["openid", "email", "profile"],
@@ -55,8 +55,8 @@ class Config:
     SQLALCHEMY_POOL_RECYCLE = 3600 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'filesystem'
-    SSL_KEY = r'C:\Users\USER\Desktop\CrazyThought\certs\private_key.pem'
-    SSL_CERT = r'C:\Users\USER\Desktop\CrazyThought\certs\certificate.pem'
+    #SSL_KEY = r'C:\Users\USER\Desktop\CrazyThought\certs\private_key.pem'
+    #SSL_CERT = r'C:\Users\USER\Desktop\CrazyThought\certs\certificate.pem'
 
 
 def format_love(value):
