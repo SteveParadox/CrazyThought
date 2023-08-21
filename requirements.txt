@@ -41,3 +41,4 @@ requests-oauthlib
 google
 python-dotenv==1.0.0
 Flask-MonitoringDashboard==3.1.1
+websockets==11.0.3
