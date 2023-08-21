@@ -35,5 +35,5 @@ jobs:
         run: |
           IMAGE_TAG=1692524249
           IMAGE_NAME=crazythought
-          docker run -d $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG celery -A run.celery worker --pool=solo --loglevel=info
-          docker run -d $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG celery -A run.celery beat --pool=solo --loglevel=info
+          docker run -d "$DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG" celery -A run.celery worker --pool=solo --loglevel=info
+          docker run -d "$DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG" celery -A run.celery beat --pool=solo --loglevel=info
