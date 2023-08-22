@@ -49,7 +49,7 @@ sentry_sdk.init(
         FlaskIntegration(),
     ],
 
-    traces_sample_rate=1.0
+    traces_sample_rate=1.0,
     profiles_sample_rate=1.0,
 
     profiles_sampler=profiles_sampler
