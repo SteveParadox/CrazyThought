@@ -1,7 +1,7 @@
 celery
 eventlet
-Flask==1.1.1
-Flask-Bcrypt==0.7.1
+Flask
+Flask-Bcrypt
 Flask-Caching==2.0.2
 Flask-Compress
 Flask-Cors
@@ -10,12 +10,12 @@ Flask-Login==0.4.1
 Flask-Mail
 flask-marshmallow
 Flask-SocketIO
-Flask-SQLAlchemy==2.4.1
+Flask-SQLAlchemy
 flask-talisman
 Flask-WTF
 gunicorn
-itsdangerous==1.1.0
-Jinja2==2.10.3
+itsdangerous
+Jinja2
 MarkupSafe
 marshmallow-sqlalchemy
 Pillow
@@ -24,7 +24,7 @@ py2neo
 py4j
 redis
 shortuuid
-SQLAlchemy==1.3.11
+SQLAlchemy
 validators
 watchdog
 websocket-client
