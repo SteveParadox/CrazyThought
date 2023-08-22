@@ -15,7 +15,7 @@ flask-talisman
 Flask-WTF
 gunicorn
 itsdangerous==1.1.0
-Jinja2
+Jinja2==2.10.3
 MarkupSafe
 marshmallow-sqlalchemy
 Pillow
