@@ -2,7 +2,7 @@ celery
 eventlet
 Flask
 Flask-Bcrypt
-Flask-Caching==1.11.1
+Flask-Caching==2.0.2
 Flask-Compress
 Flask-Cors
 Flask-JWT-Extended
