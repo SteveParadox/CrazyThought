@@ -7,10 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 80
 
-RUN apt-get update && apt-get install -y supervisor
-
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-CMD ["/usr/bin/supervisord"]
+CMD ["gunicorn", "-b", "0.0.0.0:80", "run:app"]
