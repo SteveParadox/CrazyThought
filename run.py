@@ -15,11 +15,10 @@ else:
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
-    #app.run(ssl_context=(r'C:\Users\USER\Desktop\CrazyThought\certs\certificate.pem', r'C:\Users\USER\Desktop\CrazyThought\certs\private_key.pem'))    
-    #with app.app_context():
+    with app.app_context():
+        db.create_all()
         #db.drop_all()
-        #db.create_all()
+    app.run(host="0.0.0.0", port=5000)
         
         
 
