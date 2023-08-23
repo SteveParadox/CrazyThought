@@ -1,4 +1,4 @@
-from flaskblog import db
+from flaskblog import db, app
 from flask import *
 from flaskblog.models import *
 import random
@@ -61,3 +61,9 @@ def user_dummy():
 @dummy.route('/pass')
 def notting():
     return "Hello"
+
+@dummy.route('/create_tables')
+def create_tables():
+    with app.app_context():
+        db.create_all()
+    return 'Database tables created successfully'
