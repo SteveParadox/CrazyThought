@@ -35,7 +35,7 @@ flow = Flow.from_client_secrets_file(
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    ENV = 'dev'
+    ENV = 'prod'
 
     if ENV == 'dev':
         SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
