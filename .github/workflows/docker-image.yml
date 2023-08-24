@@ -30,6 +30,31 @@ jobs:
           IMAGE_NAME=crazythought
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+    
+  build_celery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Celery
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Celery Image
+        run: |
+          IMAGE_TAG=latest
+          IMAGE_NAME=crazythought
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          docker build . --file /celery/Dockerfile --tag $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+
+      - name: Push Celery Image
+        run: |
+          IMAGE_TAG=latest
+          IMAGE_NAME=crazythought
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+
 
   run_compose:
     runs-on: ubuntu-latest
