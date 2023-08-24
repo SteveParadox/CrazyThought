@@ -44,14 +44,14 @@ jobs:
       - name: Build Celery Image
         run: |
           IMAGE_TAG=latest
-          IMAGE_NAME=crazythought
+          IMAGE_NAME=celery
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           docker build . --file ./celery/Dockerfile --tag $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
 
       - name: Push Celery Image
         run: |
           IMAGE_TAG=latest
-          IMAGE_NAME=crazythought
+          IMAGE_NAME=celery
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
 
